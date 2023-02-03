@@ -10,6 +10,7 @@
   "dependencies": {
     "@web3modal/ethereum": "2.0.0-beta.6",
     "@web3modal/react": "2.0.0-beta.6",
+    "alchemy-sdk": "^2.4.1",
     "buffer": "^6.0.3",
     "ethers": "^5.7.2",
     "process": "^0.11.10",
