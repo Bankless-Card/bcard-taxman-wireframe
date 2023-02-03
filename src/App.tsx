@@ -6,6 +6,19 @@ import { Card } from './components'
 import { Clock } from './components'
 import { Btn } from './components'
 
+
+import { Alchemy, Network, AssetTransfersCategory } from 'alchemy-sdk';
+
+// Optional Config object, but defaults to demo api-key and eth-mainnet.
+const settings = {
+  apiKey: 'szbJviwD1JXcAcbDNY0Mk7qn6uql-sN9', // Replace with your Alchemy API Key.
+  network: Network.ETH_MAINNET, // Replace with your network.
+};
+
+const alchemy = new Alchemy(settings);
+
+
+
 import './style.module.css'
 
 
@@ -20,11 +33,118 @@ if(foo) {
 let heroImg = document.getElementById('heroImage');
 if(heroImg) { heroImg.className = cs.scaleWidth }
 
+async function alchemyGo(){
+
+  // get address to use
+  let walletAddress: string = "";
+
+  let currentWallet = document.getElementById('walletInput');
+  // let inVal = (<HTMLInputElement>currentWallet).value;
+  if(currentWallet){
+
+    const inVal = (document.getElementById('walletInput') as HTMLInputElement | null)?.value;
+
+    console.log(inVal);
+
+    if (inVal !==  walletAddress) {
+      // override the wallet connect input with what is displaayed in the box
+      walletAddress = inVal!;
+    }
+  }
+
+  console.log(walletAddress);
+
+
+  // Access standard Ethers.js JSON-RPC node request
+  // alchemy.core.getBlockNumber().then(console.log);
+
+  // Access Alchemy Enhanced API requests
+  alchemy.core.getTokenBalances(walletAddress).then(console.log);
+
+
+  const toAddress = walletAddress;    // for connected or inserted wallet address
+
+  // estimated starting eth block for 2022
+  // https://etherscan.io/block/13916169
+
+  const blockNumInt = 13916169;   //for 2022 eth mainnet hc
+  const startBlock = "0x" + blockNumInt.toString(16);   // format for 0x + hex
+
+  console.log(startBlock);
+
+  const res = await alchemy.core.getAssetTransfers({
+    fromBlock: startBlock,
+    toAddress: toAddress,
+    excludeZeroValue: true,
+    category: [ AssetTransfersCategory.ERC20],
+  });
+
+  // AssetTransfersCategory.EXTERNAL, AssetTransfersCategory.INTERNAL, AssetTransfersCategory.ERC721, AssetTransfersCategory.ERC1155,
+
+  console.log(res);
+
+  // setup output object to DOM
+  let output = document.getElementById("output");
+
+  let objArr = res.transfers;   //this is the transaction list data object
+  if(output){
+    output!.innerHTML = "";   // clear to start
+  }
+
+  for (var i=0; i<objArr.length; i++) {
+    // console.log(i, objArr[i] );
+    let thisRow = objArr[i];
+    // console.log(thisRow.hash, thisRow.from, thisRow.nonce, thisRow.gas, thisRow.gasUsed, thisRow.gasPrice);
+
+
+    //output elements
+
+    // token label -> thisRow.asset
+    // token amount -> thisRow.value
+
+    // date/time -> from blockNum?
+
+    // calculated elements
+
+    // USD/FIAT value @ timefrom blockNum
+
+
+
+    let listRow = "<li> <strong>"+thisRow.asset+"</strong> - TokenAmt: <strong>" + thisRow.value +"</strong>";
+      listRow += "<br /> <a target='_blank' href=https://etherscan.io/tx/"+thisRow.hash+">etherscan_link</a> and blocknum: "+thisRow.blockNum+"</li>";
+
+        // should log to console the block detail
+        // getBlock(thisRow.blockNumber);
+
+    if (output) {
+      output!.innerHTML = output?.innerHTML + listRow;
+    }
+
+    // using blockHash -> generate URL link to etherscan
+    //  -> pull tx data from block with hash
+  }
+
+
+  // Access the Alchemy NFT API
+   // alchemy.nft.getNftsForOwner('vitalik.eth').then(console.log);
+
+  // Access WebSockets and Alchemy-specific WS methods
+  // alchemy.ws.on(
+  //   {
+  //     method: 'alchemy_pendingTransactions'
+  //   },
+  //   res => console.log(res)
+  // );
+}
+
 
 function triggerTx(props:any) {
   console.log(props);
-  let gt = GetTransactions({address:props});
+  console.log("TX trigger call ");
+  // let gt = GetTransactions({address:props});
   // console.log(gt);
+
+  alchemyGo();    // re-run the txlist
 }
 
 function SampleFunc(here:any) {
@@ -44,6 +164,29 @@ function SampleFunc(here:any) {
       </div>
     );
 }
+
+async function getBlock(num:any){
+
+  const block = await alchemy.core.getBlock( parseInt(num) );
+  console.log(block); 
+
+  return block;
+
+}
+
+// async function getMyTxs() {
+//   const toAddress = "0x1E6E8695FAb3Eb382534915eA8d7Cc1D1994B152";
+
+//   const res = await alchemy.core.getAssetTransfers({
+//     fromBlock: "0x0",
+//     fromAddress: "0x0000000000000000000000000000000000000000",
+//     toAddress: toAddress,
+//     excludeZeroValue: true,
+//     category: ["erc721", "erc1155"],
+//   });
+
+//   console.log(res);
+// }
 
 function GetTransactions(props:any) : any {
 
@@ -106,6 +249,9 @@ function GetTransactions(props:any) : any {
 
       let listRow = "<li><a target='_blank' href=https://etherscan.io/tx/"+thisRow.hash+">etherscan_link</a> and timestamp: "+thisRow.timeStamp+" & nonce: "+thisRow.nonce+" </li>";
 
+          // should log to console the block detail
+          // getBlock(thisRow.blockNumber);
+
       if (output) {
         output!.innerHTML = output?.innerHTML + listRow;
       }
@@ -129,6 +275,9 @@ function DaoSelect(props:any){
 export function App() {
   const { address, isConnected } = useAccount()
   // console.log(address);
+
+  //kickoff alchemyGo function
+  const myFunc = alchemyGo();
 
   return (
     <div className={cs.container}>
@@ -239,7 +388,7 @@ export function App() {
 
         {isConnected && <Account />}
 
-        {isConnected && <GetTransactions address={address} />}
+        {/* {isConnected && <AlchemyGo address={address} />} */}
 
         <aside className={cs.buttonContainer}>
           <a 
