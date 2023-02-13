@@ -1,5 +1,5 @@
 import { useAccount, useEnsName, useEnsAvatar, useDisconnect, } from 'wagmi'
-import { useBalance } from 'wagmi'
+import { useBalance, } from 'wagmi'
 
 import { TxComp } from './TxComponent';
 
