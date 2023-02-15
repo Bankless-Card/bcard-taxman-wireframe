@@ -88,27 +88,49 @@ function displayTokenAmount(value:any, asset:any){
 
 var gBankUsd = 0.0101;
 
-async function displayConvertAmount(value:any, asset:any){
+async function displayConvertAmount(value:any, asset:any, timestamp:any){
   // USD/FIAT value @ timefrom blockNum
 
   if(asset === "BANK"){
 
     let bankUSD = gBankUsd;   // 1 BANK = 0.01 USD (or newer price)
 
+    console.log(timestamp);
+
+    if(!timestamp){ timestamp=1676311028 }
+
+    let timeMin = timestamp - 250;
+    let timeMax = timestamp + 250;
+    let tokenAPI = 'bankless-dao';
+    let vsCurrency = 'usd';
+
     // use coingecko api to get price
     // https://api.coingecko.com/api/v3/simple/price?ids=bankless-dao&vs_currencies=usd
-    fetch('https://api.coingecko.com/api/v3/coins/bankless-dao/market_chart/range?vs_currency=usd&from=1676310750&to=1676311028').then((response) => response.json()).then( async (data) => {
+
+    let apiURLcall = 'https://api.coingecko.com/api/v3/coins/bankless-dao/market_chart/range?vs_currency=usd&from=1676311028&to=1676311528';
+
+    // let apiURLcall = 'https://api.coingecko.com/api/v3/coins/'+tokenAPI+'/market_chart/range?vs_currency='+vsCurrency+'&from='+timeMin+'&to='+timeMax;
+
+    // THIS IS ON HOLD FOR NOW
+
+    // fetch(apiURLcall).then((response) => response.json()).then((data) => {
       
-      console.log(data.prices[0][1]);   // this shoud be BANK price at closest timestamp to end
+    //   // return object has prices, market_caps, and total_volumes
 
-      bankUSD = data.prices[0][1];
-      gBankUsd = bankUSD;   // update global var with new price
+    //   console.log(data);   // this shoud be BANK price at closest timestamp to end
 
-      console.log((bankUSD*parseFloat(value)).toFixed(2) + " $USD")
+    //   if(data.prices.length >= 1){
+    //     // it has received a price
+    //     bankUSD = data.prices[0][1];
+    //     gBankUsd = bankUSD;   // update global var with new price
 
-      return (bankUSD*parseFloat(value)).toFixed(2) + " $USD";
+    //     console.log((bankUSD*parseFloat(value)).toFixed(2) + " $USD")
+    //   }
+      
+
+    //   return (bankUSD*parseFloat(value)).toFixed(2) + " $USD";
     
-    });
+    // });
 
     return (bankUSD*parseFloat(value)).toFixed(2) + " $USD";
 
@@ -210,7 +232,7 @@ async function alchemyGo(){
     toBlock: endBlock,
     toAddress: toAddress,
     excludeZeroValue: true,
-    // withMetadata: true,
+    withMetadata: true,
     // order: "desc",       // default asc for ascending
     category: [ AssetTransfersCategory.ERC20],
   });
@@ -226,13 +248,22 @@ async function alchemyGo(){
   let objArr = res.transfers;   //this is the transaction list data object
   if(output){
     output!.innerHTML = "";   // clear to start
+    console.log("output cleared");
   }
 
+    // for each of the transactions
   for (var i=0; i<objArr.length; i++) {
     // console.log(i, objArr[i] );
     let thisRow = objArr[i];
     // console.log(thisRow.hash, thisRow.from, thisRow.nonce, thisRow.gas, thisRow.gasUsed, thisRow.gasPrice);
 
+    let t = thisRow.metadata.blockTimestamp;    // date from tx record
+    let tNice = new Date(t);
+    // console.log(tNice);
+
+
+    var unixT = Date.parse(t)/1000
+    // console.log(unixT);
 
     //output elements
 
@@ -256,7 +287,7 @@ async function alchemyGo(){
     let tokenLogo = getTokenLogo(thisRow.asset);   // token logo - '+thisRow.asset+'
     let tokenLabel = getTokenLabel(thisRow.asset);   // token label - '+thisRow.asset+'
     let tokenAmount = displayTokenAmount(thisRow.value,thisRow.asset);   // token amount - '+thisRow.value+'
-    let convertAmount = await displayConvertAmount(thisRow.value, thisRow.asset)// "USD/FIAT value @ timefrom blockNum";   // USD/FIAT value @ timefrom blockNum
+    let convertAmount = await displayConvertAmount(thisRow.value, thisRow.asset, unixT)// "USD/FIAT value @ timefrom blockNum";   // USD/FIAT value @ timefrom blockNum
 
     let outBox = '<div class=' + cs.flexCont + '>\
       <div class='+cs.row+'>\
@@ -311,7 +342,7 @@ async function alchemyGo(){
     
     listRow += "<div class="+cs.col+">";
     listRow += "TokenAmt: <strong>" + thisRow.value +"</strong>" + "ConvertAmt: <strong>";
-    listRow += await displayConvertAmount(thisRow.value, a) +"</strong></div>";
+    listRow += await displayConvertAmount(thisRow.value, a, unixT) +"</strong></div>";
 
     listRow += "</div>";
 
@@ -325,8 +356,10 @@ async function alchemyGo(){
     
     // let thisTimestamp = web3.eth.getBlock(1920050).timestamp;
 
+    // "<br/>DATE/TIME AS CAPTURED FROM BLOCKnum: "+thisRow.blockNum+" or TXhash: "+thisRow.hash+
 
-    listRow += "<br/>DATE/TIME AS CAPTURED FROM BLOCKnum: "+thisRow.blockNum+" or TXhash: "+thisRow.hash+"<br /> <a target='_blank' class="+cs.buttonStyle+" href=https://etherscan.io/tx/"+thisRow.hash+">View TX on Etherscan</a> <br /><strong>From address: </strong><br />"+thisRow.from+"<br /><a href=https://etherscan.io/address/"+thisRow.from+" target=_blank class="+cs.buttonStyle+">View Sender</a><br />";
+
+    listRow += tNice + "<br /> <a target='_blank' class="+cs.buttonStyle+" href=https://etherscan.io/tx/"+thisRow.hash+">View TX on Etherscan</a> <br /><strong>From address: </strong><br />"+thisRow.from+"<br /><a href=https://etherscan.io/address/"+thisRow.from+" target=_blank class="+cs.buttonStyle+">View Sender</a><br />";
 
     // default view for BANK token is income
     if(a === "BANK"){
@@ -378,6 +411,9 @@ function triggerTx(props:any) {
   // console.log(gt);
 
   alchemyGo();    // re-run the txlist
+
+  // change the background image
+  document.body.style.backgroundImage = "url('./src/img/bg2.jpg')";
 }
 
 function SampleFunc(here:any) {
@@ -576,6 +612,38 @@ function DaoSelect(props:any){
   </div>);
 }
 
+function toggleAlts(e) {
+  e.preventDefault();
+
+  // let allTxs = document.getElementsByClassName("tx");
+  // console.log(allTxs);
+
+  // [].forEach.call(allTxs, function (el:any) {
+  //   el.style.display = 'none';
+  // });
+
+  let alts = document.getElementsByClassName("BANK");
+  console.log(alts);
+
+  [].forEach.call(alts, function (el:any) {
+    el.style.display = 'none';
+  });
+
+
+}
+
+function toggleDetail(e){
+  e.preventDefault();
+
+  let allDetails = document.getElementsByClassName("txDetail");
+  console.log(allDetails);
+
+  [].forEach.call(allDetails, function (el:any) {
+    el.style.display = 'none';
+  });
+
+}
+
 export function App() {
   const { address, isConnected } = useAccount()
   // console.log(address);
@@ -593,21 +661,48 @@ export function App() {
   const [BANK, setBANK] = useState(true);
 
   return (
-    <div className={cs.container}>
-      <header>
-        <img src="https://via.placeholder.com/25?text=logo" alt="" />
+    <>
+    <header>
+      <img className={cs.headerLogo} src="./src/img/bc_logo.png" alt="BanklessCard Logo" /> 
+      <ul className={cs.headerLinks}>
+        <li><a href="">Blog</a></li>
+        <li><a href="">About Us</a></li>
+        <li><a href="" className={cs.highlight}>VISIT US</a></li>
+        <li className={cs.wcBtn}><Web3Button /></li>
+      </ul>
+    </header>
+    <div id="HomeSplash" className={cs.home}>
+      <Clock />
+      <h1>TAXMAN</h1>
+      <h3>DAO Income Tax Helper</h3>
+      <div className={cs.clear}></div>
+      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae magnam dolor cum! Repellat impedit quibusdam inventore, rem fugit, voluptate voluptas consequuntur minus quo iure magnam sequi reiciendis nisi officia veritatis!</p>
+      <div className={cs.bigButton}>
+        <h2>
+          <a href="#first"> 
+            <img src="./src/img/click-arrow.png" alt="click-arrow" />
+            &nbsp;Click here to start
+          </a>
+        </h2>
+      </div>
+    </div>
+    <div className={cs.clear}></div>
+    <div id="AppContent" className={cs.container}>
+    
+      {/* <header>
+        
         <h1>BCard TaxMan</h1>
 
         <Web3Button />
-      </header>
+      </header> */}
       {/* example of class component - can be set to update live with tick() */}
-      <Clock />
+      
 
       <div className={cs.page}>
-
+      <a id="first"></a>
         <h2 className={cs.red}>DAO Income Tax Helper</h2>
 
-        <img src="https://via.placeholder.com/500?text=Hero+Image" alt="" className={cs.scaleWidth} />
+        <img src="https://via.placeholder.com/500x350?text=Hero+Image" alt="" className={cs.scaleWidth} />
 
         {/* <div className={cs.buttonContainer} >
           <Btn name="Calculate your tax now (it's free)" url="#info" />
@@ -707,6 +802,19 @@ export function App() {
 
         <a id="tx-page"></a>
 
+        <p></p>
+        <a 
+            href=""
+            className={cs.btn} 
+            onClick={(e) => toggleAlts(e)}
+          >BTN: hide all DAO</a>
+          <a 
+            href=""
+            className={cs.btn} 
+            onClick={(e) => toggleDetail(e)}
+          >show/hide all tx details</a>
+        
+
         <h2 className={cs.red}>Matched Transactions</h2>
 
         {isConnected && <Account />}
@@ -727,11 +835,17 @@ export function App() {
       <hr />
       <hr />
       {/* example of functional component - will display based on input props */}
+
+      <Web3Button />
+
       <Card title="Card Title" paragraph="This is paragraph data for sample card." />
 
       <SampleFunc here="here" />
 
 
+    
     </div>
+    <footer>Thisisfooter</footer>
+    </>
   )
 }
