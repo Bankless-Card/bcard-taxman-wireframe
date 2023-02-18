@@ -111,10 +111,12 @@ export function Account() {
       <div>
         Balance (eth value): {data?.formatted} {data?.symbol}
       </div>
-      {/* <h4>Connection Info</h4> */}
-      {/* <div>Connected to {connector.name}</div> */}
+      <h4>Connection Info:
+        <span> Connected to {connector!.name}</span>
+      </h4>
       {/* <button onClick={disconnect}>Disconnect</button> */}
-      <h4>Account Transaction Info</h4>
+
+      <h4 id="txHeader">2022 Ethereum Transactions</h4>
       <div id="output">
         {/* <TxComp txs={myTx} /> */}
       </div>

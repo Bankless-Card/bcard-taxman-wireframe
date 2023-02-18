@@ -290,31 +290,32 @@ async function alchemyGo(){
     let convertAmount = await displayConvertAmount(thisRow.value, thisRow.asset, unixT)// "USD/FIAT value @ timefrom blockNum";   // USD/FIAT value @ timefrom blockNum
 
     let outBox = '<div class=' + cs.flexCont + '>\
-      <div class='+cs.row+'>\
-        <div class='+cs.col+'>\
-          '+incomeBadge+'\
-        </div>\
+      <div class="'+cs.row+" "+cs.even+'">\
         <div class='+cs.col+'>\
           '+ tokenLogo + ' \
         </div>\
         <div class='+cs.col+'>\
           <div class='+cs.row+'>\
-            Received\
+          <strong>'+tokenLabel+'</strong>\
           </div>\
           <div class='+cs.row+'>\
-            <strong>'+tokenLabel+'</strong>\
+          '+incomeBadge+'Income Received\
           </div>\
         </div>\
         <div class='+cs.col+'>\
-          <div class='+cs.row+'>\
+          <div class="'+cs.row+" "+cs.end+'">\
             <span class='+cs.tokenAmount+'>'+tokenAmount+'</span>\
           </div>\
-          <div class='+cs.row+'>\
+          <div class="'+cs.row+" "+cs.end+'">\
             <span class='+cs.convertAmount+'>'+convertAmount+'</span>\
           </div>\
         </div>\
-      </div>\
-    </div>';
+      </div>';
+
+
+            // </div>\
+
+            // try to have flexcont also contain the detail view
 
     
     // let moreMsg = console.log("more button has been clicked");
@@ -330,10 +331,10 @@ async function alchemyGo(){
     let a = thisRow.asset;
 
     let listRow = "<li class='"+cs.tx + " " + a + " " + cs[incomeState] + "'>";
-    listRow += outBox + moreBtn;    // main tx output and more button to reveal detail
+    listRow += outBox;    // main tx output and more button to reveal detail
     // listRow += getTokenLogo(thisRow.asset);
 
-    listRow += "<div class="+cs.detail+"><strong>DETAIL VIEW:"+a+" tx</strong><span style=float:right>X</span><br />";
+    listRow += "<div class="+cs.detail+"><strong><hr/>DETAIL VIEW:"+a+" tx</strong><span style=float:right>X</span><br />";
     listRow += "<div class="+cs.row+">";
       listRow += "<div class="+cs.col+">";
         listRow += getTokenLogo(a) + getTokenLabel(a);
@@ -377,7 +378,7 @@ async function alchemyGo(){
     listRow += "<br /><a href='#' class="+cs.buttonStyle+" title='revert & hide detail view'>Cancel</a>";
     listRow += "<a href='#' class="+cs.buttonStyle+" title='save (auto) & hide detail view'>Save</a>"
     
-    listRow += "</div></li>";   // end of detail & list item
+    listRow += "</div></div></li>";   // end of detail, flexView container & list item
 
         // should log to console the block detail
         // getBlock(thisRow.blockNumber);
@@ -612,7 +613,7 @@ function DaoSelect(props:any){
   </div>);
 }
 
-function toggleAlts(e) {
+function toggleAlts(e:any) {
   e.preventDefault();
 
   // let allTxs = document.getElementsByClassName("tx");
@@ -621,6 +622,14 @@ function toggleAlts(e) {
   // [].forEach.call(allTxs, function (el:any) {
   //   el.style.display = 'none';
   // });
+
+  console.log(cs.NOT);
+  let nots = document.getElementsByClassName(cs.NOT);
+  console.log(nots);
+
+  [].forEach.call(nots, function (el:any) {
+    el.style.display = 'block';
+  });
 
   let alts = document.getElementsByClassName("BANK");
   console.log(alts);
@@ -632,14 +641,19 @@ function toggleAlts(e) {
 
 }
 
-function toggleDetail(e){
+function toggleDetail(e:any){
   e.preventDefault();
 
-  let allDetails = document.getElementsByClassName("txDetail");
+  let allDetails = document.getElementsByClassName(cs.detail);
   console.log(allDetails);
 
   [].forEach.call(allDetails, function (el:any) {
-    el.style.display = 'none';
+    if(el.style.display === 'block') {
+      el.style.display = 'none';
+    } else {
+      el.style.display = 'block';
+    }
+    
   });
 
 }
@@ -679,7 +693,7 @@ export function App() {
       <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae magnam dolor cum! Repellat impedit quibusdam inventore, rem fugit, voluptate voluptas consequuntur minus quo iure magnam sequi reiciendis nisi officia veritatis!</p>
       <div className={cs.bigButton}>
         <h2>
-          <a href="#first"> 
+          <a href="#info"> 
             <img src="./src/img/click-arrow.png" alt="click-arrow" />
             &nbsp;Click here to start
           </a>
@@ -698,17 +712,17 @@ export function App() {
       {/* example of class component - can be set to update live with tick() */}
       
 
-      <div className={cs.page}>
-      <a id="first"></a>
-        <h2 className={cs.red}>DAO Income Tax Helper</h2>
+      {/* <div className={cs.page}>
+      <a id="first"></a> */}
+        {/* <h2 className={cs.red}>DAO Income Tax Helper</h2>
 
-        <img src="https://via.placeholder.com/500x350?text=Hero+Image" alt="" className={cs.scaleWidth} />
+        <img src="https://via.placeholder.com/500x350?text=Hero+Image" alt="" className={cs.scaleWidth} /> */}
 
         {/* <div className={cs.buttonContainer} >
           <Btn name="Calculate your tax now (it's free)" url="#info" />
         </div> */}
 
-        <aside className={cs.buttonContainer}>
+        {/* <aside className={cs.buttonContainer}>
           <a 
             href="#info"
             className={cs.btn} 
@@ -716,17 +730,17 @@ export function App() {
           >Calculate your tax now (it's free)</a>
         </aside>
 
-        <hr />
+        <hr /> */}
       
-      </div>
+      {/* </div> */}
 
       <div className={cs.page}>
         {/*<!-- sample page for initial info collect -->*/}
         <a id="info"></a>
-        <h2 className={cs.red}>First we will need some info about you!</h2>
+        <h2 className={cs.label}>Let's start with some questions!</h2>
 
         <div className={cs.inputBox}>
-          <label>What is your wallet address?</label>
+          <label>What is your ETH address?</label>
           <input type="text" placeholder="Enter your ETH address." defaultValue={address} id='walletInput' />
         </div>
 
@@ -765,7 +779,7 @@ export function App() {
       <div id="dao-select" className={cs.page}>
 
         <a id="dao-page"></a>
-        <h2 className={cs.red}>Which DAOs are you a part of?</h2>
+        <h2 className={cs.label}>Which DAOs are you a part of?</h2>
         <DaoSelect name="BanklessDAO" token="BANK" tokenState={BANK}
           // onClick={() => {
           //   // toggle BANK state
@@ -794,6 +808,8 @@ export function App() {
           >Next Step</a>
         </aside>
 
+        <p>If your DAO doesnt appear here. You can write us: <a href="mailto:links@banklesscard.xyz"  target="_blank">links@banklesscard.xyz</a></p>
+
         <hr />
 
       </div>
@@ -802,20 +818,26 @@ export function App() {
 
         <a id="tx-page"></a>
 
-        <p></p>
-        <a 
-            href=""
-            className={cs.btn} 
-            onClick={(e) => toggleAlts(e)}
-          >BTN: hide all DAO</a>
-          <a 
-            href=""
-            className={cs.btn} 
-            onClick={(e) => toggleDetail(e)}
-          >show/hide all tx details</a>
+        
         
 
-        <h2 className={cs.red}>Matched Transactions</h2>
+        <h2 className={cs.label}>We've automatically classified your transactions</h2>
+
+        <p>Verify that each one is correct.</p>
+
+        <p>
+        <a 
+            href=""
+            className={cs.btnW + " " + cs.btn} 
+            onClick={(e) => toggleAlts(e)}
+          >Show all &amp; Hide all DAO</a>
+          </p>
+          <p>
+          <a 
+            href=""
+            className={cs.btnW + " " + cs.btn} 
+            onClick={(e) => toggleDetail(e)}
+          >show/hide all tx details</a></p>
 
         {isConnected && <Account />}
 
