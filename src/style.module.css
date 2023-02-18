@@ -15,13 +15,22 @@
     font-variant: small-caps;
 
     color: white;
-    background: rgb(146, 8, 8);
+    /* background: rgb(146, 8, 8);
 
     border: 2px solid red;
-    border-radius: 8px;
-    padding: 10px 20px;
+    border-radius: 8px; */
+    padding: 10px 40%;
+
+    background: linear-gradient(90deg, #BE2BAE 0%, #F72D51 100%);
+    border-radius: 9px;
 
     box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
+
+    width: 100%;
+}
+
+.btnW {
+  padding: 10px 20%;
 }
 
 .btn:hover {
@@ -31,18 +40,38 @@
 .inputBox label {
     width: 100%;
     display: block;
+    margin: 20px 5px;
 }
 
 .inputBox input, .inputBox select {
     width: 100%;
     font-size: 18px;
-    padding: 5px 10px;
+    padding: 15px 10px;
     border-radius: 8px;
-    margin-bottom: 10px;
+    margin-bottom: 0px;
+
+
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.inputBox select {
+  height: 55px;
 }
 
 .red {
     color:red;
+}
+
+.label {
+  color: white;
+  text-align: center;
+  font-weight: 200;
+}
+
+.page label {
+  margin: 10px 5px;
+  font-size: 22px;
+  line-height: 2.1;
 }
 
 .INCOME {
@@ -50,7 +79,7 @@
 }
 
 .NOT {
-  display: block;
+  display: none;
 }
 
 .toggleButton {
@@ -78,13 +107,12 @@
 }
 
 .activeIncome {
-    background-color: #f5f5f5;  
+  background-color: #f5f5f5;  
   border:5px solid red;
 }
 
 .tx {
   list-style: none;
-
   border: 1px solid black;
   border-radius: 3px;
   margin: 5px 10px;
@@ -93,34 +121,45 @@
 
 .flexCont {
   display: flex;
+  flex-direction: column;
 }
 
 .row {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-evenly;
+  justify-content: flex-start;
   align-content: space-around;
 }
 
+.end {
+  justify-content: flex-end;
+}
+
+.even {
+  justify-content: space-evenly;
+}
+
 .col {
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   flex-basis: 100%;
   flex: 1;
-  min-width: 150px;
+  min-width: 150px; */
 }
 
  .tokenAmount {
-  color: grey;
+  color: white;
+  font-size:18px;
  }
 
  .convertAmount {
-  color: green;
+  color: #C02CAE;
+  font-size:12px;
  }
 
 .detail {
-  display: block;
+  display: none;
 }
 
 .scaleWidth {
@@ -274,7 +313,10 @@ body {
     margin: 30px auto;
 
     padding: 20px;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(0, 0, 0, 0.5); /* #DCBEEE33 */
+    /* -webkit-filter: blur(10px);
+      filter: blur(10px);*/
+      backdrop-filter: blur(8px); 
     border: 2px solid white;
     border-radius: 10px;
     max-height: 500px;
