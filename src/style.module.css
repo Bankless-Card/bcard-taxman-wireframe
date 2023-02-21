@@ -29,6 +29,24 @@
     width: 100%;
 }
 
+.exportBtn {
+  cursor: pointer;
+  text-decoration: none;
+
+  font-weight: bold;
+  font-variant: small-caps;
+
+  color: white;
+  padding: 10px 40%;
+
+  background: linear-gradient(90deg, #BE2BAE 0%, #F72D51 100%);
+  border-radius: 9px;
+
+  box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
+
+  width: 100%;
+}
+
 .btnW {
   padding: 10px 20%;
 }
@@ -75,11 +93,15 @@
 }
 
 .INCOME {
-  border: 4px solid greenyellow !important;
+  border-color: greenyellow !important;
 }
 
 .NOT {
   display: none;
+}
+
+.logoClick {
+  cursor: pointer;
 }
 
 .toggleButton {
@@ -95,15 +117,20 @@
 }
 
 .buttonStyle {
-  padding: 5px 10px;
+  padding: 5px 20%;
   border: 2px solid #ccc;
-  background-color: #333;
+  background: rgba(255,255,255,0.65);
   border-radius: 8px;
-  margin: 5px 10px;
-
+/* 
   color: white;
+  -webkit-text-fill-color: white; */
   font-weight: bold;
-  text-transform: uppercase;
+  text-transform: capitalize;
+}
+
+.buttonStyle::hover {
+  color:white;
+  text-decoration: underline;
 }
 
 .activeIncome {
@@ -113,10 +140,30 @@
 
 .tx {
   list-style: none;
-  border: 1px solid black;
+  border-bottom: 2px solid white;
   border-radius: 3px;
   margin: 5px 10px;
   padding: 5px;
+
+  /* color: #F62E54; */
+  color: #C02CAE;
+
+    /* background: -webkit-linear-gradient(#C02CAE, #F62E54);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    background: linear-gradient(#C02CAE, #F62E54);
+    background-clip: text; */
+    /* text-fill-color: transparent; */
+
+  font-weight:200;
+  line-height: 24px;
+}
+
+.tx span {
+  color:white;
+  font-weight: 400;
+  /* -webkit-text-fill-color: white; */
 }
 
 .flexCont {
@@ -137,15 +184,41 @@
 }
 
 .even {
-  justify-content: space-evenly;
+  justify-content: space-around;
+}
+
+.left {
+  float: left;
+  text-align: left;
+  font-size:14px;
+  display: block;
+  margin: 10px 0;
 }
 
 .col {
-  /* display: flex;
+  display: block;
+  /*
   flex-direction: column;
   flex-basis: 100%;
   flex: 1;
   min-width: 150px; */
+}
+
+.inBadge, .niBadge {
+  height: 10px;
+  width: 10px;
+  margin: 7px 5px 0 0;
+}
+
+.niBadge {
+  width: 35px;
+
+}
+
+.tokenLogo {
+  width: 50px;
+  height:50px;
+  border-radius: 25px;
 }
 
  .tokenAmount {
@@ -153,9 +226,19 @@
   font-size:18px;
  }
 
- .convertAmount {
-  color: #C02CAE;
-  font-size:12px;
+ .tx .convertAmount {
+  font-size: 14px;
+  font-weight:200;
+
+  color: #F62E54;
+
+    /* background: -webkit-linear-gradient( #F62E54,#C02CAE,);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    background: linear-gradient( #F62E54,#C02CAE);
+    background-clip: text; */
+    /* text-fill-color: transparent; */
  }
 
 .detail {
@@ -300,6 +383,16 @@ body {
     height: 50px;
   }
 
+  .txHeader {
+    color: #C02CAE;
+
+    background: -webkit-linear-gradient(#C02CAE, #F62E54);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+  }
+
   /* #root {
     background:green;
   } */
@@ -313,10 +406,8 @@ body {
     margin: 30px auto;
 
     padding: 20px;
-    background: rgba(0, 0, 0, 0.5); /* #DCBEEE33 */
-    /* -webkit-filter: blur(10px);
-      filter: blur(10px);*/
-      backdrop-filter: blur(8px); 
+    background: rgba(255, 168, 225, 0.8); /* #DCBEEE33 */
+    /* color: #FFA8E1  */
     border: 2px solid white;
     border-radius: 10px;
     max-height: 500px;
