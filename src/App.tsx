@@ -1,12 +1,15 @@
 import { Web3Button } from '@web3modal/react'
 import { useAccount } from 'wagmi'
 
-import { useState } from 'react'
+import { createElement, useState } from 'react'
 
 import { Account } from './components'
 import { Card } from './components'
 import { Clock } from './components'
 import { Btn } from './components'
+
+import { bankFeed } from './components'   // import pricefeed Data
+// console.log(bankFeed);
 
 // web3 for tx data - can probably use wagmi for same
 // import Web3 from 'web3';
@@ -37,20 +40,20 @@ import './style.module.css'
 
 // Sample of dynamically applied CSS
 import cs from './style.module.css'
-let foo = document.getElementById('foo');
-// console.log(classes.red)
-if(foo) {
-  foo.className = cs.red
-}
+// let foo = document.getElementById('foo');
+// // console.log(classes.red)
+// if(foo) {
+//   foo.className = cs.red
+// }
 
-let heroImg = document.getElementById('heroImage');
-if(heroImg) { heroImg.className = cs.scaleWidth }
+// let heroImg = document.getElementById('heroImage');
+// if(heroImg) { heroImg.className = cs.scaleWidth }
 
 function toggleSwitch(state:any){
   // console.log('toggleSwitch', state)
 
-  let incomeOn = '<img src="./src/img/in.png" alt="Income" width="30" height="30" />';
-  let incomeOff = '<img src="./src/img/ni.png" alt="Income Off" height="30" width="50" />';
+  let incomeOn = '<img class='+cs.inBadge+' src="./src/img/inBadge.png" alt="Income" width="30" height="30" />';
+  let incomeOff = '<img class='+cs.niBadge+' src="./src/img/ni.png" alt="Income Off" height="30" width="50" />';
 
   if(state === "INCOME"){
     return incomeOn;
@@ -59,10 +62,25 @@ function toggleSwitch(state:any){
   }
 }
 
+function handleOpen(thisLink:any) {
+  // figure out where we are in the DOM
+  console.log(thisLink);
+  // open/close the next details tab
+  let details = thisLink.nextElementSibling;
+  console.log(details);
+  if (details.style.display === "block") {
+    details.style.display = "none";
+  } else {
+    details.style.display = "block";
+  }
+
+}
+
 function getTokenLogo(asset:any){
 
   if(asset === "BANK"){
-    return '<img src="./src/img/bankless-temp.png" alt="Bankless DAO" width="50" height="50" />';
+
+    return '<img class='+cs.tokenLogo+' src="./src/img/dao.png" alt="Bankless DAO" onClick='+handleOpen+' />';
   }
 
   return "Token Logo - " + asset;
@@ -80,34 +98,60 @@ function getTokenLabel(asset:any){
 function displayTokenAmount(value:any, asset:any){
 
   if(asset === "BANK"){
-    return  parseFloat(value).toFixed(3) + " " + asset;
+    // Limit to three significant digits
+    let niceFormat = new Intl.NumberFormat('en-US', { maximumSignificantDigits: 9, minimumFractionDigits: 3,
+      maximumFractionDigits: 3 }).format(value);
+    // console.log(niceFormat);
+    // Expected output: "1,23,000"
+
+    return niceFormat + " " + asset;
+
+    // return  parseFloat(value).toFixed(3) + " " + asset;
   }
 
   return "Token Amount - " + value + " " + asset;
 }
-
-var gBankUsd = 0.0101;
 
 async function displayConvertAmount(value:any, asset:any, timestamp:any){
   // USD/FIAT value @ timefrom blockNum
 
   if(asset === "BANK"){
 
-    let bankUSD = gBankUsd;   // 1 BANK = 0.01 USD (or newer price)
+    let bankUSD = 0.0101;   // 1 BANK = 0.01 USD (or newer price)
 
     console.log(timestamp);
 
+    let bankHistory = bankFeed.prices;
+
+    bankHistory.forEach((item:any) => {
+      // console.log(timestamp, item[0], item[1]);
+      // console.log(item[0]/timestamp)
+      // if time of item is less than or equal to timestamp
+      if(item[0] <= timestamp*1000){
+        // console.log("SetPriceBANKUSD: " + item[1]);
+        bankUSD = item[1];    // set price up to timestamp
+      } else {
+        // console.log("break");
+      }
+
+      // next item
+
+    });
+
+    console.log(bankUSD);
+
     if(!timestamp){ timestamp=1676311028 }
 
-    let timeMin = timestamp - 250;
-    let timeMax = timestamp + 250;
-    let tokenAPI = 'bankless-dao';
-    let vsCurrency = 'usd';
+    // let timeMin = timestamp - 250;
+    // let timeMax = timestamp + 250;
+    // let tokenAPI = 'bankless-dao';
+    // let vsCurrency = 'usd';
 
+    /** DYNAMIC TESTING **/ 
     // use coingecko api to get price
     // https://api.coingecko.com/api/v3/simple/price?ids=bankless-dao&vs_currencies=usd
 
-    let apiURLcall = 'https://api.coingecko.com/api/v3/coins/bankless-dao/market_chart/range?vs_currency=usd&from=1676311028&to=1676311528';
+    // let apiURLcall = 'https://api.coingecko.com/api/v3/coins/bankless-dao/market_chart/range?vs_currency=usd&from=1676311028&to=1676311528';
 
     // let apiURLcall = 'https://api.coingecko.com/api/v3/coins/'+tokenAPI+'/market_chart/range?vs_currency='+vsCurrency+'&from='+timeMin+'&to='+timeMax;
 
@@ -132,7 +176,13 @@ async function displayConvertAmount(value:any, asset:any, timestamp:any){
     
     // });
 
-    return (bankUSD*parseFloat(value)).toFixed(2) + " $USD";
+    /** End DYNAMIC TESTING **/ 
+
+    let output = "$USD "+(bankUSD*parseFloat(value)).toFixed(2) + " @ " +bankUSD.toFixed(4);
+    console.log(output);
+
+      // return the price in FIAT terms, based on timestamp
+    return output;
 
 
 
@@ -142,48 +192,28 @@ async function displayConvertAmount(value:any, asset:any, timestamp:any){
 
 }
 
-function doSomething(){
-  console.log("doSomething");
+// function doSomething(){
+//   console.log("doSomething");
 
-  return "doSomething";
-}
-
-function moreTarget(event:any){
-  var caller = event.target;
-  console.log(caller+'more');
-}
-
-// function toggleItem(elem:any) {
-//   for (var i = 0; i < elem.length; i++) {
-//     elem[i].addEventListener("click", function(e:any) {
-//       var current = this;
-//       for (var i = 0; i < elem.length; i++) {
-//         if (current != elem[i]) {
-//           elem[i].classList.remove('active');
-//         } else if (current.classList.contains('active') === true) {
-//           current.classList.remove('active');
-//         } else {
-//           current.classList.add('active')
-//         }
-//       }
-//       e.preventDefault();
-//     });
-//   };
+//   return "doSomething";
 // }
-// toggleItem(document.querySelectorAll('.link'));
 
-function handleClick(e:any) {
-  var curr = e.target.textContent;
-  var elem = document.querySelectorAll('#kiran');
-  for (var i = 0; i < elem.length; i++) {
-      if (elem[i].textContent === curr) {
-          elem[i].className = 'active';
-      } else {
-          elem[i].className = '';
-      }
-  }
-};
+// function moreTarget(event:any){
+//   var caller = event.target;
+//   console.log(caller+'more');
+// }
 
+// function handleClick(e:any) {
+//   var curr = e.target.textContent;
+//   var elem = document.querySelectorAll('#kiran');
+//   for (var i = 0; i < elem.length; i++) {
+//       if (elem[i].textContent === curr) {
+//           elem[i].className = 'active';
+//       } else {
+//           elem[i].className = '';
+//       }
+//   }
+// };
 
 async function alchemyGo(){
 
@@ -225,7 +255,7 @@ async function alchemyGo(){
   const endBlockNumInt = 16308155;   //for 2022 eth mainnet END - hc
   const endBlock = "0x" + endBlockNumInt.toString(16);
 
-  console.log(startBlock);
+  // console.log(startBlock);
 
   const res = await alchemy.core.getAssetTransfers({
     fromBlock: startBlock,
@@ -285,21 +315,24 @@ async function alchemyGo(){
 
     let incomeBadge = toggleSwitch(incomeState); // 'Income Label - Toggle SWITCH';
     let tokenLogo = getTokenLogo(thisRow.asset);   // token logo - '+thisRow.asset+'
+
+
+
     let tokenLabel = getTokenLabel(thisRow.asset);   // token label - '+thisRow.asset+'
     let tokenAmount = displayTokenAmount(thisRow.value,thisRow.asset);   // token amount - '+thisRow.value+'
     let convertAmount = await displayConvertAmount(thisRow.value, thisRow.asset, unixT)// "USD/FIAT value @ timefrom blockNum";   // USD/FIAT value @ timefrom blockNum
 
     let outBox = '<div class=' + cs.flexCont + '>\
       <div class="'+cs.row+" "+cs.even+'">\
-        <div class='+cs.col+'>\
+        <div class="'+cs.col+" "+cs.logoClick+'">\
           '+ tokenLogo + ' \
         </div>\
         <div class='+cs.col+'>\
           <div class='+cs.row+'>\
-          <strong>'+tokenLabel+'</strong>\
+            <span>'+tokenLabel+'</span>\
           </div>\
           <div class='+cs.row+'>\
-          '+incomeBadge+'Income Received\
+            '+incomeBadge+' Income | Received\
           </div>\
         </div>\
         <div class='+cs.col+'>\
@@ -312,6 +345,14 @@ async function alchemyGo(){
         </div>\
       </div>';
 
+
+    // enable token logo for clickable -> show details
+    // console.log("Enable Show Details for Next onClick");
+    // outBox.find(cs.tokenClick).addEventListener("click", showDetails);      
+    // let outElem = document.createElement('div');
+    // outElem.innerHTML = outBox;
+
+    // console.log(outElem);
 
             // </div>\
 
@@ -330,7 +371,8 @@ async function alchemyGo(){
     // a defines the show/hide condition of the div
     let a = thisRow.asset;
 
-    let listRow = "<li class='"+cs.tx + " " + a + " " + cs[incomeState] + "'>";
+    // include the date/time in local format, as title of the list item
+    let listRow = "<li title='"+tNice+"' class='"+cs.tx + " " + a + " " + cs[incomeState] + "'>";
     listRow += outBox;    // main tx output and more button to reveal detail
     // listRow += getTokenLogo(thisRow.asset);
 
@@ -342,7 +384,7 @@ async function alchemyGo(){
     
     
     listRow += "<div class="+cs.col+">";
-    listRow += "TokenAmt: <strong>" + thisRow.value +"</strong>" + "ConvertAmt: <strong>";
+    listRow += "TokenAmt: <strong>" + thisRow.value +"</strong>" + "<br/>ConvertAmt: <strong>";
     listRow += await displayConvertAmount(thisRow.value, a, unixT) +"</strong></div>";
 
     listRow += "</div>";
@@ -359,18 +401,19 @@ async function alchemyGo(){
 
     // "<br/>DATE/TIME AS CAPTURED FROM BLOCKnum: "+thisRow.blockNum+" or TXhash: "+thisRow.hash+
 
+    let clearBoth = "<div style=clear:both></div>";
 
-    listRow += tNice + "<br /> <a target='_blank' class="+cs.buttonStyle+" href=https://etherscan.io/tx/"+thisRow.hash+">View TX on Etherscan</a> <br /><strong>From address: </strong><br />"+thisRow.from+"<br /><a href=https://etherscan.io/address/"+thisRow.from+" target=_blank class="+cs.buttonStyle+">View Sender</a><br />";
+    listRow += "<div class="+cs.left+">"+tNice + "</div> "+clearBoth+"<a target='_blank' class="+cs.buttonStyle+" href=https://etherscan.io/tx/"+thisRow.hash+">View TX on Etherscan</a> <br /><div class="+cs.left+">From address: <br/>"+thisRow.from+"</div>"+clearBoth+"<a href=https://etherscan.io/address/"+thisRow.from+" target=_blank class="+cs.buttonStyle+">View Sender</a>" + clearBoth;
 
     // default view for BANK token is income
     if(a === "BANK"){
-      listRow += "<a onClick=handleClick(e)><img id=kiran src='./src/img/in.png' class='"+cs.activeIncome + " " + cs.toggleButton+"' alt=income  /></a>";   // active income image
+      listRow += "<a onClick=handleClick(e)><img src='./src/img/in.png' class='"+cs.activeIncome + " " + cs.toggleButton+"' alt=income  /></a>";   // active income image
 
-      listRow += "<img id=kiran src='./src/img/ni.png' alt=notincome class="+cs.toggleButton+" />";   // not income image
+      listRow += "<img src='./src/img/ni.png' alt=notincome class="+cs.toggleButton+" />";   // not income image
     } else {
       // non-income display
-      listRow += "<a onClick=handleClick(e)><img id=kiran src='./src/img/in.png' alt=income width=50 height=50 class="+cs.toggleButton+" /></a>";   // income image
-      listRow += "<img id=kiran src='./src/img/ni.png' alt=income width=60 height=40 class='"+cs.activeIncome+" "+cs.toggleButton+"' />";   // not income image
+      listRow += "<a onClick=handleClick(e)><img src='./src/img/in.png' alt=income width=50 height=50 class="+cs.toggleButton+" /></a>";   // income image
+      listRow += "<img src='./src/img/ni.png' alt=income width=60 height=40 class='"+cs.activeIncome+" "+cs.toggleButton+"' />";   // not income image
     }
 
     
@@ -385,6 +428,7 @@ async function alchemyGo(){
 
     if (output) {
       output!.innerHTML = output?.innerHTML + listRow;
+      // output!.innerHTML = outElem + output?.innerHTML;
     }
 
     // using blockHash -> generate URL link to etherscan
@@ -404,6 +448,89 @@ async function alchemyGo(){
   // );
 }
 
+function finishBtn() {
+
+  // const [BANK, setBANK] = useState();
+  // console.log(BANK);
+
+  console.log("! have to pre-setup the output div in the DOM - app.tsx");
+
+  console.log("finish button has been clicked");
+
+  // change the background image
+  document.body.style.backgroundImage = "url('./src/img/bg.jpg')";
+
+  // output the displayed tx summary
+  let totalIncome = 0;
+  let totalBalance = 0;
+
+  //actually calculate the total income and balance
+  // get the BANK as Fiat values and add them up
+  let myIncome = document.getElementsByClassName(cs.convertAmount);
+  let myTokens = document.getElementsByClassName(cs.tokenAmount);
+
+  [].forEach.call(myIncome, function (el:any) {
+    // console.log(el.innerHTML);
+
+    let txCont = el.parentElement.parentElement.parentElement.parentElement.parentElement;
+    // console.log(txCont)
+
+    // console.log(txCont.style.display)
+    // if the tx is displayed 
+    if(txCont.style.display === "block"){
+      // if the tx is not due a conversion
+      if(!el.innerHTML.startsWith("Convert")){
+        // if converted -> sum for total income
+        let f = parseFloat(el.innerHTML.split(" ")[1]);
+        // console.log(f);
+
+        totalIncome += f;
+      }
+
+    }
+
+  });
+
+  [].forEach.call(myTokens, function (el:any) {
+
+    let txContTwo = el.parentElement.parentElement.parentElement.parentElement.parentElement;
+
+    // console.log(txContTwo)
+    // console.log(txContTwo.style.display)
+    // if the tx is displayed 
+    if(txContTwo.style.display === "block"){
+      // if the tx is not due a conversion
+      if(!el.innerHTML.startsWith("Token")){
+        // if converted -> sum for total income
+        let thisAmt = el.innerHTML.split(" ")[0];
+        // console.log(thisAmt);
+
+        let f = parseFloat(thisAmt.replace(",",""));
+        // console.log(f);
+
+        totalBalance += f;
+      }
+
+    }
+
+  });
+
+
+  // DOM Output
+  // console.log(totalIncome.toFixed(2), totalBalance.toFixed(3));
+
+  let txSummary = document.getElementById("txSummary");
+
+  if(txSummary){
+
+    // add class to txSummary
+
+    txSummary.innerHTML = "<h3>2022 DAO income: "+totalIncome.toFixed(2) + " FIAT(USD)</h3>";
+    txSummary.innerHTML += "<h3>2022 BANK balance: "+totalBalance.toFixed(3)+" BANK</h3>";
+  } else  {
+    console.log("no txSummary div found");
+  }
+}
 
 function triggerTx(props:any) {
   console.log(props);
@@ -415,6 +542,117 @@ function triggerTx(props:any) {
 
   // change the background image
   document.body.style.backgroundImage = "url('./src/img/bg2.jpg')";
+}
+
+function getPriceHistory(asset:any){
+  // USD/FIAT value @ timefrom blockNum
+
+  if(asset === "BANK"){
+
+    let tokenAPI = 'bankless-dao';
+    let vsCurrency = 'usd';
+
+    // console.log(bankFeed.prices);
+
+    let bankHistory = bankFeed.prices;
+
+    // bankHistory.forEach((element:any) => {
+    //   console.log(element[0]);  // timestamp
+    //   console.log(element[1]);  // price
+    // });
+
+    return bankHistory;
+
+    // use coingecko api to get price
+    // https://api.coingecko.com/api/v3/simple/price?ids=bankless-dao&vs_currencies=usd
+
+    const blockNumInt = 13916169;   //for 2022 eth mainnet START - hc
+    const startBlock = "0x" + blockNumInt.toString(16);   // format for 0x + hex
+
+    const endBlockNumInt = 16308155;   //for 2022 eth mainnet END - hc
+    const endBlock = "0x" + endBlockNumInt.toString(16);
+
+    // this is hard coded for 2022 data as pulled from historical data
+    const startTime = 1640993039;
+    const endTime = 1672529039;
+
+    // this call for BANK vs USD for all 2022
+
+    let apiURLcall = 'https://api.coingecko.com/api/v3/coins/'+tokenAPI+'/market_chart/range?vs_currency='+vsCurrency+'&from='+startTime+'&to='+endTime;
+
+    // console.log(apiURLcall);    // test with direct call
+
+    // let apiURLcall = 'https://api.coingecko.com/api/v3/coins/'+tokenAPI+'/market_chart/range?vs_currency='+vsCurrency+'&from='+timeMin+'&to='+timeMax;
+
+    // THIS IS ON HOLD FOR NOW
+
+    // let data = await fetch(apiURLcall)
+    //   .then((response) => response.json())
+    //   .then((data) => {
+      
+    //     // return object has prices, market_caps, and total_volumes
+
+    //     // console.log(data);   
+    //     // this shoud be BANK prices, mcap and volumes
+
+    //     if(data.prices.length >= 1){
+    //       // it has received a price(s) object
+
+    //       console.log(data.prices);   // OK this is an array of arrays
+    //       /*
+    //       [[TIMECODE, PRICE],[TIMECODE, PRICE],...]
+
+    //       */
+    //       // return the 2022 history price object
+    //       return data.prices
+
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error('Error:', error);
+    //   });
+
+    // return (bankUSD*parseFloat(value)).toFixed(2) + " $USD";
+
+    // return {"BANK": 0.001}
+
+
+
+  } else {
+    return "Convert asset - " + asset;
+  }
+
+}
+
+async function triggerPrice(BANK:any, setBANK:any) {
+  // console.log(address);
+  console.log("Start - Price call - get BANK historical data with coingecko call");
+  // let gt = GetTransactions({address:props});
+  // console.log(gt);
+  console.log(BANK);
+
+  // test setBANK function to set live State
+  setBANK(false);
+
+  console.log(BANK);    // will this be updated? State or local var?
+
+  // let result = await any Promise, like:
+  let bankHistory = getPriceHistory("BANK");
+  console.log(bankHistory); 
+
+  bankHistory.forEach((element:any) => {
+    // console.log(element[0]);  // timestamp
+    // console.log(element[1]);  // price
+  });
+
+  // maybe something like this will help?
+  //const mydata = (async function(){... return data})()
+  
+
+  // alchemyGo();    // re-run the txlist
+
+  // change the background image
+  // document.body.style.backgroundImage = "url('./src/img/bg2.jpg')";
 }
 
 function SampleFunc(here:any) {
@@ -539,7 +777,7 @@ function GetTransactions(props:any) : any {
 
 function DaoSelect(props:any){
 
-  // console.log(props);
+  console.log(props);
 
   // get incoming state of token selection with props.tokenState
 
@@ -598,19 +836,26 @@ function DaoSelect(props:any){
   // let tokenSel = this.setDAOState(props.token);
 
   // shows the checkbox for the DAO token
-  return (<div>
-    <input 
-      type="checkbox" 
-      id={props.token} 
-      name={props.name} 
-      // value={props.name} 
-      checked={TOKEN} 
-      onClick={handleChange} 
-    />
-    <label htmlFor={props.name}> 
-      {props.name} ({props.token})
-    </label>
-  </div>);
+  if(props.name){
+
+  
+    return (<div>
+      <input 
+        type="checkbox" 
+        id={props.token} 
+        name={props.name} 
+        // value={props.name} 
+        checked={TOKEN} 
+        onClick={handleChange} 
+      />
+      <label htmlFor={props.name}> 
+        {props.name} ({props.token})
+      </label>
+    </div>);
+  
+  } else {
+    return (<div>Oops</div>);
+  }
 }
 
 function toggleAlts(e:any) {
@@ -642,7 +887,7 @@ function toggleAlts(e:any) {
 }
 
 function toggleDetail(e:any){
-  e.preventDefault();
+ if(e){e.preventDefault();}
 
   let allDetails = document.getElementsByClassName(cs.detail);
   console.log(allDetails);
@@ -662,8 +907,8 @@ export function App() {
   const { address, isConnected } = useAccount()
   // console.log(address);
 
-  //kickoff alchemyGo function
-  const myFunc = alchemyGo();
+  //kickoff alchemyGo function -> this will run the alchemy API call
+  // const myFunc = alchemyGo();
 
   // save state to track dao selection
   // const [daoState, setDaoState] = useState({})
@@ -673,6 +918,12 @@ export function App() {
   // default true on token states to show all
   // example with BANK token
   const [BANK, setBANK] = useState(true);
+
+  console.log(BANK);
+
+  // let state = {prices: {}};
+  // state.prices = {BANK: []};
+  // state.prices.BANK = [];
 
   return (
     <>
@@ -768,7 +1019,7 @@ export function App() {
           <a 
             href="#dao-page"
             className={cs.btn} 
-            onClick={() => triggerTx(address)}
+            onClick={() => triggerPrice(BANK, setBANK)}
           >Next Step</a>
         </aside>
 
@@ -827,18 +1078,19 @@ export function App() {
 
         <p>
         <a 
-            href=""
+            href="#"
             className={cs.btnW + " " + cs.btn} 
             onClick={(e) => toggleAlts(e)}
           >Show all &amp; Hide all DAO</a>
           </p>
           <p>
           <a 
-            href=""
+            href="#"
             className={cs.btnW + " " + cs.btn} 
             onClick={(e) => toggleDetail(e)}
           >show/hide all tx details</a></p>
 
+        {/* if the connection is set, this loads in the account info (ad) from Wallet Connect*/}
         {isConnected && <Account />}
 
         {/* {isConnected && <AlchemyGo address={address} />} */}
@@ -847,8 +1099,17 @@ export function App() {
           <a 
             href="#finish"
             className={cs.btn} 
-            // onClick={() => triggerTx(address)}
+            onClick={() => finishBtn()}
           >Finish</a>
+        </aside>
+
+        <div id="txSummary" className={cs.txSummary}></div>
+
+        <aside className={cs.buttonContainer}>
+          <button 
+            className={cs.exportBtn} 
+            onClick={() => console.log("exportData")}
+          >Export</button>
         </aside>
 
       </div>
@@ -860,9 +1121,9 @@ export function App() {
 
       <Web3Button />
 
-      <Card title="Card Title" paragraph="This is paragraph data for sample card." />
+      {/* <Card title="Card Title" paragraph="This is paragraph data for sample card." />
 
-      <SampleFunc here="here" />
+      <SampleFunc here="here" /> */}
 
 
     

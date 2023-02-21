@@ -1,6 +1,8 @@
 import { useAccount, useEnsName, useEnsAvatar, useDisconnect, } from 'wagmi'
 import { useBalance, } from 'wagmi'
 
+import cs from '../style.module.css';
+
 import { TxComp } from './TxComponent';
 
 function sampleFunc(here:any) {
@@ -112,11 +114,11 @@ export function Account() {
         Balance (eth value): {data?.formatted} {data?.symbol}
       </div>
       <h4>Connection Info:
-        <span> Connected to {connector!.name}</span>
+        {connector && <span> Connected to {connector.name}</span>}
       </h4>
       {/* <button onClick={disconnect}>Disconnect</button> */}
 
-      <h4 id="txHeader">2022 Ethereum Transactions</h4>
+      <h4 className={cs.txHeader}>2022 Ethereum Transactions</h4>
       <div id="output">
         {/* <TxComp txs={myTx} /> */}
       </div>
