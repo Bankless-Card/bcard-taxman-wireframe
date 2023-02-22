@@ -3,20 +3,31 @@ import { useAccount } from 'wagmi'
 
 import { createElement, useState } from 'react'
 
+import { Alchemy, Network, AssetTransfersCategory } from 'alchemy-sdk';
+
+
+// components from library
 import { Account } from './components'
 import { Card } from './components'
 import { Clock } from './components'
 import { Btn } from './components'
 
-import { bankFeed } from './components'   // import pricefeed Data
-// console.log(bankFeed);
+import { DaoSelectors } from './components';
 
-// web3 for tx data - can probably use wagmi for same
-// import Web3 from 'web3';
-// const web3 = new Web3();
+// data from library
+import { bankFeed } from './data'   // import pricefeed Data
 
+// functions from library
+import { toggleAlts } from './functions'
+import { toggleDetail } from './functions'
+import { finishButton } from './functions'    // action of finish button not component
+import { toggleSwitch } from './functions'    // action of switch not component
+// import { handleOpen } from './functions' 
+import { getTokenLogo } from './functions' 
+import { getTokenLabel } from './functions'   
+import { displayTokenAmount } from './functions' 
+import { displayConvertAmount } from './functions'
 
-import { Alchemy, Network, AssetTransfersCategory } from 'alchemy-sdk';
 
 // get api key from .env
 const apiKey = process.env.REACT_APP_ALCHEMY_API_KEY;
@@ -35,185 +46,10 @@ const alchemy = new Alchemy(settings);
 
 
 
-import './style.module.css'
-
-
+// import './style.module.css'
 // Sample of dynamically applied CSS
 import cs from './style.module.css'
-// let foo = document.getElementById('foo');
-// // console.log(classes.red)
-// if(foo) {
-//   foo.className = cs.red
-// }
 
-// let heroImg = document.getElementById('heroImage');
-// if(heroImg) { heroImg.className = cs.scaleWidth }
-
-function toggleSwitch(state:any){
-  // console.log('toggleSwitch', state)
-
-  let incomeOn = '<img class='+cs.inBadge+' src="./src/img/inBadge.png" alt="Income" width="30" height="30" />';
-  let incomeOff = '<img class='+cs.niBadge+' src="./src/img/ni.png" alt="Income Off" height="30" width="50" />';
-
-  if(state === "INCOME"){
-    return incomeOn;
-  } else {
-    return incomeOff;
-  }
-}
-
-function handleOpen(thisLink:any) {
-  // figure out where we are in the DOM
-  console.log(thisLink);
-  // open/close the next details tab
-  let details = thisLink.nextElementSibling;
-  console.log(details);
-  if (details.style.display === "block") {
-    details.style.display = "none";
-  } else {
-    details.style.display = "block";
-  }
-
-}
-
-function getTokenLogo(asset:any){
-
-  if(asset === "BANK"){
-
-    return '<img class='+cs.tokenLogo+' src="./src/img/dao.png" alt="Bankless DAO" onClick='+handleOpen+' />';
-  }
-
-  return "Token Logo - " + asset;
-}
-
-function getTokenLabel(asset:any){
-
-  if(asset === "BANK"){
-    return "Bankless DAO";
-  }
-
-  return "Token Label - " + asset;
-}
-
-function displayTokenAmount(value:any, asset:any){
-
-  if(asset === "BANK"){
-    // Limit to three significant digits
-    let niceFormat = new Intl.NumberFormat('en-US', { maximumSignificantDigits: 9, minimumFractionDigits: 3,
-      maximumFractionDigits: 3 }).format(value);
-    // console.log(niceFormat);
-    // Expected output: "1,23,000"
-
-    return niceFormat + " " + asset;
-
-    // return  parseFloat(value).toFixed(3) + " " + asset;
-  }
-
-  return "Token Amount - " + value + " " + asset;
-}
-
-async function displayConvertAmount(value:any, asset:any, timestamp:any){
-  // USD/FIAT value @ timefrom blockNum
-
-  if(asset === "BANK"){
-
-    let bankUSD = 0.0101;   // 1 BANK = 0.01 USD (or newer price)
-
-    console.log(timestamp);
-
-    let bankHistory = bankFeed.prices;
-
-    bankHistory.forEach((item:any) => {
-      // console.log(timestamp, item[0], item[1]);
-      // console.log(item[0]/timestamp)
-      // if time of item is less than or equal to timestamp
-      if(item[0] <= timestamp*1000){
-        // console.log("SetPriceBANKUSD: " + item[1]);
-        bankUSD = item[1];    // set price up to timestamp
-      } else {
-        // console.log("break");
-      }
-
-      // next item
-
-    });
-
-    console.log(bankUSD);
-
-    if(!timestamp){ timestamp=1676311028 }
-
-    // let timeMin = timestamp - 250;
-    // let timeMax = timestamp + 250;
-    // let tokenAPI = 'bankless-dao';
-    // let vsCurrency = 'usd';
-
-    /** DYNAMIC TESTING **/ 
-    // use coingecko api to get price
-    // https://api.coingecko.com/api/v3/simple/price?ids=bankless-dao&vs_currencies=usd
-
-    // let apiURLcall = 'https://api.coingecko.com/api/v3/coins/bankless-dao/market_chart/range?vs_currency=usd&from=1676311028&to=1676311528';
-
-    // let apiURLcall = 'https://api.coingecko.com/api/v3/coins/'+tokenAPI+'/market_chart/range?vs_currency='+vsCurrency+'&from='+timeMin+'&to='+timeMax;
-
-    // THIS IS ON HOLD FOR NOW
-
-    // fetch(apiURLcall).then((response) => response.json()).then((data) => {
-      
-    //   // return object has prices, market_caps, and total_volumes
-
-    //   console.log(data);   // this shoud be BANK price at closest timestamp to end
-
-    //   if(data.prices.length >= 1){
-    //     // it has received a price
-    //     bankUSD = data.prices[0][1];
-    //     gBankUsd = bankUSD;   // update global var with new price
-
-    //     console.log((bankUSD*parseFloat(value)).toFixed(2) + " $USD")
-    //   }
-      
-
-    //   return (bankUSD*parseFloat(value)).toFixed(2) + " $USD";
-    
-    // });
-
-    /** End DYNAMIC TESTING **/ 
-
-    let output = "$USD "+(bankUSD*parseFloat(value)).toFixed(2) + " @ " +bankUSD.toFixed(4);
-    console.log(output);
-
-      // return the price in FIAT terms, based on timestamp
-    return output;
-
-
-
-  } else {
-    return "Convert Amount - " + value;
-  }
-
-}
-
-// function doSomething(){
-//   console.log("doSomething");
-
-//   return "doSomething";
-// }
-
-// function moreTarget(event:any){
-//   var caller = event.target;
-//   console.log(caller+'more');
-// }
-
-// function handleClick(e:any) {
-//   var curr = e.target.textContent;
-//   var elem = document.querySelectorAll('#kiran');
-//   for (var i = 0; i < elem.length; i++) {
-//       if (elem[i].textContent === curr) {
-//           elem[i].className = 'active';
-//       } else {
-//           elem[i].className = '';
-//       }
-//   }
-// };
 
 async function alchemyGo(){
 
@@ -447,91 +283,7 @@ async function alchemyGo(){
   //   res => console.log(res)
   // );
 }
-
-function finishBtn() {
-
-  // const [BANK, setBANK] = useState();
-  // console.log(BANK);
-
-  console.log("! have to pre-setup the output div in the DOM - app.tsx");
-
-  console.log("finish button has been clicked");
-
-  // change the background image
-  document.body.style.backgroundImage = "url('./src/img/bg.jpg')";
-
-  // output the displayed tx summary
-  let totalIncome = 0;
-  let totalBalance = 0;
-
-  //actually calculate the total income and balance
-  // get the BANK as Fiat values and add them up
-  let myIncome = document.getElementsByClassName(cs.convertAmount);
-  let myTokens = document.getElementsByClassName(cs.tokenAmount);
-
-  [].forEach.call(myIncome, function (el:any) {
-    // console.log(el.innerHTML);
-
-    let txCont = el.parentElement.parentElement.parentElement.parentElement.parentElement;
-    // console.log(txCont)
-
-    // console.log(txCont.style.display)
-    // if the tx is displayed 
-    if(txCont.style.display === "block"){
-      // if the tx is not due a conversion
-      if(!el.innerHTML.startsWith("Convert")){
-        // if converted -> sum for total income
-        let f = parseFloat(el.innerHTML.split(" ")[1]);
-        // console.log(f);
-
-        totalIncome += f;
-      }
-
-    }
-
-  });
-
-  [].forEach.call(myTokens, function (el:any) {
-
-    let txContTwo = el.parentElement.parentElement.parentElement.parentElement.parentElement;
-
-    // console.log(txContTwo)
-    // console.log(txContTwo.style.display)
-    // if the tx is displayed 
-    if(txContTwo.style.display === "block"){
-      // if the tx is not due a conversion
-      if(!el.innerHTML.startsWith("Token")){
-        // if converted -> sum for total income
-        let thisAmt = el.innerHTML.split(" ")[0];
-        // console.log(thisAmt);
-
-        let f = parseFloat(thisAmt.replace(",",""));
-        // console.log(f);
-
-        totalBalance += f;
-      }
-
-    }
-
-  });
-
-
-  // DOM Output
-  // console.log(totalIncome.toFixed(2), totalBalance.toFixed(3));
-
-  let txSummary = document.getElementById("txSummary");
-
-  if(txSummary){
-
-    // add class to txSummary
-
-    txSummary.innerHTML = "<h3>2022 DAO income: "+totalIncome.toFixed(2) + " FIAT(USD)</h3>";
-    txSummary.innerHTML += "<h3>2022 BANK balance: "+totalBalance.toFixed(3)+" BANK</h3>";
-  } else  {
-    console.log("no txSummary div found");
-  }
-}
-
+// triggers the alchemyGo() function
 function triggerTx(props:any) {
   console.log(props);
   console.log("TX trigger call ");
@@ -544,367 +296,206 @@ function triggerTx(props:any) {
   document.body.style.backgroundImage = "url('./src/img/bg2.jpg')";
 }
 
-function getPriceHistory(asset:any){
-  // USD/FIAT value @ timefrom blockNum
+// type GreetFunction = (asset: string) => Array;
 
-  if(asset === "BANK"){
+// called by the triggerPrice function
+// function getPriceHistory(asset:any){
+//   // USD/FIAT value @ timefrom blockNum
 
-    let tokenAPI = 'bankless-dao';
-    let vsCurrency = 'usd';
+//   if(asset === "BANK"){
 
-    // console.log(bankFeed.prices);
+//     let tokenAPI = 'bankless-dao';
+//     let vsCurrency = 'usd';
 
-    let bankHistory = bankFeed.prices;
+//     // console.log(bankFeed.prices);
 
-    // bankHistory.forEach((element:any) => {
-    //   console.log(element[0]);  // timestamp
-    //   console.log(element[1]);  // price
-    // });
+//     let bankHistory = bankFeed.prices;
 
-    return bankHistory;
+//     // bankHistory.forEach((element:any) => {
+//     //   console.log(element[0]);  // timestamp
+//     //   console.log(element[1]);  // price
+//     // });
 
-    // use coingecko api to get price
-    // https://api.coingecko.com/api/v3/simple/price?ids=bankless-dao&vs_currencies=usd
+//     return bankHistory;
 
-    const blockNumInt = 13916169;   //for 2022 eth mainnet START - hc
-    const startBlock = "0x" + blockNumInt.toString(16);   // format for 0x + hex
+//     // use coingecko api to get price
+//     // https://api.coingecko.com/api/v3/simple/price?ids=bankless-dao&vs_currencies=usd
 
-    const endBlockNumInt = 16308155;   //for 2022 eth mainnet END - hc
-    const endBlock = "0x" + endBlockNumInt.toString(16);
+//     const blockNumInt = 13916169;   //for 2022 eth mainnet START - hc
+//     const startBlock = "0x" + blockNumInt.toString(16);   // format for 0x + hex
 
-    // this is hard coded for 2022 data as pulled from historical data
-    const startTime = 1640993039;
-    const endTime = 1672529039;
+//     const endBlockNumInt = 16308155;   //for 2022 eth mainnet END - hc
+//     const endBlock = "0x" + endBlockNumInt.toString(16);
 
-    // this call for BANK vs USD for all 2022
+//     // this is hard coded for 2022 data as pulled from historical data
+//     const startTime = 1640993039;
+//     const endTime = 1672529039;
 
-    let apiURLcall = 'https://api.coingecko.com/api/v3/coins/'+tokenAPI+'/market_chart/range?vs_currency='+vsCurrency+'&from='+startTime+'&to='+endTime;
+//     // this call for BANK vs USD for all 2022
 
-    // console.log(apiURLcall);    // test with direct call
+//     let apiURLcall = 'https://api.coingecko.com/api/v3/coins/'+tokenAPI+'/market_chart/range?vs_currency='+vsCurrency+'&from='+startTime+'&to='+endTime;
 
-    // let apiURLcall = 'https://api.coingecko.com/api/v3/coins/'+tokenAPI+'/market_chart/range?vs_currency='+vsCurrency+'&from='+timeMin+'&to='+timeMax;
+//     // console.log(apiURLcall);    // test with direct call
 
-    // THIS IS ON HOLD FOR NOW
+//     // let apiURLcall = 'https://api.coingecko.com/api/v3/coins/'+tokenAPI+'/market_chart/range?vs_currency='+vsCurrency+'&from='+timeMin+'&to='+timeMax;
 
-    // let data = await fetch(apiURLcall)
-    //   .then((response) => response.json())
-    //   .then((data) => {
+//     // THIS IS ON HOLD FOR NOW
+
+//     // let data = await fetch(apiURLcall)
+//     //   .then((response) => response.json())
+//     //   .then((data) => {
       
-    //     // return object has prices, market_caps, and total_volumes
+//     //     // return object has prices, market_caps, and total_volumes
 
-    //     // console.log(data);   
-    //     // this shoud be BANK prices, mcap and volumes
+//     //     // console.log(data);   
+//     //     // this shoud be BANK prices, mcap and volumes
 
-    //     if(data.prices.length >= 1){
-    //       // it has received a price(s) object
+//     //     if(data.prices.length >= 1){
+//     //       // it has received a price(s) object
 
-    //       console.log(data.prices);   // OK this is an array of arrays
-    //       /*
-    //       [[TIMECODE, PRICE],[TIMECODE, PRICE],...]
+//     //       console.log(data.prices);   // OK this is an array of arrays
+//     //       /*
+//     //       [[TIMECODE, PRICE],[TIMECODE, PRICE],...]
 
-    //       */
-    //       // return the 2022 history price object
-    //       return data.prices
+//     //       */
+//     //       // return the 2022 history price object
+//     //       return data.prices
 
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error('Error:', error);
-    //   });
+//     //     }
+//     //   })
+//     //   .catch((error) => {
+//     //     console.error('Error:', error);
+//     //   });
 
-    // return (bankUSD*parseFloat(value)).toFixed(2) + " $USD";
+//     // return (bankUSD*parseFloat(value)).toFixed(2) + " $USD";
 
-    // return {"BANK": 0.001}
+//     // return {"BANK": 0.001}
 
 
 
-  } else {
-    return "Convert asset - " + asset;
-  }
+//   } else {
+//     return "Convert asset - " + asset;
+//   }
 
-}
-
-async function triggerPrice(BANK:any, setBANK:any) {
-  // console.log(address);
-  console.log("Start - Price call - get BANK historical data with coingecko call");
-  // let gt = GetTransactions({address:props});
-  // console.log(gt);
-  console.log(BANK);
-
-  // test setBANK function to set live State
-  setBANK(false);
-
-  console.log(BANK);    // will this be updated? State or local var?
-
-  // let result = await any Promise, like:
-  let bankHistory = getPriceHistory("BANK");
-  console.log(bankHistory); 
-
-  bankHistory.forEach((element:any) => {
-    // console.log(element[0]);  // timestamp
-    // console.log(element[1]);  // price
-  });
-
-  // maybe something like this will help?
-  //const mydata = (async function(){... return data})()
-  
-
-  // alchemyGo();    // re-run the txlist
-
-  // change the background image
-  // document.body.style.backgroundImage = "url('./src/img/bg2.jpg')";
-}
-
-function SampleFunc(here:any) {
-  // console.log(here)   // we can get the list of tx array here
-
-    // let myTxs = GetTransactions('0x522d634b6BFfb444FdbCdE5932738995A4cfd1F1');
-    // console.log(myTxs)
-
-    const data =[{"name":"test1"},{"name":"test2"}];
-    const listItems = data.map((d) => <li key={d.name}>{d.name}</li>);
-
-    // console.log(listItems)
-
-    return (
-      <div>
-      {listItems }
-      </div>
-    );
-}
-
-async function getBlock(num:any){
-
-  const block = await alchemy.core.getBlock( parseInt(num) );
-  console.log(block); 
-
-  return block;
-
-}
-
-// async function getMyTxs() {
-//   const toAddress = "0x1E6E8695FAb3Eb382534915eA8d7Cc1D1994B152";
-
-//   const res = await alchemy.core.getAssetTransfers({
-//     fromBlock: "0x0",
-//     fromAddress: "0x0000000000000000000000000000000000000000",
-//     toAddress: toAddress,
-//     excludeZeroValue: true,
-//     category: ["erc721", "erc1155"],
-//   });
-
-//   console.log(res);
 // }
 
-function GetTransactions(props:any) : any {
+// async function triggerPrice(BANK:any, setBANK:any) {
+//   // console.log(address);
+//   console.log("Start - Price call - get BANK historical data with coingecko call");
+//   // let gt = GetTransactions({address:props});
+//   // console.log(gt);
+//   console.log(BANK);
 
-  let walletAddress = props.address;
-  console.log(props);
+//   // test setBANK function to set live State
+//   setBANK(false);
 
-  // check input box for current address:
+//   console.log(BANK);    // will this be updated? State or local var?
 
-  let currentWallet = document.getElementById('walletInput');
-  // let inVal = (<HTMLInputElement>currentWallet).value;
-  if(currentWallet){
+//   // let result = await any Promise, like:
+//   let bankHistory = getPriceHistory("BANK");
+//   console.log(bankHistory); 
 
-    const inVal = (document.getElementById('walletInput') as HTMLInputElement | null)?.value;
+//   bankHistory.forEach((element:any) => {
+//     // console.log(element[0]);  // timestamp
+//     // console.log(element[1]);  // price
+//   });
 
-    console.log(inVal);
-
-    if (inVal !==  walletAddress) {
-      // override the wallet connect input with what is displaayed in the box
-      walletAddress = inVal;
-    }
-  }
-
-  // address should be passed from connected wallet
-  let EsApiKeyToken = "GJEDCGUWPNTHY5PSSRSNZ1SNBZBXTCNHP1";
-
-  let etherscanAPIurl = "https://api.etherscan.io/api"
-  etherscanAPIurl += "?module=account"
-  etherscanAPIurl += "&action=txlist"
-  etherscanAPIurl += "&address=" + walletAddress;     //0xc5102fE9359FD9a28f877a67E36B0F050d81a3CC"
-  etherscanAPIurl += "&startblock=16356037"           // start from block X which corresponds to Y
-  etherscanAPIurl += "&endblock=99999999"
-  etherscanAPIurl += "&page=1"
-  etherscanAPIurl += "&offset=10"
-  etherscanAPIurl += "&sort=asc"
-  etherscanAPIurl += "&apikey=" + EsApiKeyToken;
-
-  let output = document.getElementById("output");
-
-  // Simple GET request using fetch
-  fetch(etherscanAPIurl)
-  .then(response => response.json())
-  .then(data => {
-    console.log( data.result );
-
-    // for each data
-
-    // output a row in the html DOM
-
-    // let myData;
-    let objArr = data.result;
-    if(output){
-      output!.innerHTML = "";   // clear to start
-    }
-
-    for (var i=0; i<objArr.length; i++) {
-      // console.log(i, objArr[i] );
-      let thisRow = objArr[i];
-      // console.log(thisRow.hash, thisRow.from, thisRow.nonce, thisRow.gas, thisRow.gasUsed, thisRow.gasPrice);
-
-
-      let listRow = "<li><a target='_blank' href=https://etherscan.io/tx/"+thisRow.hash+">etherscan_link</a> and timestamp: "+thisRow.timeStamp+" & nonce: "+thisRow.nonce+" </li>";
-
-          // should log to console the block detail
-          // getBlock(thisRow.blockNumber);
-
-      if (output) {
-        output!.innerHTML = output?.innerHTML + listRow;
-      }
-
-      // using blockHash -> generate URL link to etherscan
-      //  -> pull tx data from block with hash
-    }
-
-    return true;
-
-  })
+//   // maybe something like this will help?
+//   //const mydata = (async function(){... return data})()
   
 
-}
+//   // alchemyGo();    // re-run the txlist
 
-function DaoSelect(props:any){
+//   // change the background image
+//   // document.body.style.backgroundImage = "url('./src/img/bg2.jpg')";
+// }
 
-  console.log(props);
+// function DaoSelect(props:any){
 
-  // get incoming state of token selection with props.tokenState
+//   console.log(props);
 
-  // console.log(props.tokenState);
+//   // get incoming state of token selection with props.tokenState
 
-  const [TOKEN, setTOKEN] = useState(props.tokenState);
-  console.log(props.token, TOKEN);    // see current state
+//   // console.log(props.tokenState);
 
-  // using js lookup tokens in the transaction list
-  // if found, set the display to true
-  let allTxs = document.getElementsByClassName("tx");
-  // console.log(allTxs);
+//   const [TOKEN, setTOKEN] = useState(props.tokenState);
+//   console.log(props.token, TOKEN);    // see current state
 
-  //  SAMPLE: this to hide all the transactions in the list
+//   // using js lookup tokens in the transaction list
+//   // if found, set the display to true
+//   let allTxs = document.getElementsByClassName("tx");
+//   // console.log(allTxs);
 
-  // NEXT UP: Make this conditional on the checkbox state
-  // if (TOKEN) { its an add, so no need to hide, just reveal
-  // } else { its a remove, so hide all the tokens first
-  if(!TOKEN){
-    [].forEach.call(allTxs, function (el:any) {
-      el.style.display = 'block';
-    });
-  } else {
-    [].forEach.call(allTxs, function (el:any) {
-      el.style.display = 'none';
-    });
-  }
+//   //  SAMPLE: this to hide all the transactions in the list
 
-  // SAMPLE: this to show all matching transactions in the list
-  let myTxs = document.getElementsByClassName(props.token);
-  console.log(myTxs);
-  if(TOKEN){
-    // show all of the matching tokens
-    [].forEach.call(myTxs, function (el:any) {
-      el.style.display = 'block';
-    });
-  } else {
-    // remove all of the matching tokens
-    [].forEach.call(myTxs, function (el:any) {
-      el.style.display = 'none';
-    });
-  }
+//   // NEXT UP: Make this conditional on the checkbox state
+//   // if (TOKEN) { its an add, so no need to hide, just reveal
+//   // } else { its a remove, so hide all the tokens first
+//   if(!TOKEN){
+//     [].forEach.call(allTxs, function (el:any) {
+//       el.style.display = 'block';
+//     });
+//   } else {
+//     [].forEach.call(allTxs, function (el:any) {
+//       el.style.display = 'none';
+//     });
+//   }
+
+//   // SAMPLE: this to show all matching transactions in the list
+//   let myTxs = document.getElementsByClassName(props.token);
+//   console.log(myTxs);
+//   if(TOKEN){
+//     // show all of the matching tokens
+//     [].forEach.call(myTxs, function (el:any) {
+//       el.style.display = 'block';
+//     });
+//   } else {
+//     // remove all of the matching tokens
+//     [].forEach.call(myTxs, function (el:any) {
+//       el.style.display = 'none';
+//     });
+//   }
   
 
 
+//   function handleChange(e:any) {
+//     setTOKEN(e.target.checked);
+//   }
 
 
 
-  function handleChange(e:any) {
-    setTOKEN(e.target.checked);
-  }
 
-  // !this.state.daoState
+//   // !this.state.daoState
 
-  // toggle token state 
-  // let tokenSel = this.setDAOState(props.token);
+//   // toggle token state 
+//   // let tokenSel = this.setDAOState(props.token);
 
-  // shows the checkbox for the DAO token
-  if(props.name){
+//   // shows the checkbox for the DAO token
+//   if(props.name){
 
   
-    return (<div>
-      <input 
-        type="checkbox" 
-        id={props.token} 
-        name={props.name} 
-        // value={props.name} 
-        checked={TOKEN} 
-        onClick={handleChange} 
-      />
-      <label htmlFor={props.name}> 
-        {props.name} ({props.token})
-      </label>
-    </div>);
+//     return (<div>
+//       <input 
+//         type="checkbox" 
+//         id={props.token} 
+//         name={props.name} 
+//         // value={props.name} 
+//         checked={TOKEN} 
+//         onClick={handleChange} 
+//       />
+//       <label htmlFor={props.name}> 
+//         {props.name} ({props.token})
+//       </label>
+//     </div>);
   
-  } else {
-    return (<div>Oops</div>);
-  }
-}
-
-function toggleAlts(e:any) {
-  e.preventDefault();
-
-  // let allTxs = document.getElementsByClassName("tx");
-  // console.log(allTxs);
-
-  // [].forEach.call(allTxs, function (el:any) {
-  //   el.style.display = 'none';
-  // });
-
-  console.log(cs.NOT);
-  let nots = document.getElementsByClassName(cs.NOT);
-  console.log(nots);
-
-  [].forEach.call(nots, function (el:any) {
-    el.style.display = 'block';
-  });
-
-  let alts = document.getElementsByClassName("BANK");
-  console.log(alts);
-
-  [].forEach.call(alts, function (el:any) {
-    el.style.display = 'none';
-  });
-
-
-}
-
-function toggleDetail(e:any){
- if(e){e.preventDefault();}
-
-  let allDetails = document.getElementsByClassName(cs.detail);
-  console.log(allDetails);
-
-  [].forEach.call(allDetails, function (el:any) {
-    if(el.style.display === 'block') {
-      el.style.display = 'none';
-    } else {
-      el.style.display = 'block';
-    }
-    
-  });
-
-}
+//   } else {
+//     return (<div>Oops</div>);
+//   }
+// }
 
 export function App() {
-  const { address, isConnected } = useAccount()
+  // this to get connected accouunt info from WalletConnect
+  const { address, isConnected } = useAccount();
   // console.log(address);
 
   //kickoff alchemyGo function -> this will run the alchemy API call
@@ -913,17 +504,13 @@ export function App() {
   // save state to track dao selection
   // const [daoState, setDaoState] = useState({})
 
-  const [count, setCount] = useState(0);
+  // const [count, setCount] = useState(0);
 
   // default true on token states to show all
   // example with BANK token
   const [BANK, setBANK] = useState(true);
 
   console.log(BANK);
-
-  // let state = {prices: {}};
-  // state.prices = {BANK: []};
-  // state.prices.BANK = [];
 
   return (
     <>
@@ -938,19 +525,38 @@ export function App() {
     </header>
     <div id="HomeSplash" className={cs.home}>
       <Clock />
-      <h1>TAXMAN</h1>
+      <h1 className={cs.mainTitle}>TAXMAN</h1>
       <h3>DAO Income Tax Helper</h3>
       <div className={cs.clear}></div>
-      <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae magnam dolor cum! Repellat impedit quibusdam inventore, rem fugit, voluptate voluptas consequuntur minus quo iure magnam sequi reiciendis nisi officia veritatis!</p>
-      <div className={cs.bigButton}>
-        <h2>
-          <a href="#info"> 
-            <img src="./src/img/click-arrow.png" alt="click-arrow" />
-            &nbsp;Click here to start
-          </a>
-        </h2>
+
+      <div className={cs.columnWide}>
+        <div className={cs.smallButton}>
+          <h2>FAST</h2>
+          <p>Finish your DAO Income Taxes in 5 minutes</p>
+        </div>
+        <div className={cs.smallButton}>
+          <h2>FREE</h2>
+          <p>No credit card or crypto payment required</p>
+        </div>
+        <div className={cs.wideButton}>
+          <h2>BUILT FOR DAOs</h2>
+          <p>Earning monney from DAOs? We automatically filter out any transactions that aren't DAO income to make the process EASY for anyone to use.</p>
+        </div>
       </div>
-    </div>
+      {/* <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae magnam dolor cum! Repellat impedit quibusdam inventore, rem fugit, voluptate voluptas consequuntur minus quo iure magnam sequi reiciendis nisi officia veritatis!</p> */}
+      
+    
+      <div className={cs.columnWide}>
+        <div className={cs.bigButton}>
+          <h2>
+            <a href="#info"> 
+              <img src="./src/img/click-arrow.png" alt="click-arrow" />
+              &nbsp;Click here to start
+            </a>
+          </h2>
+        </div>
+      </div>
+    </div>    {/* <!-- end of HomeSplash --> */}
     <div className={cs.clear}></div>
     <div id="AppContent" className={cs.container}>
     
@@ -1019,7 +625,7 @@ export function App() {
           <a 
             href="#dao-page"
             className={cs.btn} 
-            onClick={() => triggerPrice(BANK, setBANK)}
+            onClick={() => console.log("First Button Press - call TX?")}
           >Next Step</a>
         </aside>
 
@@ -1031,23 +637,13 @@ export function App() {
 
         <a id="dao-page"></a>
         <h2 className={cs.label}>Which DAOs are you a part of?</h2>
-        <DaoSelect name="BanklessDAO" token="BANK" tokenState={BANK}
-          // onClick={() => {
-          //   // toggle BANK state
-          //   setBANK(!BANK);
-
-          //   console.log(BANK);
-
-          //   // setCount(count => count + 1);
-          //   // console.log(count);
-          // }} 
-        />
-        <DaoSelect name="1Inch" token="1INCH" />
-
-        <DaoSelect name="Aragon" token="ANT" />
-        <DaoSelect name="Maker DAO" token="MKR" />
-        <DaoSelect name="Pocket DAO" token="POKT" />
-        <DaoSelect name="Pool Together" token="POOL" />
+        <DaoSelectors name="BanklessDAO" token="BANK" tokenState={BANK} />
+        
+        <DaoSelectors name="1Inch" token="1INCH" />
+        <DaoSelectors name="Aragon" token="ANT" />
+        <DaoSelectors name="Maker DAO" token="MKR" />
+        <DaoSelectors name="Pocket DAO" token="POKT" />
+        <DaoSelectors name="Pool Together" token="POOL" />
 
         {/* <Btn name="Next Step" url="#tx-page" /> */}
 
@@ -1099,7 +695,7 @@ export function App() {
           <a 
             href="#finish"
             className={cs.btn} 
-            onClick={() => finishBtn()}
+            onClick={() => finishButton()}
           >Finish</a>
         </aside>
 

@@ -1,3 +1,60 @@
+/* Google webfonts inclusion - download and consolidate fonts to reduce http requests */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Space+Grotesk:wght@300;400;500&display=swap');
+
+html {
+  font-family: 'Poppins', sans-serif;
+  
+}
+
+h1, h2, h3 {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.headerLinks {
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+/* end of typography specific rules */
+
+body {
+  font: normal 18px/1.5 "Fira Sans", "Helvetica Neue", sans-serif;
+  background: rgba(247, 120, 156, 0.63);
+  color: #fff;
+  padding: 0 0 50px 0;
+  margin: 0;
+
+    background-image: url('./src/img/bg.jpg');
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+  
+}
+
+/** main nav */
+.headerLinks {
+  margin:0;
+  padding:0;
+  list-style: none;
+  position:relative;
+  top: 15px;
+}
+
+.headerLinks li {
+  float: left;
+  margin-right: 10px;
+}
+
+.headerLinks li a {
+  text-decoration: none;
+  color:white;
+}
+
+.wcBtn {
+  position: relative; 
+  top: -7px;
+}
+
 .buttonContainer {
     text-align:center;
     margin: 20px auto 30px;
@@ -289,25 +346,7 @@ header {
 
 /** form styling **/
 
-body {
-    font: normal 18px/1.5 "Fira Sans", "Helvetica Neue", sans-serif;
-    background: rgba(247, 120, 156, 0.63);
-    color: #fff;
-    padding: 0 0 50px 0;
-    margin: 0;
 
-      background-image: url('./src/img/bg.jpg');
-      background-size: cover;
-      background-position: center center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      
-      
-      /* background: linear-gradient(180.08deg, rgba(192, 44, 173, 0.44) 0.07%, rgba(247, 120, 156, 0.63) 44.8%, rgba(252, 173, 193, 0.44) 99.93%);
-    */
-      /* transform: rotate(-180deg); */
-    
-  }
 
   .headerLogo {
     height:50px;
@@ -323,9 +362,9 @@ body {
     padding-top: 50px;
   }
 
-  .home h1 {
+  .home h1.mainTitle {
     font-size: 9.0em;
-    font-weight: 400;
+    font-weight: 500;
     line-height:1;
     margin: 40px 0 0 40px;
     padding: 0;
@@ -344,17 +383,24 @@ body {
     width:23%;
   }
 
-  .home p {
+  /* .home p {
     max-width: 50%;
     margin-left: 40px;
     font-size: 14px;
+  } */
+
+  .home .columnWide {
+    max-width: 50%;
+    float: left;
+    margin: 0;
+    padding: 0 20px;
   }
 
   .home .bigButton {
     float: right;
     border: 1px solid white;
     padding: 30px 20px 30px 40px;
-    width:30%;
+    width: 400px;
     margin: 0 20px 120px 0;
 
     background: rgba(255, 255, 255, 0.25);
@@ -381,6 +427,36 @@ body {
   .bigButton img {
     width: 50px;
     height: 50px;
+  }
+
+  .home .smallButton, .home .wideButton {
+    float: left;
+    border: 1px solid white;
+    padding: 5px;
+    width: 188px;
+    margin: 5px;
+
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(27.4747px);
+    border-radius: 8px;
+  }
+
+  .home .wideButton {
+    width: 398px;
+  }
+
+  .home .smallButton h2, .home .wideButton h2  {
+    font-size:40px;
+    text-align:center;
+    margin:0 0 5px 0;
+    font-weight: 200;
+    line-height:1.2
+  }
+
+  .home .smallButton p, .home .wideButton p  {
+    font-size: 22px;
+    margin:0;
+    max-width: 100%;
   }
 
   .txHeader {
@@ -413,29 +489,6 @@ body {
     max-height: 500px;
 
     overflow-y: scroll;
-  }
-
-  .headerLinks {
-    margin:0;
-    padding:0;
-    list-style: none;
-    position:relative;
-    top: 15px;
-  }
-
-  .headerLinks li {
-    float: left;
-    margin-right: 10px;
-  }
-
-  .headerLinks li a {
-    text-decoration: none;
-    color:white;
-  }
-
-  .wcBtn {
-    position: relative; 
-    top: -7px;
   }
   
   .container * {
