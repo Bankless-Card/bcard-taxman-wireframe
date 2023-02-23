@@ -672,20 +672,6 @@ export function App() {
 
         <p>Verify that each one is correct.</p>
 
-        <p>
-        <a 
-            href="#"
-            className={cs.btnW + " " + cs.btn} 
-            onClick={(e) => toggleAlts(e)}
-          >Show all &amp; Hide all DAO</a>
-          </p>
-          <p>
-          <a 
-            href="#"
-            className={cs.btnW + " " + cs.btn} 
-            onClick={(e) => toggleDetail(e)}
-          >show/hide all tx details</a></p>
-
         {/* if the connection is set, this loads in the account info (ad) from Wallet Connect*/}
         {isConnected && <Account />}
 
@@ -710,6 +696,21 @@ export function App() {
 
       </div>
 
+      <h2>Dev testing buttons</h2>
+
+      <p><a 
+          href="#"
+          className={cs.btnW + " " + cs.btn} 
+          onClick={(e) => toggleAlts(e)}
+        >Show all &amp; Hide all DAO</a>
+        </p>
+        <p>
+        <a 
+          href="#"
+          className={cs.btnW + " " + cs.btn} 
+          onClick={(e) => toggleDetail(e)}
+        >show/hide all tx details</a>
+      </p>
 
       <hr />
       <hr />
@@ -724,7 +725,19 @@ export function App() {
 
     
     </div>
-    <footer>Thisisfooter</footer>
+    <div className='footerCont'>
+      <footer>
+        <div>Made with &#x2764; by Bankless Card</div>
+        <ul className='socials'>
+          <li><a href="mailto:links@banklesscard.xyz" target="_blank"><img src="./src/img/mail.png" alt="Email Us" /></a></li>
+          <li><a href="#" target="_blank"><img src="./src/img/lin.png" alt="LinkedIn" /></a></li>
+          <li><a href="#" target="_blank"><img src="./src/img/yt.png" alt="Our YouTube Channel" /></a></li>
+          <li><a href="#" target="_blank"><img src="./src/img/insta.png" alt="Instagram" /></a></li>
+          <li><a href="#" target="_blank"><img src="./src/img/tw.png" alt="Twitter" /></a></li>
+        </ul>
+        <div>&copy; 2023 Bankless Card | All rights reserved</div>
+      </footer>
+    </div>
     </>
   )
 }
