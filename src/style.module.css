@@ -2,7 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Space+Grotesk:wght@300;400;500&display=swap');
 
 html {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Poppins', "Fira Sans", "Helvetica Neue", sans-serif;
   
 }
 
@@ -17,7 +17,7 @@ h1, h2, h3 {
 /* end of typography specific rules */
 
 body {
-  font: normal 18px/1.5 "Fira Sans", "Helvetica Neue", sans-serif;
+  /* font: normal 18px/1.5 "Fira Sans", "Helvetica Neue", sans-serif; */
   background: rgba(247, 120, 156, 0.63);
   color: #fff;
   padding: 0 0 50px 0;
@@ -360,6 +360,7 @@ header {
     overflow:auto;
     background: linear-gradient(180.08deg, rgba(192, 44, 173, 0.44) 0.07%, rgba(247, 120, 156, 0.63) 44.8%, rgba(252, 173, 193, 0.44) 99.93%);
     padding-top: 50px;
+    padding-bottom: 60px;
   }
 
   .home h1.mainTitle {
@@ -564,4 +565,41 @@ header {
   
   .flex-inner li {
     width: 100px;
+  }
+
+  /** Footer **/
+
+  /* div.footerCont {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  } */
+
+  footer {
+    display:flex;
+    flex:1;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 0 5px 0 5px;
+
+    position: fixed;
+    bottom: 0;
+    width: 99%;
+  }
+
+  footer ul {
+    display:flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  footer ul li {
+    margin: 0 10px;
+  }
+
+  .socials img {
+    cursor: pointer;
   }
