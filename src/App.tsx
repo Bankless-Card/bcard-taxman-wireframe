@@ -51,7 +51,9 @@ const alchemy = new Alchemy(settings);
 import cs from './style.module.css'
 
 
-async function alchemyGo(){
+async function alchemyGo(FIAT:string){
+
+  console.log("FIAT: " + FIAT);
 
   // get address to use
   let walletAddress: string = "";
@@ -156,7 +158,7 @@ async function alchemyGo(){
 
     let tokenLabel = getTokenLabel(thisRow.asset);   // token label - '+thisRow.asset+'
     let tokenAmount = displayTokenAmount(thisRow.value,thisRow.asset);   // token amount - '+thisRow.value+'
-    let convertAmount = await displayConvertAmount(thisRow.value, thisRow.asset, unixT)// "USD/FIAT value @ timefrom blockNum";   // USD/FIAT value @ timefrom blockNum
+    let convertAmount = await displayConvertAmount(thisRow.value, thisRow.asset, unixT, FIAT)// "USD/FIAT value @ timefrom blockNum";   // USD/FIAT value @ timefrom blockNum
 
     let outBox = '<div class=' + cs.flexCont + '>\
       <div class="'+cs.row+" "+cs.even+'">\
@@ -221,7 +223,7 @@ async function alchemyGo(){
     
     listRow += "<div class="+cs.col+">";
     listRow += "TokenAmt: <strong>" + thisRow.value +"</strong>" + "<br/>ConvertAmt: <strong>";
-    listRow += await displayConvertAmount(thisRow.value, a, unixT) +"</strong></div>";
+    listRow += await displayConvertAmount(thisRow.value, a, unixT, FIAT) +"</strong></div>";
 
     listRow += "</div>";
 
@@ -284,13 +286,13 @@ async function alchemyGo(){
   // );
 }
 // triggers the alchemyGo() function
-function triggerTx(props:any) {
-  console.log(props);
+function triggerTx(FIAT:string) {
+  console.log(FIAT);
   console.log("TX trigger call ");
   // let gt = GetTransactions({address:props});
   // console.log(gt);
 
-  alchemyGo();    // re-run the txlist
+  alchemyGo(FIAT);    // re-run the txlist, confirm FIAT value
 
   // change the background image
   document.body.style.backgroundImage = "url('./src/img/bg2.jpg')";
@@ -493,6 +495,47 @@ function triggerTx(props:any) {
 //   }
 // }
 
+function callSetFiat(setFIAT:any) {
+  // lookup state of DOM for select option (country code)
+  let country = document.getElementsByClassName("fiatSelect");
+  let fiatCode = (country[0] as HTMLSelectElement).value;
+
+  console.log(fiatCode);
+
+  // assign to state variable
+  setFIAT(fiatCode);
+}
+
+function getProvinceSelect(FIAT:string) {
+
+  if(FIAT === "CAD"){
+    return (
+      <div className={cs.inputBox}>
+          <label>Where in Canada do you live?</label>
+          <select>
+            <option>Ontario</option>
+            <option>British Columbia (BC)</option>
+            <option>Other</option>
+          </select>
+        </div>
+    );
+
+  } else {
+    return (
+      <div className={cs.inputBox}>
+        <label>Where in USA do you live?</label>
+        <select>
+          <option>California</option>
+          <option>New York</option>
+          <option>Florida</option>
+          <option>Other</option>
+        </select>
+      </div>
+    );
+  }
+
+}
+
 export function App() {
   // this to get connected accouunt info from WalletConnect
   const { address, isConnected } = useAccount();
@@ -510,7 +553,9 @@ export function App() {
   // example with BANK token
   const [BANK, setBANK] = useState(true);
 
-  console.log(BANK);
+  const [FIAT, setFIAT] = useState('CAD');    // default cad, later probably usd
+
+  // console.log(FIAT);
 
   return (
     <>
@@ -603,21 +648,26 @@ export function App() {
 
         <div className={cs.inputBox}>
           <label>Select your country of residence</label>
-          <select>
-            <option>Canada (CAD)</option>
-            <option>United States (USA)</option>
-            <option>Other</option>
+          <select 
+            className='fiatSelect'
+            onChange={() => callSetFiat(setFIAT)}
+          >
+            <option value='CAD'>Canada (CAD)</option>
+            <option value='USD'>United States (USA)</option>
+            <option disabled>Other</option>
           </select>
         </div>
 
-        <div className={cs.inputBox}>
-          <label>Where in Canada do you live?</label>
+        {getProvinceSelect(FIAT)}
+
+        {/* <div className={cs.inputBox}>
+          <label>Where in {FIAT==="CAD" ? "Canada" : "USA"} do you live?</label>
           <select>
             <option>Ontario</option>
             <option>British Columbia (BC)</option>
             <option>Other</option>
           </select>
-        </div>
+        </div> */}
 
         {/* <Btn name="Next Step" onClick={triggerTx} /> */}
 
@@ -625,7 +675,7 @@ export function App() {
           <a 
             href="#dao-page"
             className={cs.btn} 
-            onClick={() => console.log("First Button Press - call TX?")}
+            onClick={() => callSetFiat(setFIAT)}
           >Next Step</a>
         </aside>
 
@@ -651,7 +701,7 @@ export function App() {
           <a 
             href="#tx-page"
             className={cs.btn} 
-            onClick={() => triggerTx(address)}
+            onClick={() => triggerTx(FIAT)}
           >Next Step</a>
         </aside>
 
@@ -681,7 +731,7 @@ export function App() {
           <a 
             href="#finish"
             className={cs.btn} 
-            onClick={() => finishButton()}
+            onClick={() => finishButton(FIAT)}
           >Finish</a>
         </aside>
 
@@ -731,9 +781,9 @@ export function App() {
         <ul className='socials'>
           <li><a href="mailto:links@banklesscard.xyz" target="_blank"><img src="./src/img/mail.png" alt="Email Us" /></a></li>
           <li><a href="#" target="_blank"><img src="./src/img/lin.png" alt="LinkedIn" /></a></li>
-          <li><a href="#" target="_blank"><img src="./src/img/yt.png" alt="Our YouTube Channel" /></a></li>
-          <li><a href="#" target="_blank"><img src="./src/img/insta.png" alt="Instagram" /></a></li>
-          <li><a href="#" target="_blank"><img src="./src/img/tw.png" alt="Twitter" /></a></li>
+          <li><a href="https://www.youtube.com/shorts/Hpbq0laSEWM" target="_blank"><img src="./src/img/yt.png" alt="Our YouTube Channel" /></a></li>
+          <li><a href="https://www.instagram.com/bankless_card/" target="_blank"><img src="./src/img/insta.png" alt="Instagram" /></a></li>
+          <li><a href="https://twitter.com/BanklessCard" target="_blank"><img src="./src/img/tw.png" alt="Twitter" /></a></li>
         </ul>
         <div>&copy; 2023 Bankless Card | All rights reserved</div>
       </footer>
