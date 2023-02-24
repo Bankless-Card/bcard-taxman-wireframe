@@ -1,8 +1,5 @@
 import cs from '../style.module.css'
-export function finishButton() {
-
-  // const [BANK, setBANK] = useState();
-  // console.log(BANK);
+export function finishButton(FIAT:string) {
 
   console.log("! have to pre-setup the output div in the DOM - app.tsx");
 
@@ -20,17 +17,25 @@ export function finishButton() {
   let myIncome = document.getElementsByClassName(cs.convertAmount);
   let myTokens = document.getElementsByClassName(cs.tokenAmount);
 
+  // console.log(myIncome);    // OK
+  // console.log(myTokens);    // OK
+
   [].forEach.call(myIncome, function (el:any) {
-    // console.log(el.innerHTML);
+    console.log(el.innerHTML);
 
     let txCont = el.parentElement.parentElement.parentElement.parentElement.parentElement;
-    // console.log(txCont)
+
+    console.log(txCont);
 
     // console.log(txCont.style.display)
     // if the tx is displayed 
-    if(txCont.style.display === "block"){
+    // if(txCont.style.display === "block"){
+
       // if the tx is not due a conversion
       if(!el.innerHTML.startsWith("Convert")){
+        
+        console.log(el.innerHTML);
+
         // if converted -> sum for total income
         let f = parseFloat(el.innerHTML.split(" ")[1]);
         // console.log(f);
@@ -38,18 +43,20 @@ export function finishButton() {
         totalIncome += f;
       }
 
-    }
+    // }
 
   });
 
   [].forEach.call(myTokens, function (el:any) {
 
-    let txContTwo = el.parentElement.parentElement.parentElement.parentElement.parentElement;
+    // let txContTwo = el.parentElement.parentElement.parentElement.parentElement.parentElement;
 
-    // console.log(txContTwo)
+    // console.log(txContTwo);
+
     // console.log(txContTwo.style.display)
     // if the tx is displayed 
-    if(txContTwo.style.display === "block"){
+    // if(txContTwo.style.display === "block"){
+
       // if the tx is not due a conversion
       if(!el.innerHTML.startsWith("Token")){
         // if converted -> sum for total income
@@ -57,12 +64,12 @@ export function finishButton() {
         // console.log(thisAmt);
 
         let f = parseFloat(thisAmt.replace(",",""));
-        // console.log(f);
+        console.log(f);
 
         totalBalance += f;
       }
 
-    }
+    // }
 
   });
 
@@ -76,7 +83,9 @@ export function finishButton() {
 
     // add class to txSummary
 
-    txSummary.innerHTML = "<h3>2022 DAO income: "+totalIncome.toFixed(2) + " FIAT(USD)</h3>";
+    console.log(totalIncome.toFixed(2), totalBalance.toFixed(3));
+
+    txSummary.innerHTML = "<h3>2022 DAO income: "+totalIncome.toFixed(2) + " $"+FIAT+"</h3>";
     txSummary.innerHTML += "<h3>2022 BANK balance: "+totalBalance.toFixed(3)+" BANK</h3>";
   } else  {
     console.log("no txSummary div found");
