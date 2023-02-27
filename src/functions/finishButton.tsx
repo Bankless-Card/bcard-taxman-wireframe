@@ -118,7 +118,7 @@ export function finishButton(FIAT:string) {
   
     txSummary.innerHTML += "<h3 title='Your tax rate - most countries classify 100% of income from any source as taxable.'>Tax Rate: <input type='number' id='taxRate' value='"+taxRate+"' />%</h3><hr />";
 
-    txSummary.innerHTML += "<h2>Total Income to Report: $"+(totalIncome*taxRate/100).toFixed(2)+"</h2>";
+    txSummary.innerHTML += "<h2>Total Income to Report: $<span id=totalIncome>"+(totalIncome*taxRate/100).toFixed(2)+"</span></h2>";
 
     txSummary.innerHTML += "<h3 title=''><input type='email' class='"+cs.mailSubmit+"' id='mailSubmit' placeholder='Write your email...' /></h3><hr />";
   
