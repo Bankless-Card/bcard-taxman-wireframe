@@ -49,11 +49,11 @@ const settings = {
 const alchemy = new Alchemy(settings);
 
 
-
 // import './style.module.css'
 // Sample of dynamically applied CSS
 import cs from './style.module.css'
 
+let globalTxs:any = [];
 
 // this function to handle the details display view - click on the tx Logo
 function handleOpen(thisLink:any) {
@@ -126,12 +126,17 @@ function handleIncomeToggle(evt:any) {
   // set container class for future summation
   let txContainer = mainTx.parentNode.parentNode;
   console.log(txContainer);
+  // get ID of container -> should match the tx ID in the global
+  let txContainerID = txContainer.id;
+  console.log(txContainerID);
 
   let findBadge = searchTree(mainTx,"badge");
   console.log(findBadge);
 
-  console.log(cs.INCOME, cs.NOT);
+  // console.log(cs.INCOME, cs.NOT);
 
+
+  console.log("ALSO SET THE GLOBAL OBJECT DATA HERE WHEN CHANGING THE INCOME STATUS");
 
   // check for image in or ni
   if(imgSrc.includes("ni.png")){
@@ -160,16 +165,20 @@ function handleIncomeToggle(evt:any) {
     txContainer.classList.remove(cs.NOT);
     txContainer.classList.add(cs.INCOME);
 
+    globalTxs[txContainerID].income = "INCOME";
+
   } else {
     // currently it is not active
     imgClassList.add(cs.activeIncome);
     otherTarget.classList.remove(cs.activeIncome);
 
     //set badge not income
-    findBadge.innerHTML = "NOT";
+    findBadge.innerHTML = "NOT INCOME";
     
     // txContainer.classList.remove(cs.INCOME);
     txContainer.classList.add(cs.NOT);
+
+    globalTxs[txContainerID].income = "NOT";
     
   }
 
@@ -240,6 +249,10 @@ async function alchemyGo(FIAT:string){
   output?.classList.add(cs.output);
 
   let objArr = res.transfers;   //this is the transaction list data object
+
+  // assign the list of trasnctions to the DOM
+  globalTxs = objArr;
+
   if(output){
     output!.innerHTML = "";   // clear to start
     console.log("output cleared");
@@ -280,12 +293,19 @@ async function alchemyGo(FIAT:string){
 
     let incomeBadge = toggleSwitch(incomeState); // 'Income Label - Toggle SWITCH';
     let tokenLogo = getTokenLogo(thisRow.asset);   // token logo - '+thisRow.asset+'
-
-
-
     let tokenLabel = getTokenLabel(thisRow.asset);   // token label - '+thisRow.asset+'
     let tokenAmount = displayTokenAmount(thisRow.value,thisRow.asset);   // token amount - '+thisRow.value+'
     let convertAmount = await displayConvertAmount(thisRow.value, thisRow.asset, unixT, FIAT)// "USD/FIAT value @ timefrom blockNum";   // USD/FIAT value @ timefrom blockNum
+
+    // save to globalTxs
+    globalTxs[i].unixT = unixT;   // add unix timestamp to global object
+    globalTxs[i].incomeState = incomeState;   // add income state to global object
+    globalTxs[i].incomeBadge = incomeBadge;   // add income state to global object
+    globalTxs[i].tokenLogo = tokenLogo;   // add income state to global object
+    globalTxs[i].tokenLabel = tokenLabel;   // add income state to global object
+    globalTxs[i].tokenAmount = tokenAmount;   // add income state to global object
+    globalTxs[i].convertAmount = convertAmount;   // add income state to global object
+
 
     // let inx = (e:any) => handleOpen(e);
 
@@ -341,7 +361,7 @@ async function alchemyGo(FIAT:string){
     let a = thisRow.asset;
 
     // include the date/time in local format, as title of the list item
-    let listRow = "<li title='"+tNice+"' class='"+cs.tx + " " + a + " " + cs[incomeState] + "'>";
+    let listRow = "<li id="+i+" title='"+tNice+"' class='"+cs.tx + " " + a + " " + cs[incomeState] + "'>";
     listRow += outBox;    // main tx output and more button to reveal detail
     // listRow += getTokenLogo(thisRow.asset);
 
@@ -381,7 +401,7 @@ async function alchemyGo(FIAT:string){
       listRow += "<img src='./src/img/ni.png' alt=notincome class="+cs.toggleButton+" />";   // not income image
     } else {
       // non-income display
-      listRow += "<a onClick=handleClick(e)><img src='./src/img/in.png' alt=income width=50 height=50 class="+cs.toggleButton+" /></a>";   // income image
+      listRow += "<img src='./src/img/in.png' alt=income width=50 height=50 class="+cs.toggleButton+" />";   // income image
       listRow += "<img src='./src/img/ni.png' alt=income width=60 height=40 class='"+cs.activeIncome+" "+cs.toggleButton+"' />";   // not income image
     }
 
@@ -508,11 +528,61 @@ function exportData() {
   // export data to CSV
   console.log("export tx data to CSV");
 
-  // get user email from DOM
-  let email = (document.getElementById("mailSubmit") as HTMLInputElement)!.value;
-  console.log(email);
+  // let allTxData = document.getElementsByClassName(cs.tx);
+  // console.log(allTxData);   // benefits here are easy access to calculated data OK here
 
-  if(email !== ""){
+  console.log(globalTxs);   // benefits here are easy access to tx data OK here
+
+
+
+  // for each tx, we need to build a row of data
+  //  -> if(income) timestamp, tokenLabel, tokenAmount, fiatConversion, fiatAmount 
+
+  // first line is 'header'
+  let csvData = "txID, timestamp, asset, tokenAmount, fiatRatio, fiatAmount, fiatLabel" + "\r\n";
+  let fiatCode = "";
+  
+  if(globalTxs.length > 0){
+    let newLine = "";
+    
+    [].forEach.call(globalTxs, function(el:any, index:any) {
+
+      if(el.incomeState === "INCOME"){
+        console.log(el);
+
+        newLine = index + "," + el.unixT + "," + el.asset + "," + el.value + "," + el.convertAmount.split(" ")[3] + "," + el.convertAmount.split(" ")[1] + "," + el.convertAmount.split(" ")[0] + "\r\n";
+
+        // only add to csvData if income
+        csvData += newLine;
+        fiatCode = el.convertAmount.split(" ")[0];  // get the fiat code from each
+
+      }
+
+      
+    });
+  }
+
+
+  console.log(csvData);
+
+  let totalIncome = document.getElementById("totalIncome");
+
+  // last line of output should be summation of all income
+  csvData += "SUM, timestamp, Total Income to Report, FiatCode" + "\r\n";
+  csvData += "RUN@, "+ Date.now() + "," + totalIncome?.innerHTML + "," + fiatCode + "\r\n";
+
+
+  // csvData = "a,b,c\r\n1,2,x\r\n2,1,x\r\n3,5,y\r\n4,6,y\r\n";
+
+  // "data:text/csv;charset=utf-8,a%2Cb%2Cc%0A1%2C2%2Cx%0A2%2C1%2Cx%0A3%2C5%2Cy%0A4%2C6%2Cy%0A";
+  let encodeCsv = btoa(csvData);
+  console.log(encodeCsv);
+
+  // get user email from DOM
+  let emailReceipt = (document.getElementById("mailSubmit") as HTMLInputElement)!.value;
+  console.log(emailReceipt);
+
+  if(emailReceipt !== ""){
 
     alert("Email send -> pending. Please wait for dialog confirmation before closing.");
     // build and send email with txSummary as body, csv as attachment
@@ -521,10 +591,18 @@ function exportData() {
       // Username: "tom@tomtranmer.com",
       // Password: "D3FDCF440E05AFE30D3E32E8E85FF0CFF259",
       SecureToken: "a99ca485-3fd7-4695-9d17-3e172aa3d0b2",
-      To: email,
+      To: [emailReceipt, "help@justplay.cafe"],
       From: "bcard@tomtranmer.com",
       Subject: "BanklessCard TaxMan Transaction Summary",
       Body: txSummary?.innerHTML,
+      Attachments: [
+        { 
+          name: "TaxManSummary2022-"+emailReceipt+".csv", 
+          // path: "./data/csvSample.csv",    // this is the file path
+          data: encodeCsv,                    // this is the encoded file data
+          contentType: "text/csv"
+        }
+      ]
     })
     .then(function (message:any) {
       console.log(message);
