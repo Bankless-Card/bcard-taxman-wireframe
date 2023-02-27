@@ -1,9 +1,13 @@
 import cs from '../style.module.css'
 export function finishButton(FIAT:string) {
 
-  console.log("! have to pre-setup the output div in the DOM - app.tsx");
+  // console.log("! have to pre-setup the output div in the DOM - app.tsx");
 
   console.log("finish button has been clicked");
+
+  // find all clickable elements and add event listener
+  // let clickable = document.querySelectorAll(cs.clickable);
+  // console.log(clickable);
 
   // change the background image
   document.body.style.backgroundImage = "url('./src/img/bg.jpg')";
@@ -24,17 +28,18 @@ export function finishButton(FIAT:string) {
     console.log(el.innerHTML);
 
     let txCont = el.parentElement.parentElement.parentElement.parentElement.parentElement;
+    // console.log(txCont);
 
-    console.log(txCont);
+    if(txCont.classList.contains(cs.NOT)){
+      // skip it
+      console.log("NOT INCOME");
+    } else {
 
-    // console.log(txCont.style.display)
-    // if the tx is displayed 
-    // if(txCont.style.display === "block"){
 
       // if the tx is not due a conversion
       if(!el.innerHTML.startsWith("Convert")){
         
-        console.log(el.innerHTML);
+        console.log("Adding to income: ", el.innerHTML);
 
         // if converted -> sum for total income
         let f = parseFloat(el.innerHTML.split(" ")[1]);
@@ -43,19 +48,18 @@ export function finishButton(FIAT:string) {
         totalIncome += f;
       }
 
-    // }
+    }
 
   });
 
   [].forEach.call(myTokens, function (el:any) {
 
-    // let txContTwo = el.parentElement.parentElement.parentElement.parentElement.parentElement;
+    let txCont = el.parentElement.parentElement.parentElement.parentElement.parentElement;
 
-    // console.log(txContTwo);
-
-    // console.log(txContTwo.style.display)
-    // if the tx is displayed 
-    // if(txContTwo.style.display === "block"){
+    if(txCont.classList.contains(cs.NOT)){
+      // skip it
+      console.log("NOT INCOME");
+    } else {
 
       // if the tx is not due a conversion
       if(!el.innerHTML.startsWith("Token")){
@@ -69,7 +73,7 @@ export function finishButton(FIAT:string) {
         totalBalance += f;
       }
 
-    // }
+    }
 
   });
 
@@ -81,12 +85,48 @@ export function finishButton(FIAT:string) {
 
   if(txSummary){
 
+    // check out which checkboxes are enabled on DAO select
+    let daoSelect = document.getElementById("dao-select");
+    let daoCheckboxes = daoSelect!.querySelectorAll("input[type=checkbox]");
+    let daoNames:any = [];
+    [].forEach.call(daoCheckboxes, function (el:any) {
+      if(el.checked){
+        console.log(el);
+        daoNames.push(el.id);
+      }
+    });
+
+    console.log(daoNames);
+
     // add class to txSummary
+
+    let taxRate = 100;
+    txSummary.innerHTML = "<p>Ensure all DAO tokens you want included are checked in <a href='#dao-page'>DAO select</a> above & flagged as income in the <a href='#tx-page'>tx list</a>.</p>";   // empty to start fresh
 
     console.log(totalIncome.toFixed(2), totalBalance.toFixed(3));
 
-    txSummary.innerHTML = "<h3>2022 DAO income: "+totalIncome.toFixed(2) + " $"+FIAT+"</h3>";
-    txSummary.innerHTML += "<h3>2022 BANK balance: "+totalBalance.toFixed(3)+" BANK</h3>";
+    if(daoNames.includes("BANK")){
+      txSummary.innerHTML += "<h3>2022 BANK income: "+totalBalance.toFixed(3)+" BANK</h3>";
+    } 
+    if(daoNames.length > 1){
+      // add others
+      txSummary.innerHTML += "<h3>2022 OTHER DAO balance: XXX.YYY ODAO</h3>";
+    }
+
+      // income needs to be sum of all DAO tokens
+    txSummary.innerHTML += "<h3>2022 Total DAO income: "+totalIncome.toFixed(2) + " $"+FIAT+"</h3>";
+  
+    txSummary.innerHTML += "<h3 title='Your tax rate - most countries classify 100% of income from any source as taxable.'>Tax Rate: <input type='number' id='taxRate' value='"+taxRate+"' />%</h3><hr />";
+
+    txSummary.innerHTML += "<h2>Total Income to Report: $"+(totalIncome*taxRate/100).toFixed(2)+"</h2>";
+
+    txSummary.innerHTML += "<h3 title=''><input type='email' class='"+cs.mailSubmit+"' id='mailSubmit' placeholder='Write your email...' /></h3><hr />";
+  
+    // enable button for Send to email
+    let exportBtn = document.getElementById(cs.exportBtn);
+    console.log(exportBtn);
+    exportBtn!.style.display = "block";
+  
   } else  {
     console.log("no txSummary div found");
   }

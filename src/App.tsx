@@ -5,6 +5,10 @@ import { createElement, useState } from 'react'
 
 import { Alchemy, Network, AssetTransfersCategory } from 'alchemy-sdk';
 
+// @ts-ignore Import module
+import { Email } from './functions/smtpjsv3';
+// @ts-ignore Import module
+import { searchTree } from './functions/searchTree';
 
 // components from library
 import { Account } from './components'
@@ -49,6 +53,128 @@ const alchemy = new Alchemy(settings);
 // import './style.module.css'
 // Sample of dynamically applied CSS
 import cs from './style.module.css'
+
+
+// this function to handle the details display view - click on the tx Logo
+function handleOpen(thisLink:any) {
+
+  console.log( thisLink.currentTarget );    // OK targets button
+  // figure out where we are in the DOM
+  // open/close the next details tab
+  let details = thisLink.currentTarget.parentNode.parentNode.nextSibling;
+  console.log(details);
+  console.log(details.style.display);
+
+  if (details.style.display === 'block') {
+    details.style.display = 'none';
+  } else {
+    details.style.display = 'block';
+  }
+
+}
+
+// function searchTree(element:any, matchingTitle:any) {
+//     if(element.title == matchingTitle) {
+//        return element;
+//   } else if (element.children != null) {
+//        var i;
+//        var result = null;
+//        for(i=0; result == null && i < element.children.length; i++){
+//             result = searchTree(element.children[i], matchingTitle);
+//        }
+//        return result;
+//   }
+//   return null;
+// }
+
+// this function handles the save button press within the detail view
+function handleSave(evt:any) {
+
+  evt.preventDefault();
+
+  console.log( evt.currentTarget.parentNode );    // OK targets button
+  // figure out where we are in the DOM
+
+  evt.currentTarget.parentNode.style.display = 'none';
+
+  // close only the current details tab
+  // let details = thisLink.currentTarget.parentNode.parentNode.nextSibling;
+  // console.log(details);
+  // console.log(details.style.display);
+
+  // if (details.style.display === 'block') {
+  //   details.style.display = 'none';
+  // } else {
+  //   details.style.display = 'block';
+  // }
+
+}
+
+
+function handleIncomeToggle(evt:any) {
+  console.log( evt.currentTarget );    // OK targets button?
+
+  let imgSrc = evt.currentTarget.src;
+  // console.log(imgSrc);
+
+  let imgClassList = evt.currentTarget.classList;
+  let otherTarget = evt.currentTarget.nextSibling;    // target other button
+
+  let mainTx = evt.currentTarget.parentNode.previousSibling;
+  console.log(mainTx);
+
+  // set container class for future summation
+  let txContainer = mainTx.parentNode.parentNode;
+  console.log(txContainer);
+
+  let findBadge = searchTree(mainTx,"badge");
+  console.log(findBadge);
+
+  console.log(cs.INCOME, cs.NOT);
+
+
+  // check for image in or ni
+  if(imgSrc.includes("ni.png")){
+    // currently it is not income
+
+    // get prev sibling to target the income tab
+    // console.log(evt.currentTarget.previousSibling);
+    otherTarget = evt.currentTarget.previousSibling;    // override
+  
+  } else {
+    // currently it is income
+
+    // get next sibling to target the non-income tab (default)
+    // console.log(evt.currentTarget.nextSibling);
+  }
+
+  // check for active or not & toggle the visual display on clicked element
+  if(imgClassList.contains(cs.activeIncome)){
+    // currently it is active
+    imgClassList.remove(cs.activeIncome);
+    otherTarget.classList.add(cs.activeIncome);
+
+    //set badge income    
+    findBadge.innerHTML = "INCOME | RECEIVED";
+
+    txContainer.classList.remove(cs.NOT);
+    txContainer.classList.add(cs.INCOME);
+
+  } else {
+    // currently it is not active
+    imgClassList.add(cs.activeIncome);
+    otherTarget.classList.remove(cs.activeIncome);
+
+    //set badge not income
+    findBadge.innerHTML = "NOT";
+    
+    // txContainer.classList.remove(cs.INCOME);
+    txContainer.classList.add(cs.NOT);
+    
+  }
+
+
+}
 
 
 async function alchemyGo(FIAT:string){
@@ -147,6 +273,7 @@ async function alchemyGo(FIAT:string){
     // Income Label - Toggle SWITCH
     
     let incomeState = "NOT";
+    console.log("add other assets here to autoflag as income");
     if(thisRow.asset === "BANK"){
       incomeState = "INCOME";
     }
@@ -160,16 +287,20 @@ async function alchemyGo(FIAT:string){
     let tokenAmount = displayTokenAmount(thisRow.value,thisRow.asset);   // token amount - '+thisRow.value+'
     let convertAmount = await displayConvertAmount(thisRow.value, thisRow.asset, unixT, FIAT)// "USD/FIAT value @ timefrom blockNum";   // USD/FIAT value @ timefrom blockNum
 
+    // let inx = (e:any) => handleOpen(e);
+
     let outBox = '<div class=' + cs.flexCont + '>\
       <div class="'+cs.row+" "+cs.even+'">\
         <div class="'+cs.col+" "+cs.logoClick+'">\
+          <button class="'+cs.clickable+'">\
           '+ tokenLogo + ' \
+          </button>\
         </div>\
         <div class='+cs.col+'>\
           <div class='+cs.row+'>\
             <span>'+tokenLabel+'</span>\
           </div>\
-          <div class='+cs.row+'>\
+          <div class='+cs.row+' title="badge">\
             '+incomeBadge+' Income | Received\
           </div>\
         </div>\
@@ -245,7 +376,7 @@ async function alchemyGo(FIAT:string){
 
     // default view for BANK token is income
     if(a === "BANK"){
-      listRow += "<a onClick=handleClick(e)><img src='./src/img/in.png' class='"+cs.activeIncome + " " + cs.toggleButton+"' alt=income  /></a>";   // active income image
+      listRow += "<img src='./src/img/in.png' class='"+cs.activeIncome + " " + cs.toggleButton+"' alt=income  />";   // active income image
 
       listRow += "<img src='./src/img/ni.png' alt=notincome class="+cs.toggleButton+" />";   // not income image
     } else {
@@ -255,9 +386,10 @@ async function alchemyGo(FIAT:string){
     }
 
     
+    // listRow += clearBoth;   // add a clear to give save button a new line.
 
-    listRow += "<br /><a href='#' class="+cs.buttonStyle+" title='revert & hide detail view'>Cancel</a>";
-    listRow += "<a href='#' class="+cs.buttonStyle+" title='save (auto) & hide detail view'>Save</a>"
+    // listRow += "<br /><a href='#' class="+cs.buttonStyle+" title='revert & hide detail view'>Cancel</a>";
+    listRow += "<a href='#' class='"+cs.buttonStyle+ " "+cs.saveBtn+"' title='save (auto) & hide detail view'>Save</a>"
     
     listRow += "</div></div></li>";   // end of detail, flexView container & list item
 
@@ -267,6 +399,7 @@ async function alchemyGo(FIAT:string){
     if (output) {
       output!.innerHTML = output?.innerHTML + listRow;
       // output!.innerHTML = outElem + output?.innerHTML;
+
     }
 
     // using blockHash -> generate URL link to etherscan
@@ -285,215 +418,45 @@ async function alchemyGo(FIAT:string){
   //   res => console.log(res)
   // );
 }
+
 // triggers the alchemyGo() function
-function triggerTx(FIAT:string) {
+async function triggerTx(FIAT:string) {
   console.log(FIAT);
   console.log("TX trigger call ");
   // let gt = GetTransactions({address:props});
   // console.log(gt);
 
-  alchemyGo(FIAT);    // re-run the txlist, confirm FIAT value
+  await alchemyGo(FIAT);    // re-run the txlist, confirm FIAT value
+
+        // find all clickable elements and add event listener
+        let clickable = document.getElementsByClassName(cs.clickable);
+        console.log(clickable);
+
+        for (let i = 0; i < clickable.length; i++) {
+          clickable[i].addEventListener("click", handleOpen);
+        }
+
+        // income toggle buttons
+        let toggleButton = document.getElementsByClassName(cs.toggleButton);
+        console.log(toggleButton);
+
+        for (let i = 0; i < toggleButton.length; i++) {
+          toggleButton[i].addEventListener("click", handleIncomeToggle);
+        }
+
+        // save/close button
+        let saveBtn = document.getElementsByClassName(cs.saveBtn);
+        console.log(saveBtn);
+
+        for (let i = 0; i < saveBtn.length; i++) {
+          saveBtn[i].addEventListener("click", handleSave);
+        }
 
   // change the background image
   document.body.style.backgroundImage = "url('./src/img/bg2.jpg')";
 }
 
-// type GreetFunction = (asset: string) => Array;
-
-// called by the triggerPrice function
-// function getPriceHistory(asset:any){
-//   // USD/FIAT value @ timefrom blockNum
-
-//   if(asset === "BANK"){
-
-//     let tokenAPI = 'bankless-dao';
-//     let vsCurrency = 'usd';
-
-//     // console.log(bankFeed.prices);
-
-//     let bankHistory = bankFeed.prices;
-
-//     // bankHistory.forEach((element:any) => {
-//     //   console.log(element[0]);  // timestamp
-//     //   console.log(element[1]);  // price
-//     // });
-
-//     return bankHistory;
-
-//     // use coingecko api to get price
-//     // https://api.coingecko.com/api/v3/simple/price?ids=bankless-dao&vs_currencies=usd
-
-//     const blockNumInt = 13916169;   //for 2022 eth mainnet START - hc
-//     const startBlock = "0x" + blockNumInt.toString(16);   // format for 0x + hex
-
-//     const endBlockNumInt = 16308155;   //for 2022 eth mainnet END - hc
-//     const endBlock = "0x" + endBlockNumInt.toString(16);
-
-//     // this is hard coded for 2022 data as pulled from historical data
-//     const startTime = 1640993039;
-//     const endTime = 1672529039;
-
-//     // this call for BANK vs USD for all 2022
-
-//     let apiURLcall = 'https://api.coingecko.com/api/v3/coins/'+tokenAPI+'/market_chart/range?vs_currency='+vsCurrency+'&from='+startTime+'&to='+endTime;
-
-//     // console.log(apiURLcall);    // test with direct call
-
-//     // let apiURLcall = 'https://api.coingecko.com/api/v3/coins/'+tokenAPI+'/market_chart/range?vs_currency='+vsCurrency+'&from='+timeMin+'&to='+timeMax;
-
-//     // THIS IS ON HOLD FOR NOW
-
-//     // let data = await fetch(apiURLcall)
-//     //   .then((response) => response.json())
-//     //   .then((data) => {
-      
-//     //     // return object has prices, market_caps, and total_volumes
-
-//     //     // console.log(data);   
-//     //     // this shoud be BANK prices, mcap and volumes
-
-//     //     if(data.prices.length >= 1){
-//     //       // it has received a price(s) object
-
-//     //       console.log(data.prices);   // OK this is an array of arrays
-//     //       /*
-//     //       [[TIMECODE, PRICE],[TIMECODE, PRICE],...]
-
-//     //       */
-//     //       // return the 2022 history price object
-//     //       return data.prices
-
-//     //     }
-//     //   })
-//     //   .catch((error) => {
-//     //     console.error('Error:', error);
-//     //   });
-
-//     // return (bankUSD*parseFloat(value)).toFixed(2) + " $USD";
-
-//     // return {"BANK": 0.001}
-
-
-
-//   } else {
-//     return "Convert asset - " + asset;
-//   }
-
-// }
-
-// async function triggerPrice(BANK:any, setBANK:any) {
-//   // console.log(address);
-//   console.log("Start - Price call - get BANK historical data with coingecko call");
-//   // let gt = GetTransactions({address:props});
-//   // console.log(gt);
-//   console.log(BANK);
-
-//   // test setBANK function to set live State
-//   setBANK(false);
-
-//   console.log(BANK);    // will this be updated? State or local var?
-
-//   // let result = await any Promise, like:
-//   let bankHistory = getPriceHistory("BANK");
-//   console.log(bankHistory); 
-
-//   bankHistory.forEach((element:any) => {
-//     // console.log(element[0]);  // timestamp
-//     // console.log(element[1]);  // price
-//   });
-
-//   // maybe something like this will help?
-//   //const mydata = (async function(){... return data})()
-  
-
-//   // alchemyGo();    // re-run the txlist
-
-//   // change the background image
-//   // document.body.style.backgroundImage = "url('./src/img/bg2.jpg')";
-// }
-
-// function DaoSelect(props:any){
-
-//   console.log(props);
-
-//   // get incoming state of token selection with props.tokenState
-
-//   // console.log(props.tokenState);
-
-//   const [TOKEN, setTOKEN] = useState(props.tokenState);
-//   console.log(props.token, TOKEN);    // see current state
-
-//   // using js lookup tokens in the transaction list
-//   // if found, set the display to true
-//   let allTxs = document.getElementsByClassName("tx");
-//   // console.log(allTxs);
-
-//   //  SAMPLE: this to hide all the transactions in the list
-
-//   // NEXT UP: Make this conditional on the checkbox state
-//   // if (TOKEN) { its an add, so no need to hide, just reveal
-//   // } else { its a remove, so hide all the tokens first
-//   if(!TOKEN){
-//     [].forEach.call(allTxs, function (el:any) {
-//       el.style.display = 'block';
-//     });
-//   } else {
-//     [].forEach.call(allTxs, function (el:any) {
-//       el.style.display = 'none';
-//     });
-//   }
-
-//   // SAMPLE: this to show all matching transactions in the list
-//   let myTxs = document.getElementsByClassName(props.token);
-//   console.log(myTxs);
-//   if(TOKEN){
-//     // show all of the matching tokens
-//     [].forEach.call(myTxs, function (el:any) {
-//       el.style.display = 'block';
-//     });
-//   } else {
-//     // remove all of the matching tokens
-//     [].forEach.call(myTxs, function (el:any) {
-//       el.style.display = 'none';
-//     });
-//   }
-  
-
-
-//   function handleChange(e:any) {
-//     setTOKEN(e.target.checked);
-//   }
-
-
-
-
-//   // !this.state.daoState
-
-//   // toggle token state 
-//   // let tokenSel = this.setDAOState(props.token);
-
-//   // shows the checkbox for the DAO token
-//   if(props.name){
-
-  
-//     return (<div>
-//       <input 
-//         type="checkbox" 
-//         id={props.token} 
-//         name={props.name} 
-//         // value={props.name} 
-//         checked={TOKEN} 
-//         onClick={handleChange} 
-//       />
-//       <label htmlFor={props.name}> 
-//         {props.name} ({props.token})
-//       </label>
-//     </div>);
-  
-//   } else {
-//     return (<div>Oops</div>);
-//   }
-// }
+/* Function cleanup TBD */
 
 function callSetFiat(setFIAT:any) {
   // lookup state of DOM for select option (country code)
@@ -533,6 +496,49 @@ function getProvinceSelect(FIAT:string) {
       </div>
     );
   }
+
+}
+
+function exportData() {
+
+  let txSummary = document.getElementById("txSummary");
+  console.log(txSummary);
+  // txSummary as email body content
+
+  // export data to CSV
+  console.log("export tx data to CSV");
+
+  // get user email from DOM
+  let email = (document.getElementById("mailSubmit") as HTMLInputElement)!.value;
+  console.log(email);
+
+  if(email !== ""){
+
+    alert("Email send -> pending. Please wait for dialog confirmation before closing.");
+    // build and send email with txSummary as body, csv as attachment
+    Email.send({
+      // Host: "smtp.elasticemail.com",
+      // Username: "tom@tomtranmer.com",
+      // Password: "D3FDCF440E05AFE30D3E32E8E85FF0CFF259",
+      SecureToken: "a99ca485-3fd7-4695-9d17-3e172aa3d0b2",
+      To: email,
+      From: "bcard@tomtranmer.com",
+      Subject: "BanklessCard TaxMan Transaction Summary",
+      Body: txSummary?.innerHTML,
+    })
+    .then(function (message:any) {
+      console.log(message);
+      if(message === "OK"){
+        alert("mail sent successfully");
+      } else {
+        alert("mail failed to send with message: " + message);
+      }
+    });
+  } else {
+    alert("Please enter your email address");
+  }
+
+
 
 }
 
@@ -739,9 +745,10 @@ export function App() {
 
         <aside className={cs.buttonContainer}>
           <button 
+            id={cs.exportBtn}
             className={cs.exportBtn} 
-            onClick={() => console.log("exportData")}
-          >Export</button>
+            onClick={() => exportData()}
+          >Send to my email!</button>
         </aside>
 
       </div>

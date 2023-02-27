@@ -94,13 +94,21 @@ body {
   font-variant: small-caps;
 
   color: white;
-  padding: 10px 40%;
+  padding: 10px 35%;
 
   background: linear-gradient(90deg, #BE2BAE 0%, #F72D51 100%);
   border-radius: 9px;
 
   box-shadow: 3px 3px 8px rgba(0,0,0,0.3);
 
+  width: 100%;
+
+  display:none;
+}
+
+.mailSubmit {
+  padding: 5px 10px;
+  border-radius: 8px;
   width: 100%;
 }
 
@@ -149,8 +157,17 @@ body {
   line-height: 2.1;
 }
 
+
+.txSummary h3 {
+  line-height: 1;
+  margin-bottom: 0;
+  margin-top: 10px;
+}
+
+
 .INCOME {
   border-color: greenyellow !important;
+  display: block !important;
 }
 
 .NOT {
@@ -221,6 +238,14 @@ body {
   color:white;
   font-weight: 400;
   /* -webkit-text-fill-color: white; */
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.saveBtn {
+  cursor: pointer;
 }
 
 .flexCont {
@@ -300,6 +325,7 @@ body {
 
 .detail {
   display: none;
+  padding-bottom:10px;
 }
 
 .scaleWidth {
