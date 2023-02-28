@@ -6,8 +6,12 @@ html {
   
 }
 
-h1, h2, h3 {
+h1, h2, h3, h5 {
   font-family: 'Space Grotesk', sans-serif;
+}
+
+h3 {
+  font-weight: 200;
 }
 
 .headerLinks {
@@ -106,6 +110,27 @@ body {
   display:none;
 }
 
+.dateHeader {
+  text-align: left;
+  margin: 0 10px;
+  font-weight: 500;
+
+  color: #BE2BAE;
+
+  border-top: 2px solid rgba(255,255,255,0.6);
+  padding-top: 10px;
+}
+
+.tokenLabel {
+  font-size: 16px;
+}
+
+.incBadge {
+  text-decoration: underline;
+  font-size:12px;
+  font-weight:600;
+}
+
 .mailSubmit {
   padding: 5px 10px;
   border-radius: 8px;
@@ -141,6 +166,10 @@ body {
   height: 55px;
 }
 
+.center {
+  text-align: center;
+}
+
 .red {
     color:red;
 }
@@ -148,7 +177,10 @@ body {
 .label {
   color: white;
   text-align: center;
-  font-weight: 200;
+  font-weight: 400;
+  letter-spacing: 1px;
+  font-size: 2em;
+  line-height: 1.5;
 }
 
 .page label {
@@ -164,14 +196,44 @@ body {
   margin-top: 10px;
 }
 
+.closeIcon {
+  float:right;
+}
+
+.dayOut {
+  text-align: left;
+  color:white;
+  font-size: 1.1em;
+  margin: 10px 10px 35px 10px;
+}
+
+.fromAddr {
+  text-align: left;
+  color:white;
+  margin: 35px 10px 35px 10px;
+  font-weight: 200;
+}
+
+.copyLink {
+  float: right;
+  cursor:pointer;
+  margin: 0 5px;
+}
+
+.incomeToggleContainer {
+  text-align: center;
+  margin: 20px 0;
+}
+
 
 .INCOME {
-  border-color: greenyellow !important;
+  /* border-color: greenyellow !important; */
   display: block !important;
 }
 
 .NOT {
   display: none;
+  border-bottom: 2px solid red !important;
 }
 
 .logoClick {
@@ -191,15 +253,17 @@ body {
 }
 
 .buttonStyle {
-  padding: 5px 20%;
-  border: 2px solid #ccc;
+
+  margin: 20px 0;
+  padding: 14px 20%;
+  border: 2px solid #C02CAE;
   background: rgba(255,255,255,0.65);
   border-radius: 8px;
-/* 
-  color: white;
-  -webkit-text-fill-color: white; */
+  color:#BE2BAE;
+
   font-weight: bold;
   text-transform: capitalize;
+  text-decoration: none;
 }
 
 .buttonStyle::hover {
@@ -214,7 +278,7 @@ body {
 
 .tx {
   list-style: none;
-  border-bottom: 2px solid white;
+  /* border-bottom: 2px solid white; */
   border-radius: 3px;
   margin: 5px 10px;
   padding: 5px;

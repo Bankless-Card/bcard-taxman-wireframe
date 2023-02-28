@@ -120,8 +120,9 @@ function handleIncomeToggle(evt:any) {
   let imgClassList = evt.currentTarget.classList;
   let otherTarget = evt.currentTarget.nextSibling;    // target other button
 
-  let mainTx = evt.currentTarget.parentNode.previousSibling;
-  console.log(mainTx);
+  let mainTx = evt.currentTarget.parentNode.parentNode.previousSibling;
+  // console.log(evt.currentTarget.parentNode.parentNode.previousSibling);
+  console.log(mainTx);    // should be the main tx data container
 
   // set container class for future summation
   let txContainer = mainTx.parentNode.parentNode;
@@ -183,6 +184,53 @@ function handleIncomeToggle(evt:any) {
   }
 
 
+}
+
+function getMonthOut(month:string) {
+  let monthOut = "";
+
+  switch(month) {
+    case "Jan":
+      monthOut = "January";
+      break;
+    case "Feb":
+      monthOut = "February";
+      break;
+    case "Mar":
+      monthOut = "March";
+      break;
+    case "Apr":
+      monthOut = "April";
+      break;
+    case "May":
+      monthOut = "May";
+      break;
+    case "Jun":
+      monthOut = "June";
+      break;
+    case "Jul":
+      monthOut = "July";
+      break;
+    case "Aug":
+      monthOut = "August";
+      break;
+    case "Sep":
+      monthOut = "September";
+      break;
+    case "Oct":
+      monthOut = "October";
+      break;
+    case "Nov":
+      monthOut = "November";
+      break;
+    case "Dec":
+      monthOut = "December";
+      break;
+    default:
+      monthOut = "January";
+  }
+
+  return monthOut;
 }
 
 
@@ -258,6 +306,12 @@ async function alchemyGo(FIAT:string){
     console.log("output cleared");
   }
 
+  // internal variables to the tx loop
+  // var first = true;
+  let curMonth = "Start";
+  let dateHeader = "";    // init
+  let deferHeader = false;
+
     // for each of the transactions
   for (var i=0; i<objArr.length; i++) {
     // console.log(i, objArr[i] );
@@ -297,6 +351,9 @@ async function alchemyGo(FIAT:string){
     let tokenAmount = displayTokenAmount(thisRow.value,thisRow.asset);   // token amount - '+thisRow.value+'
     let convertAmount = await displayConvertAmount(thisRow.value, thisRow.asset, unixT, FIAT)// "USD/FIAT value @ timefrom blockNum";   // USD/FIAT value @ timefrom blockNum
 
+    // htmlhelpers
+    let clearBoth = "<div style=clear:both></div>";
+
     // save to globalTxs
     globalTxs[i].unixT = unixT;   // add unix timestamp to global object
     globalTxs[i].incomeState = incomeState;   // add income state to global object
@@ -318,9 +375,9 @@ async function alchemyGo(FIAT:string){
         </div>\
         <div class='+cs.col+'>\
           <div class='+cs.row+'>\
-            <span>'+tokenLabel+'</span>\
+            <span class='+cs.tokenLabel+'>'+tokenLabel+'</span>\
           </div>\
-          <div class='+cs.row+' title="badge">\
+          <div class="'+cs.row+" "+cs.incBadge+'" title="badge">\
             '+incomeBadge+' Income | Received\
           </div>\
         </div>\
@@ -360,23 +417,81 @@ async function alchemyGo(FIAT:string){
     // a defines the show/hide condition of the div
     let a = thisRow.asset;
 
+    let listRow = "";    //init
+
+    // insert date header here - conditional on month change
+    let dString = tNice.toDateString();
+    let dStringArr = dString.split(" ");
+    let dStringMonth = dStringArr[1];
+    let dStringYear = dStringArr[3];
+
+    if(dStringMonth !== curMonth){
+      curMonth = dStringMonth;
+      // console.log("Month Change - trigger new header (on first shown element)");
+
+      // console.log("index: ",i , dStringMonth, curMonth);
+
+      // skip if element is not shown and defer to next in index
+
+      dateHeader = "<div class="+cs.dateHeader+">"+getMonthOut(curMonth)+" "+dStringYear+"</div>";
+
+      if(incomeState === "NOT") {
+        // its not shown so we need to defer the display until one that is shown
+        deferHeader = true;   // thihs will trigger display of header later
+      } else {
+        deferHeader = false;
+      
+
+        // output here IF monthh change && is income
+        listRow += dateHeader;    // add the header before the containeer element.
+
+      }
+
+      
+    }
+
+    if(deferHeader){
+      // then we need to call the header display here
+      if(incomeState === "INCOME"){
+        // only on income, so we may miss months if no income recorded.
+
+        listRow += dateHeader;    // add the header before the containeer element.
+
+        deferHeader = false;    // reset the flag
+
+      }
+    }
+
+    /** Start of tx container li element **/
     // include the date/time in local format, as title of the list item
-    let listRow = "<li id="+i+" title='"+tNice+"' class='"+cs.tx + " " + a + " " + cs[incomeState] + "'>";
+    listRow += "<li id="+i+" title='"+tNice+"' class='"+cs.tx + " " + a + " " + cs[incomeState] + "'>";
+
+  let closeIcon = "<span class="+cs.closeIcon+"><img src='./src/img/close.png' alt='close' /></span>";    
+
+  // <span style=float:right>X</span><br />
+
+
     listRow += outBox;    // main tx output and more button to reveal detail
     // listRow += getTokenLogo(thisRow.asset);
 
-    listRow += "<div class="+cs.detail+"><strong><hr/>DETAIL VIEW:"+a+" tx</strong><span style=float:right>X</span><br />";
-    listRow += "<div class="+cs.row+">";
-      listRow += "<div class="+cs.col+">";
-        listRow += getTokenLogo(a) + getTokenLabel(a);
-      listRow += "</div>";
-    
-    
-    listRow += "<div class="+cs.col+">";
-    listRow += "TokenAmt: <strong>" + thisRow.value +"</strong>" + "<br/>ConvertAmt: <strong>";
-    listRow += await displayConvertAmount(thisRow.value, a, unixT, FIAT) +"</strong></div>";
+    // detail view starts here
+    listRow += "<div class="+cs.detail+"><strong><hr/>DETAIL VIEW:"+a+" tx</strong>"+ closeIcon;
 
-    listRow += "</div>";
+    // skip this row for now?
+    if(false){
+      listRow += "<div class="+cs.row+">";
+        listRow += "<div class="+cs.col+">";
+          listRow += getTokenLogo(a) + getTokenLabel(a);
+        listRow += "</div>";
+      
+      
+      listRow += "<div class="+cs.col+">";
+      listRow += "TokenAmt: <strong>" + thisRow.value +"</strong>" + "<br/>ConvertAmt: <strong>";
+      listRow += await displayConvertAmount(thisRow.value, a, unixT, FIAT) +"</strong></div>";
+      listRow += "</div>";
+
+      listRow += clearBoth;
+    }
 
     // fetch trasaction detail based on tx hash
     /*
@@ -390,9 +505,27 @@ async function alchemyGo(FIAT:string){
 
     // "<br/>DATE/TIME AS CAPTURED FROM BLOCKnum: "+thisRow.blockNum+" or TXhash: "+thisRow.hash+
 
-    let clearBoth = "<div style=clear:both></div>";
+    let dayClean = tNice.toDateString();
+    let timeClean = tNice.toLocaleTimeString();     // use users local time to display :)
+    let dayArr = dayClean.split(" ");
+    let dayOut = getMonthOut(dayArr[1]) + " " + dayArr[2] + ", " + dayArr[3] + " | " + timeClean;
+    // console.log(dayClean, timeClean);
 
-    listRow += "<div class="+cs.left+">"+tNice + "</div> "+clearBoth+"<a target='_blank' class="+cs.buttonStyle+" href=https://etherscan.io/tx/"+thisRow.hash+">View TX on Etherscan</a> <br /><div class="+cs.left+">From address: <br/>"+thisRow.from+"</div>"+clearBoth+"<a href=https://etherscan.io/address/"+thisRow.from+" target=_blank class="+cs.buttonStyle+">View Sender</a>" + clearBoth;
+    // navigator.clipboard.writeText(thisRow.from);
+
+    let copyLink = "<a class="+cs.copyLink+" onclick=alert('"+thisRow.from+"')>[]</a>";
+ 
+
+
+    listRow += "<div class="+cs.dayOut+">" + dayOut + "</div>";
+
+    listRow += "<a target='_blank' class="+cs.buttonStyle+" href=https://etherscan.io/tx/"+thisRow.hash+">View TX on Etherscan</a>";
+
+    listRow += "<div class="+cs.fromAddr+"><strong>From:</strong> <br/>"+thisRow.from+copyLink+"</div>";
+
+    listRow += clearBoth+"<a href=https://etherscan.io/address/"+thisRow.from+" target=_blank class="+cs.buttonStyle+">View Sender</a>" + clearBoth;
+
+    listRow += "<div class="+cs.incomeToggleContainer+">";     // income toggle container
 
     // default view for BANK token is income
     if(a === "BANK"){
@@ -405,11 +538,13 @@ async function alchemyGo(FIAT:string){
       listRow += "<img src='./src/img/ni.png' alt=income width=60 height=40 class='"+cs.activeIncome+" "+cs.toggleButton+"' />";   // not income image
     }
 
+    listRow += "</div>";    // end of income toggle container
+
     
     // listRow += clearBoth;   // add a clear to give save button a new line.
 
     // listRow += "<br /><a href='#' class="+cs.buttonStyle+" title='revert & hide detail view'>Cancel</a>";
-    listRow += "<a href='#' class='"+cs.buttonStyle+ " "+cs.saveBtn+"' title='save (auto) & hide detail view'>Save</a>"
+    listRow += "<a href='#' class='"+cs.buttonStyle+ " "+cs.saveBtn+"' title='save (auto) & hide detail view'>Save</a><hr />"
     
     listRow += "</div></div></li>";   // end of detail, flexView container & list item
 
@@ -804,7 +939,7 @@ export function App() {
 
         <h2 className={cs.label}>We've automatically classified your transactions</h2>
 
-        <p>Verify that each one is correct.</p>
+        <h3 className={cs.center}>Verify that each one is correct.</h3>
 
         {/* if the connection is set, this loads in the account info (ad) from Wallet Connect*/}
         {isConnected && <Account />}
