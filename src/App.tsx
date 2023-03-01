@@ -875,7 +875,7 @@ export function App() {
           </select>
         </div>
 
-        {getProvinceSelect(FIAT)}
+        {/*getProvinceSelect(FIAT)*/}
 
         {/* <div className={cs.inputBox}>
           <label>Where in {FIAT==="CAD" ? "Canada" : "USA"} do you live?</label>
