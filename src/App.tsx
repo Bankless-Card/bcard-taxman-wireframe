@@ -781,9 +781,7 @@ export function App() {
     <header>
       <img className={cs.headerLogo} src="./src/img/bc_logo.png" alt="BanklessCard Logo" /> 
       <ul className={cs.headerLinks}>
-        <li><a href="">Blog</a></li>
-        <li><a href="">About Us</a></li>
-        <li><a href="" className={cs.highlight}>VISIT US</a></li>
+        <li><a href="https://banklesscard.xyz">About Us</a></li>
         <li className={cs.wcBtn}><Web3Button /></li>
       </ul>
     </header>
@@ -999,9 +997,6 @@ export function App() {
       <footer>
         <div>Made with &#x2764; by Bankless Card</div>
         <ul className='socials'>
-          <li><a href="mailto:links@banklesscard.xyz" target="_blank"><img src="./src/img/mail.png" alt="Email Us" /></a></li>
-          <li><a href="#" target="_blank"><img src="./src/img/lin.png" alt="LinkedIn" /></a></li>
-          <li><a href="https://www.youtube.com/shorts/Hpbq0laSEWM" target="_blank"><img src="./src/img/yt.png" alt="Our YouTube Channel" /></a></li>
           <li><a href="https://www.instagram.com/bankless_card/" target="_blank"><img src="./src/img/insta.png" alt="Instagram" /></a></li>
           <li><a href="https://twitter.com/BanklessCard" target="_blank"><img src="./src/img/tw.png" alt="Twitter" /></a></li>
         </ul>
