@@ -778,231 +778,233 @@ export function App() {
 
   return (
     <>
-    <header>
-      <img className={cs.headerLogo} src="./src/img/bc_logo.png" alt="BanklessCard Logo" /> 
-      <ul className={cs.headerLinks}>
-        <li><a href="https://banklesscard.xyz">About Us</a></li>
-        <li className={cs.wcBtn}><Web3Button /></li>
-      </ul>
-    </header>
-    <div id="HomeSplash" className={cs.home}>
+    <div className={cs.AppContainer}>
+      <header>
+        <img className={cs.headerLogo} src="./src/img/bc_logo.png" alt="BanklessCard Logo" /> 
+        <ul className={cs.headerLinks}>
+          <li><a href="https://banklesscard.xyz">About Us</a></li>
+          <li className={cs.wcBtn}><Web3Button /></li>
+        </ul>
+      </header>
+      <div id="HomeSplash" className={cs.home}>
 
-      <h1 className={cs.mainTitle}>TAXMAN</h1>
-      <h3>DAO Income Tax Helper</h3>
-      <div className={cs.clear}></div>
+        <h1 className={cs.mainTitle}>TAXMAN</h1>
+        <h3>DAO Income Tax Helper</h3>
+        <div className={cs.clear}></div>
 
-      <div className={cs.columnWide}>
-        <div className={cs.smallButton}>
-          <h2>FAST</h2>
-          <p>Finish your DAO Income Taxes in 5 minutes</p>
+        <div className={cs.columnWide}>
+          <div className={cs.smallButton}>
+            <h2>FAST</h2>
+            <p>Finish your DAO Income Taxes in 5 minutes</p>
+          </div>
+          <div className={cs.smallButton}>
+            <h2>FREE</h2>
+            <p>No credit card or crypto payment required</p>
+          </div>
+          <div className={cs.wideButton}>
+            <h2>BUILT FOR DAOs</h2>
+            <p>Earning monney from DAOs? We automatically filter out any transactions that aren't DAO income to make the process EASY for anyone to use.</p>
+          </div>
         </div>
-        <div className={cs.smallButton}>
-          <h2>FREE</h2>
-          <p>No credit card or crypto payment required</p>
-        </div>
-        <div className={cs.wideButton}>
-          <h2>BUILT FOR DAOs</h2>
-          <p>Earning monney from DAOs? We automatically filter out any transactions that aren't DAO income to make the process EASY for anyone to use.</p>
-        </div>
-      </div>
-      {/* <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae magnam dolor cum! Repellat impedit quibusdam inventore, rem fugit, voluptate voluptas consequuntur minus quo iure magnam sequi reiciendis nisi officia veritatis!</p> */}
-      
-    
-      <div className={cs.columnWide}>
-        <div className={cs.bigButton}>
-          <h2>
-            <a href="#info"> 
-              <img src="./src/img/click-arrow.png" alt="click-arrow" />
-              &nbsp;Click here to start
-            </a>
-          </h2>
-        </div>
-      </div>
-    </div>    {/* <!-- end of HomeSplash --> */}
-    <div className={cs.clear}></div>
-    <div id="AppContent" className={cs.container}>
-    
-      {/* <header>
+        {/* <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae magnam dolor cum! Repellat impedit quibusdam inventore, rem fugit, voluptate voluptas consequuntur minus quo iure magnam sequi reiciendis nisi officia veritatis!</p> */}
         
-        <h1>BCard TaxMan</h1>
+      
+        <div className={cs.columnWide}>
+          <div className={cs.bigButton}>
+            <h2>
+              <a href="#info"> 
+                <img src="./src/img/click-arrow.png" alt="click-arrow" />
+                &nbsp;Click here to start
+              </a>
+            </h2>
+          </div>
+        </div>
+      </div>    {/* <!-- end of HomeSplash --> */}
+      <div className={cs.clear}></div>
+      <div id="AppContent" className={cs.container}>
+      
+        {/* <header>
+          
+          <h1>BCard TaxMan</h1>
+
+          <Web3Button />
+        </header> */}
+        {/* example of class component - can be set to update live with tick() */}
+        
+
+        {/* <div className={cs.page}>
+        <a id="first"></a> */}
+          {/* <h2 className={cs.red}>DAO Income Tax Helper</h2>
+
+          <img src="https://via.placeholder.com/500x350?text=Hero+Image" alt="" className={cs.scaleWidth} /> */}
+
+          {/* <div className={cs.buttonContainer} >
+            <Btn name="Calculate your tax now (it's free)" url="#info" />
+          </div> */}
+
+          {/* <aside className={cs.buttonContainer}>
+            <a 
+              href="#info"
+              className={cs.btn} 
+              // onClick={() => triggerTx(address)}
+            >Calculate your tax now (it's free)</a>
+          </aside>
+
+          <hr /> */}
+        
+        {/* </div> */}
+
+        <div className={cs.page}>
+          {/*<!-- sample page for initial info collect -->*/}
+          <a id="info"></a>
+          <h2 className={cs.label}>Let's start with some questions!</h2>
+
+          <div className={cs.inputBox}>
+            <label>What is your ETH address?</label>
+            <input type="text" placeholder="Enter your ETH address." defaultValue={address} id='walletInput' />
+          </div>
+
+          <div className={cs.inputBox}>
+            <label>Select your country of residence</label>
+            <select 
+              className='fiatSelect'
+              onChange={() => callSetFiat(setFIAT)}
+            >
+              <option value='CAD'>Canada (CAD)</option>
+              <option value='USD'>United States (USA)</option>
+              <option disabled>Other</option>
+            </select>
+          </div>
+
+          {/*getProvinceSelect(FIAT)*/}
+
+          {/* <div className={cs.inputBox}>
+            <label>Where in {FIAT==="CAD" ? "Canada" : "USA"} do you live?</label>
+            <select>
+              <option>Ontario</option>
+              <option>British Columbia (BC)</option>
+              <option>Other</option>
+            </select>
+          </div> */}
+
+          {/* <Btn name="Next Step" onClick={triggerTx} /> */}
+
+          <aside className={cs.buttonContainer}>
+            <a 
+              href="#dao-page"
+              className={cs.btn} 
+              onClick={() => callSetFiat(setFIAT)}
+            >Next Step</a>
+          </aside>
+
+          <hr />
+
+        </div>
+
+        <div id="dao-select" className={cs.page}>
+
+          <a id="dao-page"></a>
+          <h2 className={cs.label}>Which DAOs are you a part of?</h2>
+          <DaoSelectors name="BanklessDAO" token="BANK" tokenState={BANK} />
+          
+          <DaoSelectors name="1Inch" token="1INCH" />
+          <DaoSelectors name="Aragon" token="ANT" />
+          <DaoSelectors name="Maker DAO" token="MKR" />
+          <DaoSelectors name="Pocket DAO" token="POKT" />
+          <DaoSelectors name="Pool Together" token="POOL" />
+
+          {/* <Btn name="Next Step" url="#tx-page" /> */}
+
+          <aside className={cs.buttonContainer}>
+            <a 
+              href="#tx-page"
+              className={cs.btn} 
+              onClick={() => triggerTx(FIAT)}
+            >Next Step</a>
+          </aside>
+
+          <p>If your DAO doesnt appear here. You can write us: <a href="mailto:links@banklesscard.xyz"  target="_blank">links@banklesscard.xyz</a></p>
+
+          <hr />
+
+        </div>
+
+        <div id="tx-list" className={cs.page}>
+
+          <a id="tx-page"></a>
+
+          
+          
+
+          <h2 className={cs.label}>We've automatically classified your transactions</h2>
+
+          <h3 className={cs.center}>Verify that each one is correct.</h3>
+
+          {/* if the connection is set, this loads in the account info (ad) from Wallet Connect*/}
+          {isConnected && <Account />}
+
+          {/* {isConnected && <AlchemyGo address={address} />} */}
+
+          <aside className={cs.buttonContainer}>
+            <a 
+              href="#finish"
+              className={cs.btn} 
+              onClick={() => finishButton(FIAT)}
+            >Finish</a>
+          </aside>
+
+          <div id="txSummary" className={cs.txSummary}></div>
+
+          <aside className={cs.buttonContainer}>
+            <button 
+              id={cs.exportBtn}
+              className={cs.exportBtn} 
+              onClick={() => exportData()}
+            >Send to my email!</button>
+          </aside>
+
+        </div>
+
+        <h2>Dev testing buttons</h2>
+
+        <p><a 
+            href="#"
+            className={cs.btnW + " " + cs.btn} 
+            onClick={(e) => toggleAlts(e)}
+          >Show all &amp; Hide all DAO</a>
+          </p>
+          <p>
+          <a 
+            href="#"
+            className={cs.btnW + " " + cs.btn} 
+            onClick={(e) => toggleDetail(e)}
+          >show/hide all tx details</a>
+        </p>
+
+        <hr />
+        <hr />
+        {/* example of functional component - will display based on input props */}
 
         <Web3Button />
-      </header> */}
-      {/* example of class component - can be set to update live with tick() */}
+
+        {/* <Card title="Card Title" paragraph="This is paragraph data for sample card." />
+
+        <SampleFunc here="here" /> */}
+
+
       
-
-      {/* <div className={cs.page}>
-      <a id="first"></a> */}
-        {/* <h2 className={cs.red}>DAO Income Tax Helper</h2>
-
-        <img src="https://via.placeholder.com/500x350?text=Hero+Image" alt="" className={cs.scaleWidth} /> */}
-
-        {/* <div className={cs.buttonContainer} >
-          <Btn name="Calculate your tax now (it's free)" url="#info" />
-        </div> */}
-
-        {/* <aside className={cs.buttonContainer}>
-          <a 
-            href="#info"
-            className={cs.btn} 
-            // onClick={() => triggerTx(address)}
-          >Calculate your tax now (it's free)</a>
-        </aside>
-
-        <hr /> */}
-      
-      {/* </div> */}
-
-      <div className={cs.page}>
-        {/*<!-- sample page for initial info collect -->*/}
-        <a id="info"></a>
-        <h2 className={cs.label}>Let's start with some questions!</h2>
-
-        <div className={cs.inputBox}>
-          <label>What is your ETH address?</label>
-          <input type="text" placeholder="Enter your ETH address." defaultValue={address} id='walletInput' />
-        </div>
-
-        <div className={cs.inputBox}>
-          <label>Select your country of residence</label>
-          <select 
-            className='fiatSelect'
-            onChange={() => callSetFiat(setFIAT)}
-          >
-            <option value='CAD'>Canada (CAD)</option>
-            <option value='USD'>United States (USA)</option>
-            <option disabled>Other</option>
-          </select>
-        </div>
-
-        {/*getProvinceSelect(FIAT)*/}
-
-        {/* <div className={cs.inputBox}>
-          <label>Where in {FIAT==="CAD" ? "Canada" : "USA"} do you live?</label>
-          <select>
-            <option>Ontario</option>
-            <option>British Columbia (BC)</option>
-            <option>Other</option>
-          </select>
-        </div> */}
-
-        {/* <Btn name="Next Step" onClick={triggerTx} /> */}
-
-        <aside className={cs.buttonContainer}>
-          <a 
-            href="#dao-page"
-            className={cs.btn} 
-            onClick={() => callSetFiat(setFIAT)}
-          >Next Step</a>
-        </aside>
-
-        <hr />
-
       </div>
-
-      <div id="dao-select" className={cs.page}>
-
-        <a id="dao-page"></a>
-        <h2 className={cs.label}>Which DAOs are you a part of?</h2>
-        <DaoSelectors name="BanklessDAO" token="BANK" tokenState={BANK} />
-        
-        <DaoSelectors name="1Inch" token="1INCH" />
-        <DaoSelectors name="Aragon" token="ANT" />
-        <DaoSelectors name="Maker DAO" token="MKR" />
-        <DaoSelectors name="Pocket DAO" token="POKT" />
-        <DaoSelectors name="Pool Together" token="POOL" />
-
-        {/* <Btn name="Next Step" url="#tx-page" /> */}
-
-        <aside className={cs.buttonContainer}>
-          <a 
-            href="#tx-page"
-            className={cs.btn} 
-            onClick={() => triggerTx(FIAT)}
-          >Next Step</a>
-        </aside>
-
-        <p>If your DAO doesnt appear here. You can write us: <a href="mailto:links@banklesscard.xyz"  target="_blank">links@banklesscard.xyz</a></p>
-
-        <hr />
-
+      <div className='footerCont'>
+        <footer>
+          <div>Made with &#x2764; by Bankless Card</div>
+          <ul className='socials'>
+            <li><a href="https://www.instagram.com/bankless_card/" target="_blank"><img src="./src/img/insta.png" alt="Instagram" /></a></li>
+            <li><a href="https://twitter.com/BanklessCard" target="_blank"><img src="./src/img/tw.png" alt="Twitter" /></a></li>
+          </ul>
+          <div>&copy; 2023 Bankless Card | All rights reserved</div>
+        </footer>
       </div>
-
-      <div id="tx-list" className={cs.page}>
-
-        <a id="tx-page"></a>
-
-        
-        
-
-        <h2 className={cs.label}>We've automatically classified your transactions</h2>
-
-        <h3 className={cs.center}>Verify that each one is correct.</h3>
-
-        {/* if the connection is set, this loads in the account info (ad) from Wallet Connect*/}
-        {isConnected && <Account />}
-
-        {/* {isConnected && <AlchemyGo address={address} />} */}
-
-        <aside className={cs.buttonContainer}>
-          <a 
-            href="#finish"
-            className={cs.btn} 
-            onClick={() => finishButton(FIAT)}
-          >Finish</a>
-        </aside>
-
-        <div id="txSummary" className={cs.txSummary}></div>
-
-        <aside className={cs.buttonContainer}>
-          <button 
-            id={cs.exportBtn}
-            className={cs.exportBtn} 
-            onClick={() => exportData()}
-          >Send to my email!</button>
-        </aside>
-
-      </div>
-
-      <h2>Dev testing buttons</h2>
-
-      <p><a 
-          href="#"
-          className={cs.btnW + " " + cs.btn} 
-          onClick={(e) => toggleAlts(e)}
-        >Show all &amp; Hide all DAO</a>
-        </p>
-        <p>
-        <a 
-          href="#"
-          className={cs.btnW + " " + cs.btn} 
-          onClick={(e) => toggleDetail(e)}
-        >show/hide all tx details</a>
-      </p>
-
-      <hr />
-      <hr />
-      {/* example of functional component - will display based on input props */}
-
-      <Web3Button />
-
-      {/* <Card title="Card Title" paragraph="This is paragraph data for sample card." />
-
-      <SampleFunc here="here" /> */}
-
-
-    
-    </div>
-    <div className='footerCont'>
-      <footer>
-        <div>Made with &#x2764; by Bankless Card</div>
-        <ul className='socials'>
-          <li><a href="https://www.instagram.com/bankless_card/" target="_blank"><img src="./src/img/insta.png" alt="Instagram" /></a></li>
-          <li><a href="https://twitter.com/BanklessCard" target="_blank"><img src="./src/img/tw.png" alt="Twitter" /></a></li>
-        </ul>
-        <div>&copy; 2023 Bankless Card | All rights reserved</div>
-      </footer>
-    </div>
+    </div> {/* #AppContainer */}
     </>
   )
 }
