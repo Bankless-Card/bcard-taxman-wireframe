@@ -46,11 +46,11 @@ body {
 
 .headerLinks li {
   float: left;
-  margin-right: 10px;
+  margin-right: 20px;
 }
 
 .headerLinks li a {
-  text-decoration: none;
+  text-decoration: underline;
   color:white;
 }
 
