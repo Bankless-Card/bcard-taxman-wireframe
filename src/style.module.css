@@ -24,7 +24,7 @@ body {
   /* font: normal 18px/1.5 "Fira Sans", "Helvetica Neue", sans-serif; */
 
   color: #fff;
-  padding: 0 0 50px 0;
+  padding: 0 0 0px 0;
   margin: 0;
 
   background-image: url('./src/img/bg.jpg');
@@ -451,7 +451,6 @@ header {
 
   .home {
     overflow:auto;
-    #background: linear-gradient(180.08deg, rgba(192, 44, 173, 0.44) 0.07%, rgba(247, 120, 156, 0.63) 44.8%, rgba(252, 173, 193, 0.44) 99.93%);
     padding-bottom: 60px;
   }
 
@@ -464,12 +463,12 @@ header {
     float:left;
   }
 
-  .home h3 {
+  .home h3.subTitle {
     float: left;
     text-align: left;
 
-    margin: 55px 0 0 40px;
-    font-size: 2.5em;
+    margin: 65px 0 0 40px;
+    font-size: 2em;
     font-weight: 200;
     line-height:1.5;
 
@@ -489,12 +488,16 @@ header {
     padding: 0 20px;
   }
 
+  .landingPageBenefits {
+    margin-left: 20px;
+  }
+
   .home .bigButton {
     float: right;
     border: 1px solid white;
     padding: 30px 20px 30px 40px;
-    width: 400px;
-    margin: 0 20px 120px 0;
+    width: 200px;
+    margin: 100px 20px 120px 0;
 
     background: rgba(255, 255, 255, 0.25);
     backdrop-filter: blur(27.4747px);
@@ -502,7 +505,7 @@ header {
   }
 
   .home .bigButton h2 {
-    font-size: 4.5em;
+    font-size: 3em;
     font-weight:100;
     margin: 0;
     padding: 0;
@@ -670,8 +673,7 @@ header {
     justify-content: space-between;
     margin: 0 5px 0 5px;
 
-    position: fixed;
-    bottom: 0;
+
     width: 99%;
   }
 
