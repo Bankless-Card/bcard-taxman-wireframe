@@ -788,7 +788,7 @@ export function App() {
       </ul>
     </header>
     <div id="HomeSplash" className={cs.home}>
-      <Clock />
+
       <h1 className={cs.mainTitle}>TAXMAN</h1>
       <h3>DAO Income Tax Helper</h3>
       <div className={cs.clear}></div>
