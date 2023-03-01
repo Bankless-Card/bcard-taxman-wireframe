@@ -789,24 +789,21 @@ export function App() {
       <div id="HomeSplash" className={cs.home}>
 
         <h1 className={cs.mainTitle}>TAXMAN</h1>
-        <h3>DAO Income Tax Helper</h3>
+        <h3 className={cs.subTitle}>DAO Income <br/> Tax Helper</h3>
         <div className={cs.clear}></div>
 
         <div className={cs.columnWide}>
-          <div className={cs.smallButton}>
-            <h2>FAST</h2>
-            <p>Finish your DAO Income Taxes in 5 minutes</p>
-          </div>
-          <div className={cs.smallButton}>
-            <h2>FREE</h2>
-            <p>No credit card or crypto payment required</p>
-          </div>
-          <div className={cs.wideButton}>
-            <h2>BUILT FOR DAOs</h2>
-            <p>Earning monney from DAOs? We automatically filter out any transactions that aren't DAO income to make the process EASY for anyone to use.</p>
+          <div className={cs.landingPageBenefits}>
+            <p>Taxman is a quick and easy tool to help you calculate your DAO income taxes.</p>
+
+            <ul>
+              <li><strong>FAST</strong> - you can finish your DAO income taxes in 5 minutes</li>
+              <li><strong>FREE</strong> - No credit card or crypto payment required</li>
+              <li><strong>BUILT FOR DAO CONTRIBUTORS</strong> - we automatically filter out any transactions that aren't DAO income</li>
+            </ul>
+
           </div>
         </div>
-        {/* <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Vitae magnam dolor cum! Repellat impedit quibusdam inventore, rem fugit, voluptate voluptas consequuntur minus quo iure magnam sequi reiciendis nisi officia veritatis!</p> */}
         
       
         <div className={cs.columnWide}>
