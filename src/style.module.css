@@ -347,11 +347,6 @@ body {
 
 .col {
   display: block;
-  /*
-  flex-direction: column;
-  flex-basis: 100%;
-  flex: 1;
-  min-width: 150px; */
 }
 
 .inBadge, .niBadge {
@@ -360,10 +355,10 @@ body {
   margin: 7px 5px 0 0;
 }
 
-.niBadge {
+/* .niBadge {
   width: 35px;
 
-}
+} */
 
 .tokenLogo {
   width: 50px;

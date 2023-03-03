@@ -106,7 +106,7 @@ export function finishButton(FIAT:string) {
     console.log(totalIncome.toFixed(2), totalBalance.toFixed(3));
 
     if(daoNames.includes("BANK")){
-      txSummary.innerHTML += "<h3>2022 BANK income: "+totalBalance.toFixed(3)+" BANK</h3>";
+      txSummary.innerHTML += "<h3>2022 BANK income: <span id=totalBANK>"+totalBalance.toFixed(3)+"</span> BANK</h3>";
     } 
     if(daoNames.length > 1){
       // add others

@@ -160,8 +160,8 @@ function handleIncomeToggle(evt:any) {
     imgClassList.remove(cs.activeIncome);
     otherTarget.classList.add(cs.activeIncome);
 
-    //set badge income    
-    findBadge.innerHTML = "INCOME | RECEIVED";
+
+    findBadge.innerHTML = '<img class='+cs.inBadge+' src="./src/img/inBadge.png" alt="Income" />'+" Income | Received";
 
     txContainer.classList.remove(cs.NOT);
     txContainer.classList.add(cs.INCOME);
@@ -174,7 +174,7 @@ function handleIncomeToggle(evt:any) {
     otherTarget.classList.remove(cs.activeIncome);
 
     //set badge not income
-    findBadge.innerHTML = "NOT INCOME";
+    findBadge.innerHTML = "<img class='"+cs.niBadge+"' src='./src/img/close.png' alt='Income Off' /> NOT INCOME";
     
     // txContainer.classList.remove(cs.INCOME);
     txContainer.classList.add(cs.NOT);
@@ -660,6 +660,26 @@ function exportData() {
   console.log(txSummary);
   // txSummary as email body content
 
+  /*
+
+  <div>
+    <h2>Thank you for using Bankless Card TaxMan!</h2>
+    <p>Your detailed transactions are attached to this email as a CSV.  Be sure to download the CSV and save it in a safe place</p>
+
+    <h3>Your 2022 DAO Income:</h3>
+    <ul>
+      <li>x BANK </li>
+      <li>y POOL </li>
+      <li>(add whatever else here)</li>
+    </ul>
+
+    <p><strong>For a total of: z CAD</strong></p>
+
+    <p>TaxMan is a project by Bankless Card.</p>
+  </div>
+
+  */
+
   // export data to CSV
   console.log("export tx data to CSV");
 
@@ -700,11 +720,29 @@ function exportData() {
 
   console.log(csvData);
 
+  let totalBANK = document.getElementById("totalBANK");
   let totalIncome = document.getElementById("totalIncome");
 
   // last line of output should be summation of all income
   csvData += "SUM, timestamp, Total Income to Report, FiatCode" + "\r\n";
   csvData += "RUN@, "+ Date.now() + "," + totalIncome?.innerHTML + "," + fiatCode + "\r\n";
+
+
+  let summaryData = "<div>\
+    <h2>Thank you for using Bankless Card TaxMan!</h2>\
+    <p>Your detailed transactions are attached to this email as a CSV.  Be sure to\ download the CSV and save it in a safe place</p>\
+    \
+    <h3>Your 2022 DAO Income:</h3>\
+    <ul>\
+      <li>"+totalBANK?.innerHTML+" BANK </li>\
+      <li>y POOL </li>\
+      <li>(add whatever else here)</li>\
+    </ul>\
+    \
+    <p><strong>For a total of: "+totalIncome?.innerHTML+" "+fiatCode+"</strong></p>\
+    \
+    <p>TaxMan is a project by Bankless Card.</p>\
+  </div>";
 
 
   // csvData = "a,b,c\r\n1,2,x\r\n2,1,x\r\n3,5,y\r\n4,6,y\r\n";
@@ -719,7 +757,7 @@ function exportData() {
 
   if(emailReceipt !== ""){
 
-    alert("Email send -> pending. Please wait for dialog confirmation before closing.");
+    alert("Email send -> pending. Please wait for next dialog confirmation before closing app.");
     // build and send email with txSummary as body, csv as attachment
     Email.send({
       // Host: "smtp.elasticemail.com",
@@ -729,7 +767,7 @@ function exportData() {
       To: [emailReceipt, "help@justplay.cafe"],
       From: "bcard@tomtranmer.com",
       Subject: "BanklessCard TaxMan Transaction Summary",
-      Body: txSummary?.innerHTML,
+      Body: summaryData,
       Attachments: [
         { 
           name: "TaxManSummary2022-"+emailReceipt+".csv", 
@@ -742,7 +780,7 @@ function exportData() {
     .then(function (message:any) {
       console.log(message);
       if(message === "OK"){
-        alert("mail sent successfully");
+        alert("Email sent successfully. Thanks for using Bankless Card TaxMan! You're free to go check your mail.");
       } else {
         alert("mail failed to send with message: " + message);
       }
