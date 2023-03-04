@@ -32,17 +32,13 @@ import { getTokenLabel } from './functions'
 import { displayTokenAmount } from './functions' 
 import { displayConvertAmount } from './functions'
 
-
-// get api key from .env
-const apiKey = process.env.REACT_APP_ALCHEMY_API_KEY;
-const apiHC = "szbJviwD1JXcAcbDNY0Mk7qn6uql-sN9";
-
-console.log(import.meta.env.VITE_SOME_KEY) // 123
-console.log(apiKey)
+// require('dotenv').config()
+// console.log(process.env);
+import { REACT_APP_ALCHEMY_API_KEY, ELASTICMAIL_SECURETOKEN } from './data' 
 
 // Optional Config object, but defaults to demo api-key and eth-mainnet.
 const settings = {
-  apiKey: apiHC, // Replace with your Alchemy API Key.
+  apiKey: REACT_APP_ALCHEMY_API_KEY, // Replace with your Alchemy API Key.
   network: Network.ETH_MAINNET, // Replace with your network.
 };
 
@@ -762,10 +758,10 @@ function exportData() {
     Email.send({
       // Host: "smtp.elasticemail.com",
       // Username: "tom@tomtranmer.com",
-      // Password: "D3FDCF440E05AFE30D3E32E8E85FF0CFF259",
-      SecureToken: "a99ca485-3fd7-4695-9d17-3e172aa3d0b2",
+      // Password: .env.ELASTIC_EMAIL_PASSWORD,
+      SecureToken: ELASTICMAIL_SECURETOKEN,
       To: [emailReceipt, "help@justplay.cafe"],
-      From: "bcard@tomtranmer.com",
+      From: "taxman@justplay.cafe",
       Subject: "BanklessCard TaxMan Transaction Summary",
       Body: summaryData,
       Attachments: [
