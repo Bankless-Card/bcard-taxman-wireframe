@@ -16,6 +16,14 @@ export function finishButton(FIAT:string) {
   let totalIncome = 0;
   let totalBalance = 0;
 
+  let totalBANK = 0;
+  let totalWETH = 0;
+  let totalDAI = 0;
+
+
+  // let totalBANKincome = 0;
+  // let totalWETHincome = 0;
+
   //actually calculate the total income and balance
   // get the BANK as Fiat values and add them up
   let myIncome = document.getElementsByClassName(cs.convertAmount);
@@ -28,13 +36,22 @@ export function finishButton(FIAT:string) {
     console.log(el.innerHTML);
 
     let txCont = el.parentElement.parentElement.parentElement.parentElement.parentElement;
-    // console.log(txCont);
+    console.log(txCont);
 
     if(txCont.classList.contains(cs.NOT)){
       // skip it
       console.log("NOT INCOME");
     } else {
 
+      // let isBANK, isWETH = false;
+
+      // if(txCont.classList.contains("BANK")){
+      //   console.log("BANK INCOME");
+      //   isBANK = true;
+      // } else if(txCont.classList.contains("WETH")){
+      //   console.log("WETH INCOME");
+      //   isWETH = true;
+      // }
 
       // if the tx is not due a conversion
       if(!el.innerHTML.startsWith("Convert")){
@@ -46,6 +63,15 @@ export function finishButton(FIAT:string) {
         // console.log(f);
 
         totalIncome += f;
+
+        
+
+        // if(isBANK){
+        //   totalBANKincome += f;
+        // } else if(isWETH){
+        //   totalWETHincome += f;
+        // }
+
       }
 
     }
@@ -61,6 +87,19 @@ export function finishButton(FIAT:string) {
       console.log("NOT INCOME");
     } else {
 
+      let isBANK, isWETH, isDAI = false;
+
+      if(txCont.classList.contains("BANK")){
+        console.log("BANK BALANCE");
+        isBANK = true;
+      } else if(txCont.classList.contains("WETH")){
+        console.log("WETH BALANCE");
+        isWETH = true;
+      } else if(txCont.classList.contains("DAI")){
+        // console.log("WETH BALANCE");
+        isDAI = true;
+      }
+
       // if the tx is not due a conversion
       if(!el.innerHTML.startsWith("Token")){
         // if converted -> sum for total income
@@ -71,6 +110,14 @@ export function finishButton(FIAT:string) {
         console.log(f);
 
         totalBalance += f;
+
+        if(isBANK){
+          totalBANK += f;
+        } else if(isWETH){
+          totalWETH += f;
+        } else if(isDAI){
+          totalDAI += f;
+        }
       }
 
     }
@@ -106,16 +153,23 @@ export function finishButton(FIAT:string) {
     console.log(totalIncome.toFixed(2), totalBalance.toFixed(3));
 
     if(daoNames.includes("BANK")){
-      txSummary.innerHTML += "<h3>2022 BANK income: <span id=totalBANK>"+totalBalance.toFixed(3)+"</span> BANK</h3>";
+      txSummary.innerHTML += "<h3>2022 BANK income: <span id=totalBANK>"+totalBANK.toFixed(3)+"</span> BANK</h3>";
     } 
-    if(daoNames.length > 1){
+    if(daoNames.includes("WETH")){
+      txSummary.innerHTML += "<h3>2022 WETH income: <span id=totalWETH>"+totalWETH.toFixed(3)+"</span> WETH</h3>";
+    } 
+    if(daoNames.includes("DAI")){
+      txSummary.innerHTML += "<h3>2022 DAI income: <span id=totalDAI>"+totalDAI.toFixed(3)+"</span> DAI</h3>";
+    } 
+    if(daoNames.length > 1 && false){
       // add others
-      txSummary.innerHTML += "<h3>2022 OTHER DAO balance: XXX.YYY ODAO</h3>";
+     // txSummary.innerHTML += "<h3>2022 OTHER DAO balance: XXX.YYY ODAO</h3>";
     }
 
       // income needs to be sum of all DAO tokens
     txSummary.innerHTML += "<h3>2022 Total DAO income: "+totalIncome.toFixed(2) + " $"+FIAT+"</h3>";
   
+    // onChange="+changingTax()+"
     txSummary.innerHTML += "<h3 title='Your tax rate - most countries classify 100% of income from any source as taxable.'>Tax Rate: <input type='number' id='taxRate' value='"+taxRate+"' />%</h3><hr />";
 
     txSummary.innerHTML += "<h2>Total Income to Report: $<span id=totalIncome>"+(totalIncome*taxRate/100).toFixed(2)+"</span></h2>";
@@ -130,4 +184,12 @@ export function finishButton(FIAT:string) {
   } else  {
     console.log("no txSummary div found");
   }
+}
+
+function changingTax(){
+  console.log("Tax is changing - recalculate the total income to report");
+  let taxRate = document.getElementById("taxRate") as HTMLInputElement;
+  let newVal = taxRate.value;
+
+  console.log(newVal);
 }
