@@ -337,6 +337,25 @@ async function alchemyGo(FIAT:string){
     
     let incomeState = "NOT";
     console.log("add other assets here to autoflag as income");
+
+    // console.log(daoSel.WETH);
+    //is enabled check
+    if(daoSel.WETH){
+      console.log("WETH is enabled");
+      if(thisRow.asset === "WETH"){
+        incomeState = "INCOME";   // only enable if WETH is enabled && it matches
+      }
+    }
+
+    if(daoSel.DAI){
+      console.log("DAI is enabled");
+      if(thisRow.asset === "DAI"){
+        incomeState = "INCOME";   // only enable if WETH is enabled && it matches
+      }
+    }
+
+    // BANK is always income
+    console.log(daoSel["BANK"]);
     if(thisRow.asset === "BANK"){
       incomeState = "INCOME";
     }
@@ -523,15 +542,18 @@ async function alchemyGo(FIAT:string){
 
     listRow += "<div class="+cs.incomeToggleContainer+">";     // income toggle container
 
+    //console.log(incomeState);
+
     // default view for BANK token is income
-    if(a === "BANK"){
+    if(incomeState === "INCOME"){
       listRow += "<img src='./src/img/in.png' class='"+cs.activeIncome + " " + cs.toggleButton+"' alt=income  />";   // active income image
 
+      // not used?
       listRow += "<img src='./src/img/ni.png' alt=notincome class="+cs.toggleButton+" />";   // not income image
     } else {
       // non-income display
-      listRow += "<img src='./src/img/in.png' alt=income width=50 height=50 class="+cs.toggleButton+" />";   // income image
-      listRow += "<img src='./src/img/ni.png' alt=income width=60 height=40 class='"+cs.activeIncome+" "+cs.toggleButton+"' />";   // not income image
+      listRow += "<img src='./src/img/in.png' alt=income class="+cs.toggleButton+" />";   // income image
+      listRow += "<img src='./src/img/ni.png' alt=notincome class='"+cs.activeIncome+" "+cs.toggleButton+"' />";   // not income image
     }
 
     listRow += "</div>";    // end of income toggle container
@@ -717,11 +739,15 @@ function exportData() {
   console.log(csvData);
 
   let totalBANK = document.getElementById("totalBANK");
+  let totalWETH = document.getElementById("totalWETH");
+  let totalDAI = document.getElementById("totalDAI");
   let totalIncome = document.getElementById("totalIncome");
 
+  let taxRate = document.getElementById("taxRate") as HTMLInputElement;
+
   // last line of output should be summation of all income
-  csvData += "SUM, timestamp, Total Income to Report, FiatCode" + "\r\n";
-  csvData += "RUN@, "+ Date.now() + "," + totalIncome?.innerHTML + "," + fiatCode + "\r\n";
+  csvData += "SUM, timestamp, TaxRate, Total Income to Report, FiatCode" + "\r\n";
+  csvData += "RUN@, "+ Date.now() + "," + taxRate?.value + ","+ totalIncome?.innerHTML + "," + fiatCode + "\r\n";
 
 
   let summaryData = "<div>\
@@ -730,12 +756,19 @@ function exportData() {
     \
     <h3>Your 2022 DAO Income:</h3>\
     <ul>\
-      <li>"+totalBANK?.innerHTML+" BANK </li>\
-      <li>y POOL </li>\
+      <li>"+totalBANK?.innerHTML+" BANK </li>";
+  if(totalWETH) {
+    summaryData += "<li>"+totalWETH?.innerHTML+" WETH </li>";
+  }
+  if(totalDAI) {
+    summaryData += "<li>"+totalDAI?.innerHTML+" DAI </li>";
+  }
+  summaryData +=
+      "<li>y POOL </li>\
       <li>(add whatever else here)</li>\
     </ul>\
     \
-    <p><strong>For a total of: "+totalIncome?.innerHTML+" "+fiatCode+"</strong></p>\
+    <p><strong>For a total of: "+totalIncome?.innerHTML+" "+fiatCode+"</strong> at income tax rate of "+taxRate.value+"%.</p>\
     \
     <p>TaxMan is a project by Bankless Card.</p>\
   </div>";
@@ -789,6 +822,12 @@ function exportData() {
 
 }
 
+let daoSel = {
+  "WETH": true,
+  "BANK": true,
+  "DAI": true,
+}
+
 export function App() {
   // this to get connected accouunt info from WalletConnect
   const { address, isConnected } = useAccount();
@@ -805,6 +844,10 @@ export function App() {
   // default true on token states to show all
   // example with BANK token
   const [BANK, setBANK] = useState(true);
+  const [POOL, setPOOL] = useState(true);
+
+  // const WETH = false;
+  // daoSel.WETH = true;
 
   const [FIAT, setFIAT] = useState('CAD');    // default cad, later probably usd
 
@@ -936,7 +979,7 @@ export function App() {
 
           <a id="dao-page"></a>
           <h2 className={cs.label}>Which DAOs are you a part of?</h2>
-          <DaoSelectors name="BanklessDAO" token="BANK" tokenState={BANK} />
+          <DaoSelectors name="BanklessDAO" token="BANK" tokenState={daoSel.BANK} />
           
           <DaoSelectors name="1Inch" token="1INCH" />
           <DaoSelectors name="Aragon" token="ANT" />
@@ -944,6 +987,10 @@ export function App() {
           <DaoSelectors name="Pocket DAO" token="POKT" />
           <DaoSelectors name="Pool Together" token="POOL" />
 
+          <hr />
+
+          <DaoSelectors name="Wrapped ETH" token="WETH" tokenState={daoSel.WETH} />
+          <DaoSelectors name="DAI Stable" token="DAI" tokenState={daoSel.DAI} />
           {/* <Btn name="Next Step" url="#tx-page" /> */}
 
           <aside className={cs.buttonContainer}>

@@ -44,6 +44,28 @@ export function displayConvertAmount(value:any, asset:any, timestamp:any, fiat:s
     return output;
 
 
+  } else if(asset === "WETH") {
+
+    console.log("real lookup for prices here...");
+    let wethFIAT = 2000.0101;   // 1 WETH = 0.01 default (or newer price)
+
+    let output = "$"+fiat+" "+(wethFIAT*parseFloat(value)).toFixed(2) + " @ " +wethFIAT.toFixed(4);
+    console.log(output);
+
+    // return the price in FIAT terms, based on timestamp
+    return output;
+
+  } else if(asset === "DAI") {
+
+    console.log("real lookup for prices here...");
+    let daiFIAT = 1.0101;   // 1 DAI = 0.01 default (or newer price)
+
+    let output = "$"+fiat+" "+(daiFIAT*parseFloat(value)).toFixed(2) + " @ " +daiFIAT.toFixed(4);
+    console.log(output);
+
+    // return the price in FIAT terms, based on timestamp
+    return output;
+
   } else {
     return "Convert Amount - " + value;
   }
