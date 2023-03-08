@@ -19,6 +19,11 @@ export function finishButton(FIAT:string) {
   let totalBANK = 0;
   let totalWETH = 0;
   let totalDAI = 0;
+  let total1INCH = 0;
+  let totalANT = 0;
+  let totalMKR = 0;
+  let totalPOKT = 0;
+  let totalPOOL = 0;
 
 
   // let totalBANKincome = 0;
@@ -87,7 +92,7 @@ export function finishButton(FIAT:string) {
       console.log("NOT INCOME");
     } else {
 
-      let isBANK, isWETH, isDAI = false;
+      let isBANK, isWETH, isDAI, is1INCH, isANT, isMKR, isPOKT, isPOOL = false;   // init all
 
       if(txCont.classList.contains("BANK")){
         console.log("BANK BALANCE");
@@ -98,6 +103,16 @@ export function finishButton(FIAT:string) {
       } else if(txCont.classList.contains("DAI")){
         // console.log("WETH BALANCE");
         isDAI = true;
+      } else if(txCont.classList.contains("1INCH")){
+        is1INCH = true;
+      } else if(txCont.classList.contains("ANT")){
+        isANT = true;
+      } else if(txCont.classList.contains("MKR")){
+        isMKR = true;
+      } else if(txCont.classList.contains("POKT")){
+        isPOKT = true;
+      } else if(txCont.classList.contains("POOL")){
+        isPOOL = true;
       }
 
       // if the tx is not due a conversion
@@ -109,7 +124,7 @@ export function finishButton(FIAT:string) {
         let f = parseFloat(thisAmt.replace(",",""));
         console.log(f);
 
-        totalBalance += f;
+        totalBalance += f;    // this number means NOTHING as it is the sumtotal of all TOKENS of all TYPES
 
         if(isBANK){
           totalBANK += f;
@@ -117,6 +132,16 @@ export function finishButton(FIAT:string) {
           totalWETH += f;
         } else if(isDAI){
           totalDAI += f;
+        } else if(is1INCH){
+          total1INCH += f;
+        } else if(isANT){
+          totalANT += f;
+        } else if(isMKR){
+          totalMKR += f;
+        } else if(isPOKT){
+          totalPOKT += f;
+        } else if(isPOOL){
+          totalPOOL += f;
         }
       }
 
@@ -161,12 +186,25 @@ export function finishButton(FIAT:string) {
     if(daoNames.includes("DAI")){
       txSummary.innerHTML += "<h3>2022 DAI income: <span id=totalDAI>"+totalDAI.toFixed(3)+"</span> DAI</h3>";
     } 
-    if(daoNames.length > 1 && false){
-      // add others
-     // txSummary.innerHTML += "<h3>2022 OTHER DAO balance: XXX.YYY ODAO</h3>";
-    }
+    if(daoNames.includes("1INCH") && total1INCH > 0){
+      txSummary.innerHTML += "<h3>2022 1INCH income: <span id=total1INCH>"+total1INCH.toFixed(3)+"</span> DAI</h3>";
+    } 
+    if(daoNames.includes("ANT") && totalANT > 0){
+      txSummary.innerHTML += "<h3>2022 ANT income: <span id=totalANT>"+totalANT.toFixed(3)+"</span> DAI</h3>";
+    } 
+    if(daoNames.includes("MKR") && totalMKR > 0){
+      txSummary.innerHTML += "<h3>2022 MKR income: <span id=totalMKR>"+totalMKR.toFixed(3)+"</span> DAI</h3>";
+    } 
+    if(daoNames.includes("POKT") && totalPOKT > 0){
+      txSummary.innerHTML += "<h3>2022 POKT income: <span id=totalPOKT>"+totalPOKT.toFixed(3)+"</span> DAI</h3>";
+    } 
+    if(daoNames.includes("POOL") && totalPOOL > 0){
+      txSummary.innerHTML += "<h3>2022 POOL income: <span id=totalPOOL>"+totalPOOL.toFixed(3)+"</span> DAI</h3>";
+    } 
 
-      // income needs to be sum of all DAO tokens
+
+
+      // income needs to be sum of all DAO & selected tokens
     txSummary.innerHTML += "<h3>2022 Total DAO income: "+totalIncome.toFixed(2) + " $"+FIAT+"</h3>";
   
     // onChange="+changingTax()+"

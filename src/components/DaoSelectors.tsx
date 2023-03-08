@@ -14,6 +14,10 @@ export function DaoSelectors(props:any){
   const [TOKEN, setTOKEN] = useState(props.tokenState);
   console.log(props.token, TOKEN);    // see current state
 
+  //set the state to checked if true
+  // props.tokenState = TOKEN;
+  console.log ("Need to update the global token based on the selected state")
+
   // using js lookup tokens in the transaction list
   // if found, set the display to true
   let allTxs = document.getElementsByClassName("tx");
