@@ -10,6 +10,16 @@ export function getTokenLabel(asset:any){
     return 'Wrapped Ether';
   } else if(asset === "DAI") {
     return 'DAI Stablecoin';
+  } else if(asset === "1INCH"){
+    return '1INCH Token';
+  } else if(asset === "ANT"){
+    return 'Aragon Token';
+  } else if(asset === "MKR"){
+    return 'Maker DAO Token';
+  } else if(asset === "POKT"){
+    return 'Poket Network Token';
+  } else if(asset === "POOL"){
+    return 'Pooltogether Token';
   }
   // TODO: add more assets here
 

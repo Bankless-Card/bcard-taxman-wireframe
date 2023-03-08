@@ -19,7 +19,7 @@ import { Btn } from './components'
 import { DaoSelectors } from './components';
 
 // data from library
-import { bankFeed } from './data'   // import pricefeed Data
+// import { bankFeed } from './data'   // import pricefeed Data
 
 // functions from library
 import { toggleAlts } from './functions'
@@ -69,19 +69,6 @@ function handleOpen(thisLink:any) {
 
 }
 
-// function searchTree(element:any, matchingTitle:any) {
-//     if(element.title == matchingTitle) {
-//        return element;
-//   } else if (element.children != null) {
-//        var i;
-//        var result = null;
-//        for(i=0; result == null && i < element.children.length; i++){
-//             result = searchTree(element.children[i], matchingTitle);
-//        }
-//        return result;
-//   }
-//   return null;
-// }
 
 // this function handles the save button press within the detail view
 function handleSave(evt:any) {
@@ -310,61 +297,87 @@ async function alchemyGo(FIAT:string){
 
     // for each of the transactions
   for (var i=0; i<objArr.length; i++) {
-    // console.log(i, objArr[i] );
+
     let thisRow = objArr[i];
     // console.log(thisRow.hash, thisRow.from, thisRow.nonce, thisRow.gas, thisRow.gasUsed, thisRow.gasPrice);
 
     let t = thisRow.metadata.blockTimestamp;    // date from tx record
     let tNice = new Date(t);
-    // console.log(tNice);
-
-
     var unixT = Date.parse(t)/1000
-    // console.log(unixT);
 
-    //output elements
-
-    // token label -> thisRow.asset
-    // token amount -> thisRow.value
-
-    // date/time -> from blockNum?
-
-    // calculated elements
-
-    // USD/FIAT value @ timefrom blockNum
+    // console.log(tNice);
 
     // Income Label - Toggle SWITCH
     
     let incomeState = "NOT";
-    console.log("add other assets here to autoflag as income");
+    // console.log("add other assets here to autoflag as income");
 
-    // console.log(daoSel.WETH);
+    // BANK is always income
+    // console.log(daoSel["BANK"]);
+    if(thisRow.asset === "BANK"){
+      incomeState = "INCOME";
+    }
+
     //is enabled check
     if(daoSel.WETH){
-      console.log("WETH is enabled");
+      // console.log("WETH is enabled");
       if(thisRow.asset === "WETH"){
         incomeState = "INCOME";   // only enable if WETH is enabled && it matches
       }
     }
 
     if(daoSel.DAI){
-      console.log("DAI is enabled");
+      // console.log("DAI is enabled");
       if(thisRow.asset === "DAI"){
         incomeState = "INCOME";   // only enable if WETH is enabled && it matches
       }
     }
 
-    // BANK is always income
-    console.log(daoSel["BANK"]);
-    if(thisRow.asset === "BANK"){
-      incomeState = "INCOME";
+    if(daoSel.INCH){
+      // console.log("1INCH is enabled");
+      if(thisRow.asset === "1INCH"){
+        incomeState = "INCOME";   // only enable if INCH is enabled && it matches
+      }
     }
 
+    if(daoSel.ANT){
+      if(thisRow.asset === "ANT"){
+        incomeState = "INCOME";   // only enable if ANT is enabled && it matches
+      }
+    }
+
+    if(daoSel.MKR){
+      if(thisRow.asset === "MKR"){
+        incomeState = "INCOME";   // only enable if MKR is enabled && it matches
+      }
+    }
+
+    if(daoSel.POKT){
+      if(thisRow.asset === "POKT"){
+        incomeState = "INCOME";   // only enable if POKT is enabled && it matches
+      }
+    }
+
+    if(daoSel.POOL){
+      if(thisRow.asset === "POOL"){
+        incomeState = "INCOME";   // only enable if POOL is enabled && it matches
+      }
+    }
+
+    // console.log(daoSel);    // pass here to convert amount?
+
     let incomeBadge = toggleSwitch(incomeState); // 'Income Label - Toggle SWITCH';
+    //console.log(incomeBadge);
+
     let tokenLogo = getTokenLogo(thisRow.asset);   // token logo - '+thisRow.asset+'
     let tokenLabel = getTokenLabel(thisRow.asset);   // token label - '+thisRow.asset+'
     let tokenAmount = displayTokenAmount(thisRow.value,thisRow.asset);   // token amount - '+thisRow.value+'
     let convertAmount = await displayConvertAmount(thisRow.value, thisRow.asset, unixT, FIAT)// "USD/FIAT value @ timefrom blockNum";   // USD/FIAT value @ timefrom blockNum
+
+    console.log(convertAmount);
+    let priceParts = convertAmount.split(" ");
+    let convertOut = priceParts[0] + " " + priceParts[1];
+    let convertRatio = priceParts[2] + " " + priceParts[3] + " " + thisRow.asset + "/" + FIAT;
 
     // htmlhelpers
     let clearBoth = "<div style=clear:both></div>";
@@ -383,28 +396,33 @@ async function alchemyGo(FIAT:string){
 
     let outBox = '<div class=' + cs.flexCont + '>\
       <div class="'+cs.row+" "+cs.even+'">\
+        <div class='+cs.col+'>\
+          <div class='+cs.row+'>\
+            <span class='+cs.tokenLabel+'>'+tokenLabel+'</span>\
+          </div>\
+          <div class="'+cs.row+" "+cs.incBadge+'" title="badge">\
+            '+incomeBadge+' \
+          </div>\
+        </div>\
         <div class="'+cs.col+" "+cs.logoClick+'">\
           <button class="'+cs.clickable+'">\
           '+ tokenLogo + ' \
           </button>\
         </div>\
         <div class='+cs.col+'>\
-          <div class='+cs.row+'>\
-            <span class='+cs.tokenLabel+'>'+tokenLabel+'</span>\
-          </div>\
-          <div class="'+cs.row+" "+cs.incBadge+'" title="badge">\
-            '+incomeBadge+' Income | Received\
-          </div>\
-        </div>\
-        <div class='+cs.col+'>\
           <div class="'+cs.row+" "+cs.end+'">\
             <span class='+cs.tokenAmount+'>'+tokenAmount+'</span>\
           </div>\
           <div class="'+cs.row+" "+cs.end+'">\
-            <span class='+cs.convertAmount+'>'+convertAmount+'</span>\
+            <span class='+cs.convertAmount+'>'+convertOut+'</span>\
           </div>\
         </div>\
       </div>';
+
+    // if(){
+    //   // override outbox
+    //   outBox = '<div class=' + cs.flexCont + '>\
+    // }
 
 
     // enable token logo for clickable -> show details
@@ -532,7 +550,7 @@ async function alchemyGo(FIAT:string){
  
 
 
-    listRow += "<div class="+cs.dayOut+">" + dayOut + "</div>";
+    listRow += "<div class="+cs.dayOut+">" + dayOut + "<br><span class="+cs.convertAmount+">Converted "+convertRatio+"</span></div>";
 
     listRow += "<a target='_blank' class="+cs.buttonStyle+" href=https://etherscan.io/tx/"+thisRow.hash+">View TX on Etherscan</a>";
 
@@ -579,22 +597,11 @@ async function alchemyGo(FIAT:string){
     //  -> pull tx data from block with hash
   }
 
-
-  // Access the Alchemy NFT API
-   // alchemy.nft.getNftsForOwner('vitalik.eth').then(console.log);
-
-  // Access WebSockets and Alchemy-specific WS methods
-  // alchemy.ws.on(
-  //   {
-  //     method: 'alchemy_pendingTransactions'
-  //   },
-  //   res => console.log(res)
-  // );
 }
 
 // triggers the alchemyGo() function
 async function triggerTx(FIAT:string) {
-  console.log(FIAT);
+  // console.log(FIAT);
   console.log("TX trigger call ");
   // let gt = GetTransactions({address:props});
   // console.log(gt);
@@ -603,7 +610,7 @@ async function triggerTx(FIAT:string) {
 
         // find all clickable elements and add event listener
         let clickable = document.getElementsByClassName(cs.clickable);
-        console.log(clickable);
+        // console.log(clickable);
 
         for (let i = 0; i < clickable.length; i++) {
           clickable[i].addEventListener("click", handleOpen);
@@ -611,7 +618,7 @@ async function triggerTx(FIAT:string) {
 
         // income toggle buttons
         let toggleButton = document.getElementsByClassName(cs.toggleButton);
-        console.log(toggleButton);
+        // console.log(toggleButton);
 
         for (let i = 0; i < toggleButton.length; i++) {
           toggleButton[i].addEventListener("click", handleIncomeToggle);
@@ -619,7 +626,7 @@ async function triggerTx(FIAT:string) {
 
         // save/close button
         let saveBtn = document.getElementsByClassName(cs.saveBtn);
-        console.log(saveBtn);
+        // console.log(saveBtn);
 
         for (let i = 0; i < saveBtn.length; i++) {
           saveBtn[i].addEventListener("click", handleSave);
@@ -636,7 +643,7 @@ function callSetFiat(setFIAT:any) {
   let country = document.getElementsByClassName("fiatSelect");
   let fiatCode = (country[0] as HTMLSelectElement).value;
 
-  console.log(fiatCode);
+  console.log("Setting: " + fiatCode);
 
   // assign to state variable
   setFIAT(fiatCode);
@@ -741,6 +748,13 @@ function exportData() {
   let totalBANK = document.getElementById("totalBANK");
   let totalWETH = document.getElementById("totalWETH");
   let totalDAI = document.getElementById("totalDAI");
+
+  let total1INCH = document.getElementById("total1INCH");
+  let totalANT = document.getElementById("totalANT");
+  let totalMKR = document.getElementById("totalMKR");
+  let totalPOKT = document.getElementById("totalPOKT");
+  let totalPOOL = document.getElementById("totalPOOL");
+
   let totalIncome = document.getElementById("totalIncome");
 
   let taxRate = document.getElementById("taxRate") as HTMLInputElement;
@@ -763,10 +777,24 @@ function exportData() {
   if(totalDAI) {
     summaryData += "<li>"+totalDAI?.innerHTML+" DAI </li>";
   }
+
+  if(total1INCH) {
+    summaryData += "<li>"+total1INCH?.innerHTML+" DAI </li>";
+  }
+  if(totalANT) {
+    summaryData += "<li>"+totalANT?.innerHTML+" DAI </li>";
+  }
+  if(totalMKR) {
+    summaryData += "<li>"+totalMKR?.innerHTML+" DAI </li>";
+  }
+  if(totalPOKT) {
+    summaryData += "<li>"+totalPOKT?.innerHTML+" DAI </li>";
+  }
+  if(totalPOOL) {
+    summaryData += "<li>"+totalPOOL?.innerHTML+" DAI </li>";
+  }
   summaryData +=
-      "<li>y POOL </li>\
-      <li>(add whatever else here)</li>\
-    </ul>\
+      "</ul>\
     \
     <p><strong>For a total of: "+totalIncome?.innerHTML+" "+fiatCode+"</strong> at income tax rate of "+taxRate.value+"%.</p>\
     \
@@ -822,10 +850,16 @@ function exportData() {
 
 }
 
+// determine/track the selected DAOs
 let daoSel = {
-  "WETH": true,
+  "WETH": false,
+  "DAI": false,
   "BANK": true,
-  "DAI": true,
+  "INCH": true,
+  "ANT": true,
+  "MKR": true,
+  "POKT": true,
+  "POOL": true,
 }
 
 export function App() {
@@ -843,8 +877,8 @@ export function App() {
 
   // default true on token states to show all
   // example with BANK token
-  const [BANK, setBANK] = useState(true);
-  const [POOL, setPOOL] = useState(true);
+  // const [BANK, setBANK] = useState(true);
+  // const [POOL, setPOOL] = useState(true);
 
   // const WETH = false;
   // daoSel.WETH = true;
@@ -981,11 +1015,11 @@ export function App() {
           <h2 className={cs.label}>Which DAOs are you a part of?</h2>
           <DaoSelectors name="BanklessDAO" token="BANK" tokenState={daoSel.BANK} />
           
-          <DaoSelectors name="1Inch" token="1INCH" />
-          <DaoSelectors name="Aragon" token="ANT" />
-          <DaoSelectors name="Maker DAO" token="MKR" />
-          <DaoSelectors name="Pocket DAO" token="POKT" />
-          <DaoSelectors name="Pool Together" token="POOL" />
+          <DaoSelectors name="1Inch" token="1INCH" tokenState={daoSel.INCH} />
+          <DaoSelectors name="Aragon" token="ANT" tokenState={daoSel.ANT} />
+          <DaoSelectors name="Maker DAO" token="MKR" tokenState={daoSel.MKR} />
+          <DaoSelectors name="Pocket DAO" token="POKT" tokenState={daoSel.POKT} />
+          <DaoSelectors name="Pool Together" token="POOL" tokenState={daoSel.POOL} />
 
           <hr />
 
@@ -1001,7 +1035,7 @@ export function App() {
             >Next Step</a>
           </aside>
 
-          <p>If your DAO doesnt appear here. You can write us: <a href="mailto:links@banklesscard.xyz"  target="_blank">links@banklesscard.xyz</a></p>
+          <p>If your DAO doesnt appear here. You can tweet @us: <a href="https://twitter.com/BanklessCard"  target="_blank">twitter.com/BanklessCard</a></p>
 
           <hr />
 
