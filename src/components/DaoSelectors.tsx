@@ -5,18 +5,18 @@ import { useState } from 'react'
 
 export function DaoSelectors(props:any){
 
-  console.log(props);
+  // console.log(props);
 
   // get incoming state of token selection with props.tokenState
 
   // console.log(props.tokenState);
 
   const [TOKEN, setTOKEN] = useState(props.tokenState);
-  console.log(props.token, TOKEN);    // see current state
+  // console.log(props.token, TOKEN);    // see current state
 
   //set the state to checked if true
   // props.tokenState = TOKEN;
-  console.log ("Need to update the global token based on the selected state")
+  // console.log ("Need to update the global token based on the selected state")
 
   // using js lookup tokens in the transaction list
   // if found, set the display to true
