@@ -5,6 +5,8 @@ import { inchPrices2022, antPrices2022, mkrPrices2022, poktPrices2022, poolPrice
 export function displayConvertAmount(value:any, asset:any, timestamp:any, fiat:string){
   // USD/FIAT value @ timefrom blockNum
 
+  // console.log(value, asset, timestamp, fiat);
+
   if(asset === "BANK"){
 
     let bankFIAT = 0.0101;   // 1 BANK = 0.01 default (or newer price)
@@ -46,7 +48,7 @@ export function displayConvertAmount(value:any, asset:any, timestamp:any, fiat:s
 
   } else if(asset === "WETH") {
 
-    console.log("real lookup for prices here...");
+    // console.log("real lookup for prices here...");
     let wethFIAT = 2000.0101;   // 1 WETH = 0.01 default (or newer price)
     let wethHistory = ethPrices2022.ethCad.prices;    // default CAD
 
@@ -57,6 +59,9 @@ export function displayConvertAmount(value:any, asset:any, timestamp:any, fiat:s
 
     wethHistory.forEach((item:any) => {
       // if time of item is less than or equal to timestamp
+
+      // console.log(item[0], timestamp*1000);   // ok for mainnet, not for polygon
+
       if(item[0] <= timestamp*1000){
         wethFIAT = item[1];    // set price up to timestamp
       } 

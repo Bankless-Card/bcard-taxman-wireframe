@@ -1,14 +1,12 @@
 import { Web3Button } from '@web3modal/react'
 import { useAccount } from 'wagmi'
-
 import { createElement, useState } from 'react'
-
 import { Alchemy, Network, AssetTransfersCategory } from 'alchemy-sdk';
 
 // @ts-ignore Import module
-import { Email } from './functions/smtpjsv3';
+import { Email } from './functions/smtpjsv3'; 
 // @ts-ignore Import module
-import { searchTree } from './functions/searchTree';
+import { searchTree } from './functions/searchTree';    
 
 // components from library
 import { Account } from './components'
@@ -17,9 +15,6 @@ import { Clock } from './components'
 import { Btn } from './components'
 
 import { DaoSelectors } from './components';
-
-// data from library
-// import { bankFeed } from './data'   // import pricefeed Data
 
 // functions from library
 import { toggleAlts } from './functions'
@@ -32,8 +27,7 @@ import { getTokenLabel } from './functions'
 import { displayTokenAmount } from './functions' 
 import { displayConvertAmount } from './functions'
 
-// require('dotenv').config()
-// console.log(process.env);
+// data imports
 import { REACT_APP_ALCHEMY_API_KEY, ELASTICMAIL_SECURETOKEN } from './data' 
 
 // Optional Config object, but defaults to demo api-key and eth-mainnet.
@@ -43,7 +37,8 @@ const settings = {
 };
 
 const alchemy = new Alchemy(settings);
-
+const polygon = new Alchemy({ apiKey: REACT_APP_ALCHEMY_API_KEY, network: Network.MATIC_MAINNET });
+const optimism = new Alchemy({ apiKey: REACT_APP_ALCHEMY_API_KEY, network: Network.OPT_MAINNET });
 
 // import './style.module.css'
 // Sample of dynamically applied CSS
@@ -122,6 +117,9 @@ function handleIncomeToggle(evt:any) {
 
   console.log("ALSO SET THE GLOBAL OBJECT DATA HERE WHEN CHANGING THE INCOME STATUS");
 
+
+
+
   // check for image in or ni
   if(imgSrc.includes("ni.png")){
     // currently it is not income
@@ -149,7 +147,10 @@ function handleIncomeToggle(evt:any) {
     txContainer.classList.remove(cs.NOT);
     txContainer.classList.add(cs.INCOME);
 
-    globalTxs[txContainerID].income = "INCOME";
+    //this not working for OP
+    // console.log(txContainerID, globalTxs[txContainerID])
+
+    globalTxs[txContainerID].incomeState = "INCOME";
 
   } else {
     // currently it is not active
@@ -162,7 +163,7 @@ function handleIncomeToggle(evt:any) {
     // txContainer.classList.remove(cs.INCOME);
     txContainer.classList.add(cs.NOT);
 
-    globalTxs[txContainerID].income = "NOT";
+    globalTxs[txContainerID].incomeState = "NOT";
     
   }
 
@@ -246,6 +247,8 @@ async function alchemyGo(FIAT:string){
 
   // Access Alchemy Enhanced API requests
   alchemy.core.getTokenBalances(walletAddress).then(console.log);
+  polygon.core.getTokenBalances(walletAddress).then(console.log);
+  optimism.core.getTokenBalances(walletAddress).then(console.log);
 
 
   const toAddress = walletAddress;    // for connected or inserted wallet address
@@ -258,6 +261,16 @@ async function alchemyGo(FIAT:string){
 
   const endBlockNumInt = 16308155;   //for 2022 eth mainnet END - hc
   const endBlock = "0x" + endBlockNumInt.toString(16);
+
+  const polyStartInt = 23231793;    // for 2022 polygon mainnet START - hc
+  const polyStart = "0x"+ polyStartInt.toString(16); //f0efd5";
+  const polyEndInt = 37466741;    // for 2022 polygon mainnet END - hc
+  const polyEnd = "0x" + polyEndInt.toString(16);
+
+  const opStartInt = 0;    // for 2022 optimism mainnet START - hc
+  const opStart = "0x"+ opStartInt.toString(16); //f0efd5";
+  const opEndInt = 58351868;    // for 2022 optimism mainnet END - hc
+  const opEnd = "0x" + opEndInt.toString(16);
 
   // console.log(startBlock);
 
@@ -273,16 +286,56 @@ async function alchemyGo(FIAT:string){
 
   // AssetTransfersCategory.EXTERNAL, AssetTransfersCategory.INTERNAL, AssetTransfersCategory.ERC721, AssetTransfersCategory.ERC1155,
 
-  console.log(res);
+  // console.log(res);
+
+  // lookup polygon results for transactions
+
+  const polyRes = await polygon.core.getAssetTransfers({
+    fromBlock: polyStart,
+    toBlock: polyEnd,
+    toAddress: toAddress,
+    excludeZeroValue: true,
+    withMetadata: true,
+    category: [ AssetTransfersCategory.ERC20 ],
+  });
+
+  // console.log(polyRes);
+
+  // lookup optimism results for transactions
+
+  const opRes = await optimism.core.getAssetTransfers({
+    fromBlock: opStart,
+    toBlock: opEnd,
+    toAddress: toAddress,
+    excludeZeroValue: true,
+    withMetadata: true,
+    // order: "desc",       // default asc for ascending
+    category: [ AssetTransfersCategory.ERC20 ],
+  });
+
+  console.log(opRes);
 
   // setup output object to DOM
   let output = document.getElementById("output");
   output?.classList.add(cs.output);
 
+  // console.log(res.transfers + opRes.transfers)
+
   let objArr = res.transfers;   //this is the transaction list data object
+  let polyArr = polyRes.transfers;
+  let opArr = opRes.transfers;
+
+  // const arr1 = ["Cecilie", "Lone"];
+  // const arr2 = ["Emil", "Tobias", "Linus"];
+  // const arr3 = ["Robin"];
+  const alTxs = objArr.concat(polyArr, opArr);
+
+  // console.log(alTxs);
 
   // assign the list of trasnctions to the DOM
-  globalTxs = objArr;
+  globalTxs = alTxs;
+  console.log("-> Add polygon and OP transactions to the global object HERE.");
+  let globalIndex = 0;
 
   if(output){
     output!.innerHTML = "";   // clear to start
@@ -295,7 +348,7 @@ async function alchemyGo(FIAT:string){
   let dateHeader = "";    // init
   let deferHeader = false;
 
-    // for each of the transactions
+    // for each of the transactions ON ETH MAINNET
   for (var i=0; i<objArr.length; i++) {
 
     let thisRow = objArr[i];
@@ -303,7 +356,7 @@ async function alchemyGo(FIAT:string){
 
     let t = thisRow.metadata.blockTimestamp;    // date from tx record
     let tNice = new Date(t);
-    var unixT = Date.parse(t)/1000
+    let unixT = Date.parse(t)/1000
 
     // console.log(tNice);
 
@@ -374,7 +427,7 @@ async function alchemyGo(FIAT:string){
     let tokenAmount = displayTokenAmount(thisRow.value,thisRow.asset);   // token amount - '+thisRow.value+'
     let convertAmount = await displayConvertAmount(thisRow.value, thisRow.asset, unixT, FIAT)// "USD/FIAT value @ timefrom blockNum";   // USD/FIAT value @ timefrom blockNum
 
-    console.log(convertAmount);
+    // console.log(convertAmount);
     let priceParts = convertAmount.split(" ");
     let convertOut = priceParts[0] + " " + priceParts[1];
     let convertRatio = priceParts[2] + " " + priceParts[3] + " " + thisRow.asset + "/" + FIAT;
@@ -383,16 +436,14 @@ async function alchemyGo(FIAT:string){
     let clearBoth = "<div style=clear:both></div>";
 
     // save to globalTxs
-    globalTxs[i].unixT = unixT;   // add unix timestamp to global object
-    globalTxs[i].incomeState = incomeState;   // add income state to global object
-    globalTxs[i].incomeBadge = incomeBadge;   // add income state to global object
-    globalTxs[i].tokenLogo = tokenLogo;   // add income state to global object
-    globalTxs[i].tokenLabel = tokenLabel;   // add income state to global object
-    globalTxs[i].tokenAmount = tokenAmount;   // add income state to global object
-    globalTxs[i].convertAmount = convertAmount;   // add income state to global object
+    globalTxs[globalIndex].unixT = unixT;   // add unix timestamp to global object
+    globalTxs[globalIndex].incomeState = incomeState;   // add income state to global object
+    globalTxs[globalIndex].incomeBadge = incomeBadge;   // add income state to global object
+    globalTxs[globalIndex].tokenLogo = tokenLogo;   // add income state to global object
+    globalTxs[globalIndex].tokenLabel = tokenLabel;   // add income state to global object
+    globalTxs[globalIndex].tokenAmount = tokenAmount;   // add income state to global object
+    globalTxs[globalIndex].convertAmount = convertAmount;   // add income state to global object
 
-
-    // let inx = (e:any) => handleOpen(e);
 
     let outBox = '<div class=' + cs.flexCont + '>\
       <div class="'+cs.row+" "+cs.even+'">\
@@ -419,32 +470,7 @@ async function alchemyGo(FIAT:string){
         </div>\
       </div>';
 
-    // if(){
-    //   // override outbox
-    //   outBox = '<div class=' + cs.flexCont + '>\
-    // }
 
-
-    // enable token logo for clickable -> show details
-    // console.log("Enable Show Details for Next onClick");
-    // outBox.find(cs.tokenClick).addEventListener("click", showDetails);      
-    // let outElem = document.createElement('div');
-    // outElem.innerHTML = outBox;
-
-    // console.log(outElem);
-
-            // </div>\
-
-            // try to have flexcont also contain the detail view
-
-    
-    // let moreMsg = console.log("more button has been clicked");
-
-    // more needs to target the detail div
-    let moreBtn = "<h3><a href='#' title='show/hide detail view'>MORE</a></h3>";
-
-    // override
-    moreBtn = "<hr />";
 
     // asset is the token symbol
     // a defines the show/hide condition of the div
@@ -499,10 +525,7 @@ async function alchemyGo(FIAT:string){
     // include the date/time in local format, as title of the list item
     listRow += "<li id="+i+" title='"+tNice+"' class='"+cs.tx + " " + a + " " + cs[incomeState] + "'>";
 
-  let closeIcon = "<span class="+cs.closeIcon+"><img src='./src/img/close.png' alt='close' /></span>";    
-
-  // <span style=float:right>X</span><br />
-
+    let closeIcon = "<span class="+cs.closeIcon+"><img src='./src/img/close.png' alt='close' /></span>";    
 
     listRow += outBox;    // main tx output and more button to reveal detail
     // listRow += getTokenLogo(thisRow.asset);
@@ -526,30 +549,13 @@ async function alchemyGo(FIAT:string){
       listRow += clearBoth;
     }
 
-    // fetch trasaction detail based on tx hash
-    /*
-    let tx = "0x5da2844afb6826d4baed6ad7e8b536c00cbc921ac147773ad056f29f2e7c1762"
-    web3.eth.getTransaction(tx).blockNumber
-      1920050
-    web3.eth.getBlock(1920050).timestamp
-    */
-    
-    // let thisTimestamp = web3.eth.getBlock(1920050).timestamp;
-
-    // "<br/>DATE/TIME AS CAPTURED FROM BLOCKnum: "+thisRow.blockNum+" or TXhash: "+thisRow.hash+
-
     let dayClean = tNice.toDateString();
     let timeClean = tNice.toLocaleTimeString();     // use users local time to display :)
     let dayArr = dayClean.split(" ");
     let dayOut = getMonthOut(dayArr[1]) + " " + dayArr[2] + ", " + dayArr[3] + " | " + timeClean;
-    // console.log(dayClean, timeClean);
-
-    // navigator.clipboard.writeText(thisRow.from);
 
     let copyLink = "<a class="+cs.copyLink+" onclick=alert('"+thisRow.from+"')>[]</a>";
  
-
-
     listRow += "<div class="+cs.dayOut+">" + dayOut + "<br><span class="+cs.convertAmount+">Converted "+convertRatio+"</span></div>";
 
     listRow += "<a target='_blank' class="+cs.buttonStyle+" href=https://etherscan.io/tx/"+thisRow.hash+">View TX on Etherscan</a>";
@@ -559,8 +565,6 @@ async function alchemyGo(FIAT:string){
     listRow += clearBoth+"<a href=https://etherscan.io/address/"+thisRow.from+" target=_blank class="+cs.buttonStyle+">View Sender</a>" + clearBoth;
 
     listRow += "<div class="+cs.incomeToggleContainer+">";     // income toggle container
-
-    //console.log(incomeState);
 
     // default view for BANK token is income
     if(incomeState === "INCOME"){
@@ -576,27 +580,525 @@ async function alchemyGo(FIAT:string){
 
     listRow += "</div>";    // end of income toggle container
 
-    
-    // listRow += clearBoth;   // add a clear to give save button a new line.
-
-    // listRow += "<br /><a href='#' class="+cs.buttonStyle+" title='revert & hide detail view'>Cancel</a>";
     listRow += "<a href='#' class='"+cs.buttonStyle+ " "+cs.saveBtn+"' title='save (auto) & hide detail view'>Save</a><hr />"
     
     listRow += "</div></div></li>";   // end of detail, flexView container & list item
 
-        // should log to console the block detail
-        // getBlock(thisRow.blockNumber);
-
+    // add the matched row to the output list 
     if (output) {
       output!.innerHTML = output?.innerHTML + listRow;
-      // output!.innerHTML = outElem + output?.innerHTML;
 
     }
 
-    // using blockHash -> generate URL link to etherscan
-    //  -> pull tx data from block with hash
+    globalIndex++;    // increment the global index
+
   }
 
+  console.log("Duplicate for polygon transactions.");
+  if(polyArr.length > 0){
+    output!.innerHTML = output?.innerHTML + "<h2>Polygon Transactions</h2>";
+
+  }
+
+  for (var i=0; i<polyArr.length; i++) {
+
+    let thisRow = polyArr[i];
+    // console.log(thisRow);
+
+    let t = thisRow.metadata.blockTimestamp;    // date from tx record
+    let tNice = new Date(t);
+    let unixT = Date.parse(t)/1000  
+
+    let incomeState = "NOT";
+
+    // BANK is always income
+    // console.log(daoSel["BANK"]);
+    if(thisRow.asset === "BANK"){
+      incomeState = "INCOME";
+    }
+
+    //is enabled check
+    if(daoSel.WETH){
+      if(thisRow.asset === "WETH"){
+        incomeState = "INCOME";   // only enable if WETH is enabled && it matches
+      }
+    }
+
+    if(daoSel.DAI){
+      if(thisRow.asset === "DAI"){
+        incomeState = "INCOME";   // only enable if WETH is enabled && it matches
+      }
+    }
+
+    if(daoSel.INCH){
+      if(thisRow.asset === "1INCH"){
+        incomeState = "INCOME";   // only enable if INCH is enabled && it matches
+      }
+    }
+
+    if(daoSel.ANT){
+      if(thisRow.asset === "ANT"){
+        incomeState = "INCOME";   // only enable if ANT is enabled && it matches
+      }
+    }
+
+    if(daoSel.MKR){
+      if(thisRow.asset === "MKR"){
+        incomeState = "INCOME";   // only enable if MKR is enabled && it matches
+      }
+    }
+
+    if(daoSel.POKT){
+      if(thisRow.asset === "POKT"){
+        incomeState = "INCOME";   // only enable if POKT is enabled && it matches
+      }
+    }
+
+    if(daoSel.POOL){
+      if(thisRow.asset === "POOL"){
+        incomeState = "INCOME";   // only enable if POOL is enabled && it matches
+      }
+    }
+
+    /** LIMIT FILTER */
+    let assets = ["BANK", "WETH", "DAI", "1INCH", "ANT", "MKR", "POKT", "POOL"];
+
+    let asset = thisRow.asset || "";
+    if(assets.includes(asset)){
+
+      let incomeBadge = toggleSwitch(incomeState); // 'Income Label - Toggle SWITCH';
+
+      let tokenLogo = getTokenLogo(thisRow.asset);   // token logo - '+thisRow.asset+'
+      let tokenLabel = getTokenLabel(thisRow.asset);   // token label - '+thisRow.asset+'
+      let tokenAmount = displayTokenAmount(thisRow.value,thisRow.asset);   // token amount - '+thisRow.value+'
+      let convertAmount = await displayConvertAmount(thisRow.value, thisRow.asset, unixT, FIAT)// "USD/FIAT value @ timefrom blockNum";   // USD/FIAT value @ timefrom blockNum
+
+      // console.log(convertAmount);
+
+      let priceParts = convertAmount.split(" ");
+      let convertOut = priceParts[0] + " " + priceParts[1];
+      let convertRatio = priceParts[2] + " " + priceParts[3] + " " + thisRow.asset + "/" + FIAT;
+
+      // htmlhelpers
+      let clearBoth = "<div style=clear:both></div>";
+
+      // console.log(asset, globalIndex);    // this index is not getting high enough
+      // console.log(globalTxs[globalIndex]);
+      // console.log(globalTxs);
+
+      // let j = i + objArr.length;   // offset for mainnet txs
+      if(globalTxs[globalIndex].asset === asset) {
+        // save to globalTxs (after mainnet txs)
+        globalTxs[globalIndex].unixT = unixT;   // add unix timestamp to global object
+        globalTxs[globalIndex].incomeState = incomeState;   // add income state to global object
+        globalTxs[globalIndex].incomeBadge = incomeBadge;   // add income state to global object
+        globalTxs[globalIndex].tokenLogo = tokenLogo;   // add income state to global object
+        globalTxs[globalIndex].tokenLabel = tokenLabel;   // add income state to global object
+        globalTxs[globalIndex].tokenAmount = tokenAmount;   // add income state to global object
+        globalTxs[globalIndex].convertAmount = convertAmount;   // add income state to global object
+      }
+      
+
+
+      let outBox = '<div class=' + cs.flexCont + '>\
+        <div class="'+cs.row+" "+cs.even+'">\
+          <div class='+cs.col+'>\
+            <div class='+cs.row+'>\
+              <span class='+cs.tokenLabel+'>'+tokenLabel+'</span>\
+            </div>\
+            <div class="'+cs.row+" "+cs.incBadge+'" title="badge">\
+              '+incomeBadge+' \
+            </div>\
+          </div>\
+          <div class="'+cs.col+" "+cs.logoClick+'">\
+            <button class="'+cs.clickable+'">\
+            '+ tokenLogo + ' \
+            </button>\
+          </div>\
+          <div class='+cs.col+'>\
+            <div class="'+cs.row+" "+cs.end+'">\
+              <span class='+cs.tokenAmount+'>'+tokenAmount+'</span>\
+            </div>\
+            <div class="'+cs.row+" "+cs.end+'">\
+              <span class='+cs.convertAmount+'>'+convertOut+'</span>\
+            </div>\
+          </div>\
+        </div>';
+
+
+
+      // asset is the token symbol
+      // a defines the show/hide condition of the div
+      let a = thisRow.asset;
+
+      let listRow = "";    //init
+
+      /** THIS IS THE MONTH HEADER SELECTOR HERE */
+
+      // insert date header here - conditional on month change
+      let dString = tNice.toDateString();
+      let dStringArr = dString.split(" ");
+      let dStringMonth = dStringArr[1];
+      let dStringYear = dStringArr[3];
+
+      if(dStringMonth !== curMonth){
+        curMonth = dStringMonth;
+        // console.log("Month Change - trigger new header (on first shown element)");
+
+        // console.log("index: ",i , dStringMonth, curMonth);
+
+        // skip if element is not shown and defer to next in index
+
+        dateHeader = "<div class="+cs.dateHeader+">"+getMonthOut(curMonth)+" "+dStringYear+"</div>";
+
+        if(incomeState === "NOT") {
+          // its not shown so we need to defer the display until one that is shown
+          deferHeader = true;   // thihs will trigger display of header later
+        } else {
+          deferHeader = false;
+        
+
+          // output here IF monthh change && is income
+          listRow += dateHeader;    // add the header before the containeer element.
+
+        }
+
+        
+      }
+
+      if(deferHeader){
+        // then we need to call the header display here
+        if(incomeState === "INCOME"){
+          // only on income, so we may miss months if no income recorded.
+
+          listRow += dateHeader;    // add the header before the containeer element.
+
+          deferHeader = false;    // reset the flag
+
+        }
+      }
+
+      /** Start of tx container li element **/
+      // include the date/time in local format, as title of the list item
+      listRow += "<li id="+i+" title='"+tNice+"' class='"+cs.tx + " " + a + " " + cs[incomeState] + "'>";
+
+      let closeIcon = "<span class="+cs.closeIcon+"><img src='./src/img/close.png' alt='close' /></span>";    
+
+      listRow += outBox;    // main tx output and more button to reveal detail
+      // listRow += getTokenLogo(thisRow.asset);
+
+
+      let dayClean = tNice.toDateString();
+      let timeClean = tNice.toLocaleTimeString();     // use users local time to display :)
+      let dayArr = dayClean.split(" ");
+      let dayOut = getMonthOut(dayArr[1]) + " " + dayArr[2] + ", " + dayArr[3] + " | " + timeClean;
+
+      let copyLink = "<a class="+cs.copyLink+" onclick=alert('"+thisRow.from+"')>[]</a>";
+  
+      // detail view starts here
+      listRow += "<div class="+cs.detail+"><strong><hr/>DETAIL VIEW:"+a+" tx</strong>"+ closeIcon;
+
+      listRow += "<div class="+cs.dayOut+">" + dayOut + "<br><span class="+cs.convertAmount+">Converted "+convertRatio+"</span></div>";
+
+      listRow += "<a target='_blank' class="+cs.buttonStyle+" href=https://etherscan.io/tx/"+thisRow.hash+">View TX on Etherscan</a>";
+
+      listRow += "<div class="+cs.fromAddr+"><strong>From:</strong> <br/>"+thisRow.from+copyLink+"</div>";
+
+      listRow += clearBoth+"<a href=https://etherscan.io/address/"+thisRow.from+" target=_blank class="+cs.buttonStyle+">View Sender</a>" + clearBoth;
+
+      listRow += "<div class="+cs.incomeToggleContainer+">";     // income toggle container
+
+      // default view for BANK token is income
+      if(incomeState === "INCOME"){
+        listRow += "<img src='./src/img/in.png' class='"+cs.activeIncome + " " + cs.toggleButton+"' alt=income  />";   // active income image
+
+        // not used?
+        listRow += "<img src='./src/img/ni.png' alt=notincome class="+cs.toggleButton+" />";   // not income image
+      } else {
+        // non-income display
+        listRow += "<img src='./src/img/in.png' alt=income class="+cs.toggleButton+" />";   // income image
+        listRow += "<img src='./src/img/ni.png' alt=notincome class='"+cs.activeIncome+" "+cs.toggleButton+"' />";   // not income image
+      }
+
+      listRow += "</div>";    // end of income toggle container
+
+      listRow += "<a href='#' class='"+cs.buttonStyle+ " "+cs.saveBtn+"' title='save (auto) & hide detail view'>Save</a><hr />"
+      
+      listRow += "</div></div></li>";   // end of detail, flexView container & list item
+
+      // add the matched row to the output list 
+      if (output) {
+        output!.innerHTML = output?.innerHTML + listRow;
+
+      }
+
+      globalIndex++;    // increment the global index
+
+
+    } else{
+      // skip non-matches - do not add to the list
+      // still increment the counter
+      globalIndex++;
+    }
+
+
+    
+
+  }   // end for all polygon transactions
+
+  console.log("Duplicate for optimism transactions.");
+  if(opArr.length > 0){
+    output!.innerHTML = output?.innerHTML + "<h2>Optimism Transactions</h2>";
+
+  }
+  for (var i=0; i<opArr.length; i++) {
+
+    let thisRow = opArr[i];     // or globalTxs[globalIndex]
+    // console.log(thisRow);
+
+    let t = thisRow.metadata.blockTimestamp;    // date from tx record
+    let tNice = new Date(t);
+    let unixT = Date.parse(t)/1000  
+
+    let incomeState = "NOT";
+
+    // BANK is always income
+    // console.log(daoSel["BANK"]);
+    if(thisRow.asset === "BANK"){
+      incomeState = "INCOME";
+    }
+
+    //is enabled check
+    if(daoSel.WETH){
+      if(thisRow.asset === "WETH"){
+        incomeState = "INCOME";   // only enable if WETH is enabled && it matches
+      }
+    }
+
+    if(daoSel.DAI){
+      if(thisRow.asset === "DAI"){
+        incomeState = "INCOME";   // only enable if WETH is enabled && it matches
+      }
+    }
+
+    if(daoSel.INCH){
+      if(thisRow.asset === "1INCH"){
+        incomeState = "INCOME";   // only enable if INCH is enabled && it matches
+      }
+    }
+
+    if(daoSel.ANT){
+      if(thisRow.asset === "ANT"){
+        incomeState = "INCOME";   // only enable if ANT is enabled && it matches
+      }
+    }
+
+    if(daoSel.MKR){
+      if(thisRow.asset === "MKR"){
+        incomeState = "INCOME";   // only enable if MKR is enabled && it matches
+      }
+    }
+
+    if(daoSel.POKT){
+      if(thisRow.asset === "POKT"){
+        incomeState = "INCOME";   // only enable if POKT is enabled && it matches
+      }
+    }
+
+    if(daoSel.POOL){
+      if(thisRow.asset === "POOL"){
+        incomeState = "INCOME";   // only enable if POOL is enabled && it matches
+      }
+    }
+
+    /** LIMIT FILTER */
+    let assets = ["BANK", "WETH", "DAI", "1INCH", "ANT", "MKR", "POKT", "POOL"];
+
+    let asset = thisRow.asset || "";
+    if(assets.includes(asset)){
+
+      let incomeBadge = toggleSwitch(incomeState); // 'Income Label - Toggle SWITCH';
+
+      let tokenLogo = getTokenLogo(thisRow.asset);   // token logo - '+thisRow.asset+'
+      let tokenLabel = getTokenLabel(thisRow.asset);   // token label - '+thisRow.asset+'
+      let tokenAmount = displayTokenAmount(thisRow.value,thisRow.asset);   // token amount - '+thisRow.value+'
+      let convertAmount = await displayConvertAmount(thisRow.value, thisRow.asset, unixT, FIAT)// "USD/FIAT value @ timefrom blockNum";   // USD/FIAT value @ timefrom blockNum
+
+      console.log(convertAmount);
+
+      let priceParts = convertAmount.split(" ");
+      let convertOut = priceParts[0] + " " + priceParts[1];
+      let convertRatio = priceParts[2] + " " + priceParts[3] + " " + thisRow.asset + "/" + FIAT;
+
+      // htmlhelpers
+      let clearBoth = "<div style=clear:both></div>";
+
+      // console.log(asset, globalIndex);    // this index is not getting high enough
+      // console.log(globalTxs[globalIndex]);
+      // console.log(globalTxs);
+
+      // dont trus't, verify asset matches
+      if(globalTxs[globalIndex].asset === asset) {
+        // save to globalTxs (after mainnet txs)
+        globalTxs[globalIndex].unixT = unixT;   // add unix timestamp to global object
+        globalTxs[globalIndex].incomeState = incomeState;   // add income state to global object
+        globalTxs[globalIndex].incomeBadge = incomeBadge;   // add income state to global object
+        globalTxs[globalIndex].tokenLogo = tokenLogo;   // add income state to global object
+        globalTxs[globalIndex].tokenLabel = tokenLabel;   // add income state to global object
+        globalTxs[globalIndex].tokenAmount = tokenAmount;   // add income state to global object
+        globalTxs[globalIndex].convertAmount = convertAmount;   // add income state to global object
+      }
+      
+
+
+      let outBox = '<div class=' + cs.flexCont + '>\
+        <div class="'+cs.row+" "+cs.even+'">\
+          <div class='+cs.col+'>\
+            <div class='+cs.row+'>\
+              <span class='+cs.tokenLabel+'>'+tokenLabel+'</span>\
+            </div>\
+            <div class="'+cs.row+" "+cs.incBadge+'" title="badge">\
+              '+incomeBadge+' \
+            </div>\
+          </div>\
+          <div class="'+cs.col+" "+cs.logoClick+'">\
+            <button class="'+cs.clickable+'">\
+            '+ tokenLogo + ' \
+            </button>\
+          </div>\
+          <div class='+cs.col+'>\
+            <div class="'+cs.row+" "+cs.end+'">\
+              <span class='+cs.tokenAmount+'>'+tokenAmount+'</span>\
+            </div>\
+            <div class="'+cs.row+" "+cs.end+'">\
+              <span class='+cs.convertAmount+'>'+convertOut+'</span>\
+            </div>\
+          </div>\
+        </div>';
+
+
+
+      // asset is the token symbol
+      // a defines the show/hide condition of the div
+      let a = thisRow.asset;
+
+      let listRow = "";    //init
+
+      /** THIS IS THE MONTH HEADER SELECTOR HERE */
+
+      // insert date header here - conditional on month change
+      let dString = tNice.toDateString();
+      let dStringArr = dString.split(" ");
+      let dStringMonth = dStringArr[1];
+      let dStringYear = dStringArr[3];
+
+      if(dStringMonth !== curMonth){
+        curMonth = dStringMonth;
+        // console.log("Month Change - trigger new header (on first shown element)");
+
+        // console.log("index: ",i , dStringMonth, curMonth);
+
+        // skip if element is not shown and defer to next in index
+
+        dateHeader = "<div class="+cs.dateHeader+">"+getMonthOut(curMonth)+" "+dStringYear+"</div>";
+
+        if(incomeState === "NOT") {
+          // its not shown so we need to defer the display until one that is shown
+          deferHeader = true;   // thihs will trigger display of header later
+        } else {
+          deferHeader = false;
+        
+
+          // output here IF monthh change && is income
+          listRow += dateHeader;    // add the header before the containeer element.
+
+        }
+
+        
+      }
+
+      if(deferHeader){
+        // then we need to call the header display here
+        if(incomeState === "INCOME"){
+          // only on income, so we may miss months if no income recorded.
+
+          listRow += dateHeader;    // add the header before the containeer element.
+
+          deferHeader = false;    // reset the flag
+
+        }
+      }
+
+      /** Start of tx container li element **/
+      // include the date/time in local format, as title of the list item
+      listRow += "<li id="+i+" title='"+tNice+"' class='"+cs.tx + " " + a + " " + cs[incomeState] + "'>";
+
+      let closeIcon = "<span class="+cs.closeIcon+"><img src='./src/img/close.png' alt='close' /></span>";    
+
+      listRow += outBox;    // main tx output and more button to reveal detail
+      // listRow += getTokenLogo(thisRow.asset);
+
+
+      let dayClean = tNice.toDateString();
+      let timeClean = tNice.toLocaleTimeString();     // use users local time to display :)
+      let dayArr = dayClean.split(" ");
+      let dayOut = getMonthOut(dayArr[1]) + " " + dayArr[2] + ", " + dayArr[3] + " | " + timeClean;
+
+      let copyLink = "<a class="+cs.copyLink+" onclick=alert('"+thisRow.from+"')>[]</a>";
+  
+      // detail view starts here
+      listRow += "<div class="+cs.detail+"><strong><hr/>DETAIL VIEW:"+a+" tx</strong>"+ closeIcon;
+
+      listRow += "<div class="+cs.dayOut+">" + dayOut + "<br><span class="+cs.convertAmount+">Converted "+convertRatio+"</span></div>";
+
+      listRow += "<a target='_blank' class="+cs.buttonStyle+" href=https://etherscan.io/tx/"+thisRow.hash+">View TX on Etherscan</a>";
+
+      listRow += "<div class="+cs.fromAddr+"><strong>From:</strong> <br/>"+thisRow.from+copyLink+"</div>";
+
+      listRow += clearBoth+"<a href=https://etherscan.io/address/"+thisRow.from+" target=_blank class="+cs.buttonStyle+">View Sender</a>" + clearBoth;
+
+      listRow += "<div class="+cs.incomeToggleContainer+">";     // income toggle container
+
+      // default view for BANK token is income
+      if(incomeState === "INCOME"){
+        listRow += "<img src='./src/img/in.png' class='"+cs.activeIncome + " " + cs.toggleButton+"' alt=income  />";   // active income image
+
+        // not used?
+        listRow += "<img src='./src/img/ni.png' alt=notincome class="+cs.toggleButton+" />";   // not income image
+      } else {
+        // non-income display
+        listRow += "<img src='./src/img/in.png' alt=income class="+cs.toggleButton+" />";   // income image
+        listRow += "<img src='./src/img/ni.png' alt=notincome class='"+cs.activeIncome+" "+cs.toggleButton+"' />";   // not income image
+      }
+
+      listRow += "</div>";    // end of income toggle container
+
+      listRow += "<a href='#' class='"+cs.buttonStyle+ " "+cs.saveBtn+"' title='save (auto) & hide detail view'>Save</a><hr />"
+      
+      listRow += "</div></div></li>";   // end of detail, flexView container & list item
+
+      // add the matched row to the output list 
+      if (output) {
+        output!.innerHTML = output?.innerHTML + listRow;
+
+      }
+
+      globalIndex++;    // increment the global index
+
+
+    } else{
+      // skip non-matches - do not add to the list
+      // still increment the counter
+      globalIndex++;
+    }
+
+
+    
+
+  }   // end for all optimism transactions
+
+
+  // end all alchemyGo function call
 }
 
 // triggers the alchemyGo() function
@@ -779,19 +1281,19 @@ function exportData() {
   }
 
   if(total1INCH) {
-    summaryData += "<li>"+total1INCH?.innerHTML+" DAI </li>";
+    summaryData += "<li>"+total1INCH?.innerHTML+" 1INCH </li>";
   }
   if(totalANT) {
-    summaryData += "<li>"+totalANT?.innerHTML+" DAI </li>";
+    summaryData += "<li>"+totalANT?.innerHTML+" ANT </li>";
   }
   if(totalMKR) {
-    summaryData += "<li>"+totalMKR?.innerHTML+" DAI </li>";
+    summaryData += "<li>"+totalMKR?.innerHTML+" MKR </li>";
   }
   if(totalPOKT) {
-    summaryData += "<li>"+totalPOKT?.innerHTML+" DAI </li>";
+    summaryData += "<li>"+totalPOKT?.innerHTML+" POKT </li>";
   }
   if(totalPOOL) {
-    summaryData += "<li>"+totalPOOL?.innerHTML+" DAI </li>";
+    summaryData += "<li>"+totalPOOL?.innerHTML+" POOL </li>";
   }
   summaryData +=
       "</ul>\

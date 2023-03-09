@@ -38,10 +38,10 @@ export function finishButton(FIAT:string) {
   // console.log(myTokens);    // OK
 
   [].forEach.call(myIncome, function (el:any) {
-    console.log(el.innerHTML);
+    // console.log(el.innerHTML);
 
     let txCont = el.parentElement.parentElement.parentElement.parentElement.parentElement;
-    console.log(txCont);
+    // console.log(txCont);
 
     if(txCont.classList.contains(cs.NOT)){
       // skip it
