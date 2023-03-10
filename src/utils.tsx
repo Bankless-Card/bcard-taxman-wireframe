@@ -1,57 +1,5 @@
-import { Web3Button } from "@web3modal/react";
-import { useAccount } from "wagmi";
-
-import { createElement, useState } from "react";
-
-import { Alchemy, Network, AssetTransfersCategory } from "alchemy-sdk";
-
-// @ts-ignore Import module
-import { Email } from "./functions/smtpjsv3";
-// @ts-ignore Import module
-import { searchTree } from "./functions/searchTree";
-
-// components from library
-import { Account } from "./components";
-import { Card } from "./components";
-import { Clock } from "./components";
-import { Btn } from "./components";
-
-import { DaoSelectors } from "./components";
-
-// data from library
-import { bankFeed } from "./data"; // import pricefeed Data
-
-// functions from library
-import { toggleAlts } from "./functions";
-import { toggleDetail } from "./functions";
-import { finishButton } from "./functions"; // action of finish button not component
-import { toggleSwitch } from "./functions"; // action of switch not component
-// import { handleOpen } from './functions'
-import { getTokenLogo } from "./functions";
-import { getTokenLabel } from "./functions";
-import { displayTokenAmount } from "./functions";
-import { displayConvertAmount } from "./functions";
-
-// require('dotenv').config()
-// console.log(process.env);
-import { REACT_APP_ALCHEMY_API_KEY, ELASTICMAIL_SECURETOKEN } from "./data";
-
-// Optional Config object, but defaults to demo api-key and eth-mainnet.
-const settings = {
-  apiKey: REACT_APP_ALCHEMY_API_KEY, // Replace with your Alchemy API Key.
-  network: Network.ETH_MAINNET, // Replace with your network.
-};
-
-const alchemy = new Alchemy(settings);
-
-// import './style.module.css'
-// Sample of dynamically applied CSS
-import cs from "./style.module.css";
-
-let globalTxs: any = [];
-
 // this function to handle the details display view - click on the tx Logo
-function handleOpen(thisLink: any) {
+export function handleOpen(thisLink: any) {
   console.log(thisLink.currentTarget); // OK targets button
   // figure out where we are in the DOM
   // open/close the next details tab
@@ -81,7 +29,7 @@ function handleOpen(thisLink: any) {
 // }
 
 // this function handles the save button press within the detail view
-function handleSave(evt: any) {
+export function handleSave(evt: any) {
   evt.preventDefault();
 
   console.log(evt.currentTarget.parentNode); // OK targets button
@@ -101,7 +49,7 @@ function handleSave(evt: any) {
   // }
 }
 
-function handleIncomeToggle(evt: any) {
+export function handleIncomeToggle(evt: any) {
   console.log(evt.currentTarget); // OK targets button?
 
   let imgSrc = evt.currentTarget.src;
@@ -177,7 +125,7 @@ function handleIncomeToggle(evt: any) {
   }
 }
 
-function getMonthOut(month: string) {
+export function getMonthOut(month: string) {
   let monthOut = "";
 
   switch (month) {
@@ -224,7 +172,7 @@ function getMonthOut(month: string) {
   return monthOut;
 }
 
-async function alchemyGo(FIAT: string) {
+export async function alchemyGo(FIAT: string) {
   console.log("FIAT: " + FIAT);
 
   // get address to use
@@ -380,73 +328,73 @@ async function alchemyGo(FIAT: string) {
       "<div class=" +
       cs.flexCont +
       '>\
-      <div class="' +
+        <div class="' +
       cs.row +
       " " +
       cs.even +
       '">\
-        <div class="' +
+          <div class="' +
       cs.col +
       " " +
       cs.logoClick +
       '">\
-          <button class="' +
+            <button class="' +
       cs.clickable +
       '">\
-          ' +
+            ' +
       tokenLogo +
       " \
-          </button>\
-        </div>\
-        <div class=" +
+            </button>\
+          </div>\
+          <div class=" +
       cs.col +
       ">\
-          <div class=" +
+            <div class=" +
       cs.row +
       ">\
-            <span class=" +
+              <span class=" +
       cs.tokenLabel +
       ">" +
       tokenLabel +
       '</span>\
-          </div>\
-          <div class="' +
+            </div>\
+            <div class="' +
       cs.row +
       " " +
       cs.incBadge +
       '" title="badge">\
-            ' +
+              ' +
       incomeBadge +
       " Income | Received\
+            </div>\
           </div>\
-        </div>\
-        <div class=" +
+          <div class=" +
       cs.col +
       '>\
-          <div class="' +
+            <div class="' +
       cs.row +
       " " +
       cs.end +
       '">\
-            <span class=' +
+              <span class=' +
       cs.tokenAmount +
       ">" +
       tokenAmount +
       '</span>\
-          </div>\
-          <div class="' +
+            </div>\
+            <div class="' +
       cs.row +
       " " +
       cs.end +
       '">\
-            <span class=' +
+              <span class=' +
       cs.convertAmount +
       ">" +
       convertAmount +
       "</span>\
+            </div>\
           </div>\
-        </div>\
-      </div>";
+        </div>";
 
     // enable token logo for clickable -> show details
     // console.log("Enable Show Details for Next onClick");
@@ -576,11 +524,11 @@ async function alchemyGo(FIAT: string) {
 
     // fetch trasaction detail based on tx hash
     /*
-    let tx = "0x5da2844afb6826d4baed6ad7e8b536c00cbc921ac147773ad056f29f2e7c1762"
-    web3.eth.getTransaction(tx).blockNumber
-      1920050
-    web3.eth.getBlock(1920050).timestamp
-    */
+      let tx = "0x5da2844afb6826d4baed6ad7e8b536c00cbc921ac147773ad056f29f2e7c1762"
+      web3.eth.getTransaction(tx).blockNumber
+        1920050
+      web3.eth.getBlock(1920050).timestamp
+      */
 
     // let thisTimestamp = web3.eth.getBlock(1920050).timestamp;
 
@@ -705,7 +653,7 @@ async function alchemyGo(FIAT: string) {
 }
 
 // triggers the alchemyGo() function
-async function triggerTx(FIAT: string) {
+export async function triggerTx(FIAT: string) {
   console.log(FIAT);
   console.log("TX trigger call ");
   // let gt = GetTransactions({address:props});
@@ -743,7 +691,7 @@ async function triggerTx(FIAT: string) {
 
 /* Function cleanup TBD */
 
-function callSetFiat(setFIAT: any) {
+export function callSetFiat(setFIAT: any) {
   // lookup state of DOM for select option (country code)
   let country = document.getElementsByClassName("fiatSelect");
   let fiatCode = (country[0] as HTMLSelectElement).value;
@@ -754,7 +702,7 @@ function callSetFiat(setFIAT: any) {
   setFIAT(fiatCode);
 }
 
-function getProvinceSelect(FIAT: string) {
+export function getProvinceSelect(FIAT: string) {
   if (FIAT === "CAD") {
     return (
       <div className={cs.inputBox}>
@@ -781,30 +729,30 @@ function getProvinceSelect(FIAT: string) {
   }
 }
 
-function exportData() {
+export function exportData() {
   let txSummary = document.getElementById("txSummary");
   console.log(txSummary);
   // txSummary as email body content
 
   /*
-
-  <div>
-    <h2>Thank you for using Bankless Card TaxMan!</h2>
-    <p>Your detailed transactions are attached to this email as a CSV.  Be sure to download the CSV and save it in a safe place</p>
-
-    <h3>Your 2022 DAO Income:</h3>
-    <ul>
-      <li>x BANK </li>
-      <li>y POOL </li>
-      <li>(add whatever else here)</li>
-    </ul>
-
-    <p><strong>For a total of: z CAD</strong></p>
-
-    <p>TaxMan is a project by Bankless Card.</p>
-  </div>
-
-  */
+  
+    <div>
+      <h2>Thank you for using Bankless Card TaxMan!</h2>
+      <p>Your detailed transactions are attached to this email as a CSV.  Be sure to download the CSV and save it in a safe place</p>
+  
+      <h3>Your 2022 DAO Income:</h3>
+      <ul>
+        <li>x BANK </li>
+        <li>y POOL </li>
+        <li>(add whatever else here)</li>
+      </ul>
+  
+      <p><strong>For a total of: z CAD</strong></p>
+  
+      <p>TaxMan is a project by Bankless Card.</p>
+    </div>
+  
+    */
 
   // export data to CSV
   console.log("export tx data to CSV");
@@ -878,12 +826,12 @@ function exportData() {
 
   let summaryData =
     "<div>\
-    <h2>Thank you for using Bankless Card TaxMan!</h2>\
-    <p>Your detailed transactions are attached to this email as a CSV.  Be sure to download the CSV and save it in a safe place</p>\
-    \
-    <h3>Your 2022 DAO Income:</h3>\
-    <ul>\
-      <li>" +
+      <h2>Thank you for using Bankless Card TaxMan!</h2>\
+      <p>Your detailed transactions are attached to this email as a CSV.  Be sure to download the CSV and save it in a safe place</p>\
+      \
+      <h3>Your 2022 DAO Income:</h3>\
+      <ul>\
+        <li>" +
     totalBANK?.innerHTML +
     " BANK </li>";
   if (totalWETH) {
@@ -894,19 +842,19 @@ function exportData() {
   }
   summaryData +=
     "<li>y POOL </li>\
-      <li>(add whatever else here)</li>\
-    </ul>\
-    \
-    <p><strong>For a total of: " +
+        <li>(add whatever else here)</li>\
+      </ul>\
+      \
+      <p><strong>For a total of: " +
     totalIncome?.innerHTML +
     " " +
     fiatCode +
     "</strong> at income tax rate of " +
     taxRate.value +
     "%.</p>\
-    \
-    <p>TaxMan is a project by Bankless Card.</p>\
-  </div>";
+      \
+      <p>TaxMan is a project by Bankless Card.</p>\
+    </div>";
 
   // csvData = "a,b,c\r\n1,2,x\r\n2,1,x\r\n3,5,y\r\n4,6,y\r\n";
 
@@ -955,325 +903,4 @@ function exportData() {
   } else {
     alert("Please enter your email address");
   }
-}
-
-let daoSel = {
-  WETH: true,
-  BANK: true,
-  DAI: true,
-};
-
-export function App() {
-  // this to get connected accouunt info from WalletConnect
-  const { address, isConnected } = useAccount();
-  // console.log(address);
-
-  //kickoff alchemyGo function -> this will run the alchemy API call
-  // const myFunc = alchemyGo();
-
-  // save state to track dao selection
-  // const [daoState, setDaoState] = useState({})
-
-  // const [count, setCount] = useState(0);
-
-  // default true on token states to show all
-  // example with BANK token
-  const [BANK, setBANK] = useState(true);
-  const [POOL, setPOOL] = useState(true);
-
-  // const WETH = false;
-  // daoSel.WETH = true;
-
-  const [FIAT, setFIAT] = useState("CAD"); // default cad, later probably usd
-
-  // console.log(FIAT);
-
-  return (
-    <>
-      <div className={cs.AppContainer}>
-        <header>
-          <img
-            className={cs.headerLogo}
-            src="./src/img/bc_logo.png"
-            alt="BanklessCard Logo"
-          />
-          <ul className={cs.headerLinks}>
-            <li>
-              <a href="https://banklesscard.xyz">About Us</a>
-            </li>
-            <li className={cs.wcBtn}>
-              <Web3Button />
-            </li>
-          </ul>
-        </header>
-        <div id="HomeSplash" className={cs.home}>
-          <h1 className={cs.mainTitle}>Hello World</h1>
-          <h3 className={cs.subTitle}>
-            DAO Income <br /> Tax Helper
-          </h3>
-          <div className={cs.clear}></div>
-
-          <div className={cs.columnWide}>
-            <div className={cs.landingPageBenefits}>
-              <p>
-                Taxman is a quick and easy tool to help you calculate your DAO
-                income taxes.
-              </p>
-
-              <ul>
-                <li>
-                  <strong>FAST</strong> - you can finish your DAO income taxes
-                  in 5 minutes
-                </li>
-                <li>
-                  <strong>FREE</strong> - No credit card or crypto payment
-                  required
-                </li>
-                <li>
-                  <strong>BUILT FOR DAO CONTRIBUTORS</strong> - we automatically
-                  filter out any transactions that aren't DAO income
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className={cs.columnWide}>
-            <div className={cs.bigButton}>
-              <h2>
-                <a href="#info">
-                  <img src="./src/img/click-arrow.png" alt="click-arrow" />
-                  &nbsp;Click here to start
-                </a>
-              </h2>
-            </div>
-          </div>
-        </div>{" "}
-        {/* <!-- end of HomeSplash --> */}
-        <div className={cs.clear}></div>
-        <div id="AppContent" className={cs.container}>
-          {/* <header>
-          
-          <h1>BCard TaxMan</h1>
-
-          <Web3Button />
-        </header> */}
-          {/* example of class component - can be set to update live with tick() */}
-
-          {/* <div className={cs.page}>
-        <a id="first"></a> */}
-          {/* <h2 className={cs.red}>DAO Income Tax Helper</h2>
-
-          <img src="https://via.placeholder.com/500x350?text=Hero+Image" alt="" className={cs.scaleWidth} /> */}
-
-          {/* <div className={cs.buttonContainer} >
-            <Btn name="Calculate your tax now (it's free)" url="#info" />
-          </div> */}
-
-          {/* <aside className={cs.buttonContainer}>
-            <a 
-              href="#info"
-              className={cs.btn} 
-              // onClick={() => triggerTx(address)}
-            >Calculate your tax now (it's free)</a>
-          </aside>
-
-          <hr /> */}
-
-          {/* </div> */}
-
-          <div className={cs.page}>
-            {/*<!-- sample page for initial info collect -->*/}
-            <a id="info"></a>
-            <h2 className={cs.label}>Let's start with some questions!</h2>
-
-            <div className={cs.inputBox}>
-              <label>What is your ETH address?</label>
-              <input
-                type="text"
-                placeholder="Enter your ETH address."
-                defaultValue={address}
-                id="walletInput"
-              />
-            </div>
-
-            <div className={cs.inputBox}>
-              <label>Select your country of residence</label>
-              <select
-                className="fiatSelect"
-                onChange={() => callSetFiat(setFIAT)}
-              >
-                <option value="CAD">Canada (CAD)</option>
-                <option value="USD">United States (USA)</option>
-                <option disabled>Other</option>
-              </select>
-            </div>
-
-            {/*getProvinceSelect(FIAT)*/}
-
-            {/* <div className={cs.inputBox}>
-            <label>Where in {FIAT==="CAD" ? "Canada" : "USA"} do you live?</label>
-            <select>
-              <option>Ontario</option>
-              <option>British Columbia (BC)</option>
-              <option>Other</option>
-            </select>
-          </div> */}
-
-            {/* <Btn name="Next Step" onClick={triggerTx} /> */}
-
-            <aside className={cs.buttonContainer}>
-              <a
-                href="#dao-page"
-                className={cs.btn}
-                onClick={() => callSetFiat(setFIAT)}
-              >
-                Next Step
-              </a>
-            </aside>
-
-            <hr />
-          </div>
-
-          <div id="dao-select" className={cs.page}>
-            <a id="dao-page"></a>
-            <h2 className={cs.label}>Which DAOs are you a part of?</h2>
-            <DaoSelectors
-              name="BanklessDAO"
-              token="BANK"
-              tokenState={daoSel.BANK}
-            />
-
-            <DaoSelectors name="1Inch" token="1INCH" />
-            <DaoSelectors name="Aragon" token="ANT" />
-            <DaoSelectors name="Maker DAO" token="MKR" />
-            <DaoSelectors name="Pocket DAO" token="POKT" />
-            <DaoSelectors name="Pool Together" token="POOL" />
-
-            <hr />
-
-            <DaoSelectors
-              name="Wrapped ETH"
-              token="WETH"
-              tokenState={daoSel.WETH}
-            />
-            <DaoSelectors
-              name="DAI Stable"
-              token="DAI"
-              tokenState={daoSel.DAI}
-            />
-            {/* <Btn name="Next Step" url="#tx-page" /> */}
-
-            <aside className={cs.buttonContainer}>
-              <a
-                href="#tx-page"
-                className={cs.btn}
-                onClick={() => triggerTx(FIAT)}
-              >
-                Next Step
-              </a>
-            </aside>
-
-            <p>
-              If your DAO doesnt appear here. You can write us:{" "}
-              <a href="mailto:links@banklesscard.xyz" target="_blank">
-                links@banklesscard.xyz
-              </a>
-            </p>
-
-            <hr />
-          </div>
-
-          <div id="tx-list" className={cs.page}>
-            <a id="tx-page"></a>
-
-            <h2 className={cs.label}>
-              We've automatically classified your transactions
-            </h2>
-
-            <h3 className={cs.center}>Verify that each one is correct.</h3>
-
-            {/* if the connection is set, this loads in the account info (ad) from Wallet Connect*/}
-            {isConnected && <Account />}
-
-            {/* {isConnected && <AlchemyGo address={address} />} */}
-
-            <aside className={cs.buttonContainer}>
-              <a
-                href="#finish"
-                className={cs.btn}
-                onClick={() => finishButton(FIAT)}
-              >
-                Finish
-              </a>
-            </aside>
-
-            <div id="txSummary" className={cs.txSummary}></div>
-
-            <aside className={cs.buttonContainer}>
-              <button
-                id={cs.exportBtn}
-                className={cs.exportBtn}
-                onClick={() => exportData()}
-              >
-                Send to my email!
-              </button>
-            </aside>
-          </div>
-
-          <h2>Dev testing buttons</h2>
-
-          <p>
-            <a
-              href="#"
-              className={cs.btnW + " " + cs.btn}
-              onClick={(e) => toggleAlts(e)}
-            >
-              Show all &amp; Hide all DAO
-            </a>
-          </p>
-          <p>
-            <a
-              href="#"
-              className={cs.btnW + " " + cs.btn}
-              onClick={(e) => toggleDetail(e)}
-            >
-              show/hide all tx details
-            </a>
-          </p>
-
-          <hr />
-          <hr />
-          {/* example of functional component - will display based on input props */}
-
-          <Web3Button />
-
-          {/* <Card title="Card Title" paragraph="This is paragraph data for sample card." />
-
-        <SampleFunc here="here" /> */}
-        </div>
-        <div className="footerCont">
-          <footer>
-            <div>Made with &#x2764; by Bankless Card</div>
-            <ul className="socials">
-              <li>
-                <a
-                  href="https://www.instagram.com/bankless_card/"
-                  target="_blank"
-                >
-                  <img src="./src/img/insta.png" alt="Instagram" />
-                </a>
-              </li>
-              <li>
-                <a href="https://twitter.com/BanklessCard" target="_blank">
-                  <img src="./src/img/tw.png" alt="Twitter" />
-                </a>
-              </li>
-            </ul>
-            <div>&copy; 2023 Bankless Card | All rights reserved</div>
-          </footer>
-        </div>
-      </div>{" "}
-      {/* #AppContainer */}
-    </>
-  );
 }
