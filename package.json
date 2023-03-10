@@ -13,6 +13,7 @@
     "alchemy-sdk": "^2.4.1",
     "buffer": "^6.0.3",
     "ethers": "^5.7.2",
+    "framer-motion": "^10.2.3",
     "process": "^0.11.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

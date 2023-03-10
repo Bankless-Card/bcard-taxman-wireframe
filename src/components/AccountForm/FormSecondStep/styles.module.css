@@ -1,0 +1,31 @@
+.form_second_step {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.form_second_step label {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  height: 50px;
+}
+
+input[type="checkbox"] {
+  background-color: #ffdde6 !important;
+  border: none !important;
+  margin-right: 10px;
+}
+
+.form_second_step_title {
+  font-weight: 500;
+  font-size: 24px;
+  text-align: center;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+.warning {
+  text-align: center;
+}

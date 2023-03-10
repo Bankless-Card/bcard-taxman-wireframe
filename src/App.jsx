@@ -18,6 +18,9 @@ import {
   TitleContent,
   CallToAction,
 } from "./components/HomePage";
+import AccountForm from "./components/AccountForm";
+import MainContent from "./components/MainContent";
+import { UIProvider } from "./context/UIContext";
 
 import { DaoSelectors } from "./components";
 
@@ -78,13 +81,13 @@ export function App() {
   // console.log(FIAT);
 
   return (
-    <>
+    <UIProvider>
       <AppContainer>
         <Navbar />
-        <TitleContent />
+        <MainContent />
         <Footer />
         <CallToAction />
       </AppContainer>
-    </>
+    </UIProvider>
   );
 }
