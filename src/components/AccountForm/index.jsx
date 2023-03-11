@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import FormFirstStep from "./FormFirstStep/FormFirstStep";
 import FormSecondStep from "./FormSecondStep/FormSecondStep";
+import FormThirdStep from "./FormThirdStep/FormThirdStep";
 import FormButton from "./FormButton";
 import styles from "./styles.module.css";
 import { useUI } from "../../context/UIContext";
@@ -27,6 +28,7 @@ const AccountForm = () => {
               <div style={{ flex: "1" }}>
                 {step === 1 && <FormFirstStep currentStep={step} />}
                 {step === 2 && <FormSecondStep currentStep={step} />}
+                {step === 3 && <FormThirdStep currentStep={step} />}
               </div>
               <FormButton currentStep={step} stepChange={setStep} />
             </div>
