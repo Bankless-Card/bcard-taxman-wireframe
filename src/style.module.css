@@ -1,6 +1,5 @@
 /* Google webfonts inclusion - download and consolidate fonts to reduce http requests */
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Space+Grotesk:wght@300;400;500&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@400;500;600&family=Roboto:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap");
 html {
   font-family: "Space Grotesk", sans-serif;
 }
