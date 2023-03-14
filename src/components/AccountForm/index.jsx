@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import FormFirstStep from "./FormFirstStep/FormFirstStep";
 import FormSecondStep from "./FormSecondStep/FormSecondStep";
 import FormThirdStep from "./FormThirdStep/FormThirdStep";
+import FormFourthStep from "./FormFouthStep/FormFouthStep";
 import FormButton from "./FormButton";
 import styles from "./styles.module.css";
 import { useUI } from "../../context/UIContext";
@@ -29,6 +30,7 @@ const AccountForm = () => {
                 {step === 1 && <FormFirstStep currentStep={step} />}
                 {step === 2 && <FormSecondStep currentStep={step} />}
                 {step === 3 && <FormThirdStep currentStep={step} />}
+                {step === 4 && <FormFourthStep />}
               </div>
               <FormButton currentStep={step} stepChange={setStep} />
             </div>

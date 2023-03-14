@@ -16,27 +16,27 @@ const FormSecondStep = ({ currentStep }) => {
           <p className={styles.form_second_step_title}>
             Which DAOs are you part of?
           </p>
-          <div>
+          <div className={styles.row}>
             <input type="checkbox" id="BANK" />
             <label>Bankless DAO (BANK)</label>
           </div>
-          <div>
+          <div className={styles.row}>
             <input type="checkbox" id="1INCH" />
             <label>1inch (1INCH)</label>
           </div>
-          <div>
+          <div className={styles.row}>
             <input type="checkbox" id="ANT" />
             <label>Aragon (ANT)</label>
           </div>
-          <div>
+          <div className={styles.row}>
             <input type="checkbox" id="MKR" />
             <label>Maker DAO (MKR)</label>
           </div>
-          <div>
+          <div className={styles.row}>
             <input type="checkbox" id="POKT" />
             <label>Pocket DAO (POKT)</label>
           </div>
-          <div>
+          <div className={styles.row}>
             <input type="checkbox" id="POOL" />
             <label> Pool Together (POOL)</label>
           </div>

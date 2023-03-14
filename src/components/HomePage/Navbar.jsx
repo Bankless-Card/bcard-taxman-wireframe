@@ -24,6 +24,10 @@ const Navbar = () => {
           </li>
         ))}
       </ul>
+      <img
+        src="./src/img/menu_mobile.png"
+        className={styles.mobile_menu_button}
+      />
     </header>
   );
 };
