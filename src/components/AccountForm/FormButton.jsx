@@ -7,7 +7,7 @@ const FormButton = ({ stepChange, currentStep }) => {
       className={styles.next_step_button}
       type="button"
     >
-      Next Step
+      {currentStep === 4 ? "Send to my email" : "Next Step"}
     </button>
   );
 };
