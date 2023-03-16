@@ -42,6 +42,7 @@ p {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 16px;
+  cursor: pointer;
 }
 
 .avatar_container {
