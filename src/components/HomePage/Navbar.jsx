@@ -1,12 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./styles.module.css";
+import { useUI } from "../../context/UIContext";
+import MenuMobile from "./MenuMobile";
 
 const Navbar = () => {
+  const [, { setIsCTAclicked }] = useUI();
+
   const MenuLinks = [
     { id: 1, href: "#", title: "Blog" },
     { id: 2, href: "https://banklesscard.xyz", title: "About Us" },
     { id: 3, href: "https://banklesscard.xyz", title: "Visit Us" },
   ];
+
+  //  methods for controlling menu icon
+  const [isActive, setIsActive] = useState(false);
+
+  function handleClick() {
+    setIsActive(!isActive);
+  }
 
   return (
     <header className={styles.nav_container}>
@@ -14,6 +25,7 @@ const Navbar = () => {
         src="./img/bc_logo.png"
         className={styles.logo}
         alt="BanklessCard Logo"
+        onClick={() => setIsCTAclicked(false)}
       />
       <ul className={styles.menu_container}>
         {MenuLinks.map((item) => (
@@ -24,10 +36,25 @@ const Navbar = () => {
           </li>
         ))}
       </ul>
-      <img
-        src="./src/img/menu_mobile.png"
-        className={styles.mobile_menu_button}
-      />
+      {/* Menu icon */}
+      <div className={styles.menu_mobile_icon_container} onClick={handleClick}>
+        <div
+          className={`${styles.menu_mobile_icon_row} ${
+            isActive ? styles.active : ""
+          }`}
+        ></div>
+        <div
+          className={`${styles.menu_mobile_icon_row} ${
+            isActive ? styles.active : ""
+          }`}
+        ></div>
+        <div
+          className={`${styles.menu_mobile_icon_row} ${
+            isActive ? styles.active : ""
+          }`}
+        ></div>
+      </div>
+      {isActive && <MenuMobile menuLinks={MenuLinks} />}
     </header>
   );
 };

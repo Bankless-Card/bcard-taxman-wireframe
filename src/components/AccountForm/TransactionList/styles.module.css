@@ -43,8 +43,13 @@ p {
   align-items: center;
   margin-bottom: 16px;
   cursor: pointer;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 10px;
 }
-
+.item_container:hover {
+  background: rgba(255, 221, 230, 0.2);
+}
 .avatar_container {
   display: flex;
   align-items: center;

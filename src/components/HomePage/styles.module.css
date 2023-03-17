@@ -30,12 +30,14 @@
 .logo {
   width: 206px;
   height: 54px;
+  cursor: pointer;
 }
 
 .nav_container {
   display: flex;
   justify-content: space-between;
   padding-top: 45px;
+  position: relative;
 }
 .menu_container {
   list-style: none;
@@ -153,6 +155,12 @@
 .mobile_menu_button {
   display: none;
 }
+.menu_mobile_icon_container {
+  display: none;
+}
+.mobile_menu_container {
+  display: none;
+}
 
 @media screen and (max-width: 600px) {
   .title_container {
@@ -226,5 +234,71 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+  }
+  .menu_mobile_icon_container {
+    display: block;
+    height: 50px;
+    width: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 1000;
+  }
+  .menu_mobile_icon_row {
+    background: linear-gradient(180deg, #c02cad 0%, #f42e57 100%);
+    border-radius: 40px;
+    width: 100%;
+    height: 8px;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .menu_mobile_icon_row.active {
+    background-color: #fff;
+  }
+
+  .menu_mobile_icon_row.active:first-child {
+    transform: rotate(45deg) translate(8px, 26px);
+  }
+
+  .menu_mobile_icon_row.active:nth-child(2) {
+    opacity: 0;
+  }
+
+  .menu_mobile_icon_row.active:last-child {
+    transform: rotate(-45deg) translate(5px, -21px);
+  }
+  .mobile_menu_container {
+    display: block;
+    height: 100vh;
+    width: 100vw;
+    background: #ffdde6;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+  }
+  .mobile_menu_list {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .mobile_menu_list_item {
+    list-style: none;
+    font-weight: 500;
+    background: linear-gradient(90deg, #c02cae 0%, #f62e54 113.54%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    font-size: 50px;
+    padding-top: 20px;
+    padding-right: 20px;
+  }
+  .mobile_menu_list_item a {
+    text-decoration: none;
   }
 }
