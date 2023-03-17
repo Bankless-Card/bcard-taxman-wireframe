@@ -189,3 +189,25 @@ input:checked + .slider:before {
   text-fill-color: transparent;
   border: 2px solid #c02cae;
 }
+
+.transaction_modal_container_mobile_top {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 75vh;
+  width: 90%;
+  margin: auto;
+}
+.transaction_modal_container_mobile {
+  width: 100%;
+  height: auto;
+  max-height: 600px;
+  backdrop-filter: blur(20px);
+  border-radius: 10px;
+  border: 2px solid #ffffff;
+}
+@media screen and (max-width: 600px) {
+  .form_container_with_modal {
+    border-right: 2px solid #ffffff;
+  }
+}

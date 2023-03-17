@@ -144,3 +144,11 @@
     transform: rotate(360deg);
   }
 }
+@media screen and (max-width: 600px) {
+  .step_button {
+    width: 50px;
+  }
+  .step_button_current {
+    width: 50px;
+  }
+}
