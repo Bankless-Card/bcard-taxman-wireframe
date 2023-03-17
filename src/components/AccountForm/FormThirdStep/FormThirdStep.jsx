@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useUI } from "../../../context/UIContext";
 import styles from "./styles.module.css";
 import TransactionList from "../TransactionList/TransactionList";
 import Spinner from "../Spinner";
-import TransactionModal from "../TransactionModal/TransactionModal";
+
 // I recommend to add a loader spiner while the data is loaading on Transaction List, this is an example
 // this settimeOut is to simulate this behavior
 
 const FormThirdStep = ({ currentStep }) => {
   const [loading, setLoading] = useState(true);
-  const [{ showTransactionModal }, { setShowTransactionModal }] = useUI();
 
   useEffect(() => {
     setTimeout(() => {
