@@ -18,7 +18,7 @@ const CallToAction = () => {
             className={styles.special_button_container_mobile}
           >
             <div className={styles.special_button_mobile}>
-              <img src="./src/img/click-arrow.png" />
+              <img src="./img/click-arrow.png" />
               <p>CLICK HERE TO START</p>
             </div>
           </motion.div>
@@ -37,7 +37,7 @@ const CallToAction = () => {
                 <p>
                   <span>
                     {" "}
-                    <img src="./src/img/click-arrow.png" />
+                    <img src="./img/click-arrow.png" />
                   </span>{" "}
                   CLICK HERE TO START
                 </p>

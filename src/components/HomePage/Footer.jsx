@@ -3,19 +3,19 @@ import styles from "./styles.module.css";
 
 const Footer = () => {
   const socialMedia = [
-    { id: 1, img: "./src/img/mail.png", href: "", alt: "email" },
+    { id: 1, img: "./img/mail.png", href: "", alt: "email" },
 
-    { id: 2, img: "./src/img/lin.png", href: "", alt: "Linkedin" },
-    { id: 3, img: "./src/img/yt.png", href: "", alt: "YouTube" },
+    { id: 2, img: "./img/lin.png", href: "", alt: "Linkedin" },
+    { id: 3, img: "./img/yt.png", href: "", alt: "YouTube" },
     {
       id: 4,
-      img: "./src/img/insta.png",
+      img: "./img/insta.png",
       href: "https://www.instagram.com/bankless_card/",
       alt: "Instagram",
     },
     {
       id: 5,
-      img: "./src/img/tw.png",
+      img: "./img/tw.png",
       href: "https://twitter.com/BanklessCard",
       alt: "Twitter",
     },

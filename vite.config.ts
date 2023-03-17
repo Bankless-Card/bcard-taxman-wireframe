@@ -1,6 +1,6 @@
-import react from '@vitejs/plugin-react'
+import react from "@vitejs/plugin-react";
 // import { resolve } from 'path'
-import { defineConfig } from 'vite'
+import { defineConfig } from "vite";
 
 // const root = resolve(__dirname, 'src')
 // const outDir = resolve(__dirname, 'dist')
@@ -8,28 +8,29 @@ import { defineConfig } from 'vite'
 // https://vitejs.dev/config/
 export default defineConfig({
   define: {
-    global: 'globalThis',
+    global: "globalThis",
   },
+  base: "/",
+
   resolve: {
     alias: {
-      process: 'process/browser',
-      util: 'util',
+      process: "process/browser",
+      util: "util",
     },
   },
 
   plugins: [react()],
+});
 
-})
+// root,
 
-  // root,
-
-  // build: {
-  //   outDir,
-  //   emptyOutDir: true,
-  //   rollupOptions: {
-  //     input: {
-  //       main: resolve(root, 'index.html'),
-  //       about: resolve(root, 'about', 'index.html')
-  //     }
-  //   }
-  // }
+// build: {
+//   outDir,
+//   emptyOutDir: true,
+//   rollupOptions: {
+//     input: {
+//       main: resolve(root, 'index.html'),
+//       about: resolve(root, 'about', 'index.html')
+//     }
+//   }
+// }

@@ -2,15 +2,7 @@ import { Web3Button } from "@web3modal/react";
 import { useAccount } from "wagmi";
 import { createElement, useState } from "react";
 import { Alchemy, Network, AssetTransfersCategory } from "alchemy-sdk";
-// @ts-ignore Import module
-import { Email } from "./functions/smtpjsv3";
-// @ts-ignore Import module
-import { searchTree } from "./functions/searchTree";
-// components from library
-import { Account } from "./components";
-import { Card } from "./components";
-import { Clock } from "./components";
-import { Btn } from "./components";
+
 import {
   AppContainer,
   Footer,
@@ -22,31 +14,6 @@ import AccountForm from "./components/AccountForm";
 import MainContent from "./components/MainContent";
 import { UIProvider } from "./context/UIContext";
 
-import { DaoSelectors } from "./components";
-
-// data from library
-import { bankFeed } from "./data"; // import pricefeed Data
-
-// functions from library
-import { toggleAlts } from "./functions";
-import { toggleDetail } from "./functions";
-import { finishButton } from "./functions"; // action of finish button not component
-import { toggleSwitch } from "./functions"; // action of switch not component
-// import { handleOpen } from './functions'
-import { getTokenLogo } from "./functions";
-import { getTokenLabel } from "./functions";
-import { displayTokenAmount } from "./functions";
-import { displayConvertAmount } from "./functions";
-import {
-  handleOpen,
-  handleSave,
-  handleIncomeToggle,
-  alchemyGo,
-  triggerTx,
-  callSetFiat,
-  getProvinceSelect,
-  exportData,
-} from "./utils";
 // require('dotenv').config()
 // console.log(process.env);
 import { REACT_APP_ALCHEMY_API_KEY, ELASTICMAIL_SECURETOKEN } from "./data";
