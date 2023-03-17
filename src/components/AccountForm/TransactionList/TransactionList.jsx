@@ -14,14 +14,14 @@ const transactionsData = [
     transactions: [
       {
         id: 1,
-        avatar_url: "./src/img/dao.jpg",
+        avatar_url: "./img/dao.jpg",
         userName: "Bankless DAO",
         crypto: "20000 BANKS",
         currency: "$48.77 CAD",
       },
       {
         id: 2,
-        avatar_url: "./src/img/dao.jpg",
+        avatar_url: "./img/dao.jpg",
         userName: "Bankless DAO",
         crypto: "20000 BANKS",
         currency: "$48.77 CAD",
@@ -34,28 +34,28 @@ const transactionsData = [
     transactions: [
       {
         id: 1,
-        avatar_url: "./src/img/dao.jpg",
+        avatar_url: "./img/dao.jpg",
         userName: "Bankless DAO",
         crypto: "20000 BANKS",
         currency: "$48.77 CAD",
       },
       {
         id: 1,
-        avatar_url: "./src/img/dao.jpg",
+        avatar_url: "./img/dao.jpg",
         userName: "Bankless DAO",
         crypto: "20000 BANKS",
         currency: "$48.77 CAD",
       },
       {
         id: 1,
-        avatar_url: "./src/img/dao.jpg",
+        avatar_url: "./img/dao.jpg",
         userName: "Bankless DAO",
         crypto: "20000 BANKS",
         currency: "$48.77 CAD",
       },
       {
         id: 1,
-        avatar_url: "./src/img/dao.jpg",
+        avatar_url: "./img/dao.jpg",
         userName: "Bankless DAO",
         crypto: "20000 BANKS",
         currency: "$48.77 CAD",

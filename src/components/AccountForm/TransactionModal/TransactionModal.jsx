@@ -15,7 +15,7 @@ const TransactionModal = () => {
         {/*close modal*/}
         <div className={styles.close_container}>
           <img
-            src="./src/img/close2.svg"
+            src="./img/close2.svg"
             onClick={() => setShowTransactionModal(false)}
           />
         </div>
@@ -29,7 +29,7 @@ const TransactionModal = () => {
         >
           <TransactionListItemComponent
             id={1}
-            avatar_url="./src/img/dao.jpg"
+            avatar_url="./img/dao.jpg"
             userName="Bankless DAO"
             crypto="20000 BANKS"
             currency="$48.77 CAD"
@@ -51,7 +51,7 @@ const TransactionModal = () => {
                   0xb794f5ea0ba39494ce839613fffba74279579268
                 </p>
               </div>
-              <img src="./src/img/copy.svg" />
+              <img src="./img/copy.svg" />
             </div>
 
             <button className={styles.tx_button}>
@@ -62,7 +62,7 @@ const TransactionModal = () => {
           <div className={styles.income_switch}>
             <p>
               <span>
-                <img src="./src/img/arrow_up.svg" />
+                <img src="./img/arrow_up.svg" />
               </span>
               Not Income
             </p>
@@ -72,7 +72,7 @@ const TransactionModal = () => {
             </label>
             <p>
               <span>
-                <img src="./src/img/arrow_down.svg" />
+                <img src="./img/arrow_down.svg" />
               </span>
               Income
             </p>

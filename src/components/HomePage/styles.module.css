@@ -3,7 +3,7 @@
   width: 100vw;
   position: relative;
   overflow: hidden;
-  background-image: url("./src/img/bg.jpg");
+  background-image: url("../../../public/img/bg.jpg");
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
@@ -15,7 +15,7 @@
   width: 100vw;
   position: relative;
   overflow: hidden;
-  background-image: url("../../../src/img/bg3.png");
+  background-image: url("../../../public/img/bg3.png");
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;

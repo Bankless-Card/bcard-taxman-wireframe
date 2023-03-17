@@ -11,7 +11,7 @@ const Navbar = () => {
   return (
     <header className={styles.nav_container}>
       <img
-        src="./src/img/bc_logo.png"
+        src="./img/bc_logo.png"
         className={styles.logo}
         alt="BanklessCard Logo"
       />
