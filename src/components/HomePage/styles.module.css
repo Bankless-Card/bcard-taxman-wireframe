@@ -199,6 +199,10 @@
     height: 30px;
     margin-bottom: 10px;
   }
+  .footer_container {
+    width: 90%;
+    position: relative;
+  }
   .footer_container footer {
     display: flex;
     flex-direction: column;
@@ -216,5 +220,11 @@
   }
   .mobile_menu_button {
     display: block;
+  }
+  .main {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
   }
 }

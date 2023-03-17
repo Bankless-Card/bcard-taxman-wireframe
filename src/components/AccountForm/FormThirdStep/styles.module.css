@@ -29,3 +29,12 @@ p {
   font-family: "Inter", sans-serif;
   text-transform: uppercase;
 }
+.modal_mobile {
+  display: none;
+}
+
+@media screen and (max-width: 600px) {
+  .form_third_step_title {
+    font-size: 20px;
+  }
+}

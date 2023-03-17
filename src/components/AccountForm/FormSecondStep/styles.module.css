@@ -29,3 +29,9 @@ input[type="checkbox"] {
 .warning {
   text-align: center;
 }
+
+@media screen and (max-width: 600px) {
+  .form_second_step_title {
+    font-size: 20px;
+  }
+}

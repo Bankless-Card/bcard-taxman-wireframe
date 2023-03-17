@@ -4,7 +4,7 @@ import { useUI } from "../../context/UIContext";
 import { motion, AnimatePresence } from "framer-motion";
 
 const TitleContent = () => {
-  const [{ isCTAclicked }] = useUI();
+  const [{ isCTAclicked }, { setIsCTAclicked }] = useUI();
   return (
     <AnimatePresence>
       {!isCTAclicked && (
@@ -26,6 +26,19 @@ const TitleContent = () => {
             pellentesque augue. Nam semper nisi vitae pulvinar faucibus.
             Suspendisse tempor ultrices sodales.
           </p>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            exit={{ opacity: 0 }}
+            className={styles.special_button_container_mobile}
+            onClick={() => setIsCTAclicked(true)}
+          >
+            <div className={styles.special_button_mobile}>
+              <img src="./img/click-arrow.png" />
+              <p>CLICK HERE TO START</p>
+            </div>
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
