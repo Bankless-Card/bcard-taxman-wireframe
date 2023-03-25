@@ -1,9 +1,27 @@
-import React from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import TransactionList from "../TransactionList/TransactionList";
+import { useUI } from "../../../context/UIContext";
+import TransactionListItem from "../TransactionList/TransactionListItem";
 import styles from "./styles.module.css";
 
+const transactionsData = [
+  {
+    id: 1,
+    date: "",
+    transactions: [
+      {
+        id: 1,
+        avatar_url: "./img/dao.jpg",
+        userName: "Bankless DAO",
+        crypto: "20000 BANKS",
+        currency: "$48.77 CAD",
+      },
+    ],
+  },
+];
 const FormFourthStep = () => {
+  const [{ showEmailInput }] = useUI();
+
   return (
     <AnimatePresence>
       <motion.div
@@ -14,20 +32,25 @@ const FormFourthStep = () => {
         className={styles.fourth_step_container}
       >
         <p className={styles.form_fourth_step_title}>Your 2022 Income</p>
-        <TransactionList />
+        <TransactionListItem transactions={transactionsData[0].transactions} />
         <div className={styles.row}>
           <p>Total Income</p>
           <p>$751.29 CAD</p>
         </div>
         <div className={styles.row}>
           <p>Tax Rate</p>
-          <p>29%</p>
+          <div className={styles.tax_number_container}>
+            <input defaultValue={0} type="number" step="0.1" suffix="%" />
+            <p className={styles.porcentage}>%</p>
+          </div>
         </div>
         <div className={styles.row_total}>
           <p>TOTAL TAX OWNED</p>
           <p>$217.87 CAD</p>
         </div>
-        <input type="email" placeholder="Write your email..." />
+        {showEmailInput && (
+          <input type="email" placeholder="Write your email..." />
+        )}
       </motion.div>
     </AnimatePresence>
   );

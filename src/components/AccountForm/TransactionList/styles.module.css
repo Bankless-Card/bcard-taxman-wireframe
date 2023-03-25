@@ -2,7 +2,7 @@ p {
   margin: 0px;
 }
 .transaction_list_container {
-  height: 30vh;
+  height: 35vh;
   overflow-x: hidden;
   overflow-y: scroll;
   padding-right: 10px;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./styles.module.css";
 import { useUI } from "../../../context/UIContext";
 import TransactionListItemComponent from "../TransactionList/TransactionListItemComponent";
@@ -6,6 +6,25 @@ import TransactionModalButtons from "./TransactionModalButtons";
 
 const TransactionModal = () => {
   const [, { setShowTransactionModal }] = useUI();
+
+  // wallet state
+  const [walletText, setWalletText] = useState(
+    "0xb794f5ea0ba39494ce839613fffba74279579268"
+  );
+
+  // Function for coying
+  function copyToClipboard(text) {
+    const tempElement = document.createElement("textarea");
+    tempElement.value = text;
+    document.body.appendChild(tempElement);
+
+    tempElement.select();
+    tempElement.setSelectionRange(0, 99999);
+
+    document.execCommand("copy");
+
+    document.body.removeChild(tempElement);
+  }
   return (
     <>
       <div
@@ -45,14 +64,17 @@ const TransactionModal = () => {
             </div>
             {/* walllet text  */}
             <div>
-              <div className={styles.wallet_container}>
+              <div
+                className={styles.wallet_container}
+                onClick={() => copyToClipboard(walletText)}
+              >
                 <div className={styles.wallet_container_inner}>
                   <p>From:</p>
                   <p className={styles.wallet_container_inner_walletText}>
-                    0xb794f5ea0ba39494ce839613fffba74279579268
+                    {walletText}
                   </p>
                 </div>
-                <img src="./img/copy.svg" />
+                <img src="./img/copy.svg" alt="Copy icon" />
               </div>
 
               <button className={styles.tx_button}>
@@ -68,7 +90,7 @@ const TransactionModal = () => {
                 Not Income
               </p>
               <label class={styles.switch}>
-                <input type="checkbox" checked />
+                <input type="checkbox" />
                 <span class={styles.slider}></span>
               </label>
               <p>

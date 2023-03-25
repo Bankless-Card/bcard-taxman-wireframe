@@ -22,9 +22,21 @@ const TitleContent = () => {
             </div>
           </div>
           <p className={styles.title_paragraph}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas id
-            pellentesque augue. Nam semper nisi vitae pulvinar faucibus.
-            Suspendisse tempor ultrices sodales.
+            Taxman is a quick and easy tool to help you calculate your DAO
+            income taxes.
+            <ul>
+              <li>
+                <b>FAST</b> - you can finish your DAO income taxes in 5 minutes
+              </li>
+              <li>
+                <b>FREE</b> - No credit card or crypto payment required BUILT
+                FOR
+              </li>
+              <li>
+                <b>DAO CONTRIBUTORS</b> - we automatically filter out any
+                transactions that aren't DAO income
+              </li>
+            </ul>
           </p>
           <motion.div
             initial={{ opacity: 0 }}

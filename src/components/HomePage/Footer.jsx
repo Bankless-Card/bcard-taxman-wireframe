@@ -3,14 +3,10 @@ import styles from "./styles.module.css";
 
 const Footer = () => {
   const socialMedia = [
-    { id: 1, img: "./img/mail.png", href: "", alt: "email" },
-
-    { id: 2, img: "./img/lin.png", href: "", alt: "Linkedin" },
-    { id: 3, img: "./img/yt.png", href: "", alt: "YouTube" },
     {
       id: 4,
       img: "./img/insta.png",
-      href: "https://www.instagram.com/bankless_card/",
+      href: " https://www.instagram.com/bankless_card/",
       alt: "Instagram",
     },
     {

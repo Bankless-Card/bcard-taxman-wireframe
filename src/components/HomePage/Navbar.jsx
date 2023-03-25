@@ -7,9 +7,8 @@ const Navbar = () => {
   const [, { setIsCTAclicked }] = useUI();
 
   const MenuLinks = [
-    { id: 1, href: "#", title: "Blog" },
-    { id: 2, href: "https://banklesscard.xyz", title: "About Us" },
-    { id: 3, href: "https://banklesscard.xyz", title: "Visit Us" },
+    { id: 1, href: "https://banklesscard.mirror.xyz/", title: "Blog" },
+    { id: 2, href: "https://banklesscard.xyz/", title: "About Us" },
   ];
 
   //  methods for controlling menu icon
@@ -30,7 +29,7 @@ const Navbar = () => {
       <ul className={styles.menu_container}>
         {MenuLinks.map((item) => (
           <li key={item.id}>
-            <a href={item.href} className={item.id === 3 && styles.menu_button}>
+            <a href={item.href} rel="nofollow noopener noreferrer">
               {item.title}
             </a>
           </li>
