@@ -3,15 +3,21 @@ import styles from "./styles.module.css";
 import { useUI } from "../../context/UIContext";
 
 const FormButton = ({ stepChange, currentStep }) => {
-  const [{ showTransactionModal }] = useUI();
+  const [{ showTransactionModal }, { setShowEmailInput }] = useUI();
 
   const isButtonDisabled = showTransactionModal
     ? styles.next_step_button_disabled
     : styles.next_step_button;
 
+  const handleFormButton = (currentStep) => {
+    return currentStep != 4
+      ? stepChange(currentStep + 1)
+      : setShowEmailInput(true);
+  };
+
   return (
     <button
-      onClick={() => stepChange(currentStep + 1)}
+      onClick={() => handleFormButton(currentStep)}
       className={isButtonDisabled}
       type="button"
       disabled={showTransactionModal}

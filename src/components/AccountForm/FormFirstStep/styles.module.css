@@ -31,6 +31,43 @@
   font-size: 16px;
   outline: none; /* Añadir esta línea */
 }
+.select_container {
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(20px);
+  border-radius: 12px;
+  padding: 19px 20px;
+}
+.form_first_step select {
+  width: 95%;
+  color: white;
+  background: transparent;
+  border-radius: 12px;
+  border: none;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  outline: none; /* Añadir esta línea */
+}
+.form_first_step select option {
+  background: pink;
+  color: black;
+}
+.connect_wallet_button {
+  background-image: radial-gradient(
+    circle farthest-corner at 10.2% 55.8%,
+    rgba(252, 37, 103, 1) 0%,
+    rgba(250, 38, 151, 1) 46.2%,
+    rgba(186, 8, 181, 1) 90.1%
+  );
+  border: none;
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  cursor: pointer;
+  border-radius: 9px;
+  padding: 19px 0px;
+}
 
 @media screen and (max-width: 600px) {
   .form_first_step_title {

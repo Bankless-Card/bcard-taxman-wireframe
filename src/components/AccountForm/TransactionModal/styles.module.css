@@ -60,6 +60,7 @@
   width: 100%;
   display: flex;
   margin: 18px 0px;
+  cursor: pointer;
 }
 .wallet_container_inner {
   width: 90%;
@@ -109,6 +110,8 @@
   background-color: #ccc;
   -webkit-transition: 0.4s;
   transition: 0.4s;
+  border-radius: 4000px;
+  border: none;
 }
 
 .slider:before {
@@ -122,15 +125,18 @@
   -webkit-transition: 0.4s;
   transition: 0.4s;
   border-radius: 4000px;
+  border: none;
 }
 
 input:checked + .slider {
   background: linear-gradient(90deg, #c02cae 0%, #f62e54 113.54%);
   border-radius: 4000px;
+  border: none;
 }
 
 input:focus + .slider {
   box-shadow: 0 0 1px #2196f3;
+  border: none;
 }
 
 input:checked + .slider:before {

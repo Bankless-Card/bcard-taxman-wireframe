@@ -15,7 +15,17 @@ const TransactionListItemComponent = ({
         <img src={avatar_url} className={styles.avatar_img} />
         <div className={styles.inner_container}>
           <p className={styles.avatar_userName}>{userName}</p>
-          <p className={styles.income_received}>Income | Received</p>
+          <p className={styles.income_received}>
+            <span>
+              {" "}
+              <img
+                style={{ width: "10px" }}
+                src="./img/inBadge.png"
+                alt="icon"
+              />
+            </span>{" "}
+            Income | Received
+          </p>
         </div>
       </div>
       <div>
