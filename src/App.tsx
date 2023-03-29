@@ -1364,6 +1364,8 @@ let daoSel = {
   "POOL": true,
 }
 
+import logoUrl from './img/bc_logo.png'
+
 export function App() {
   // this to get connected accouunt info from WalletConnect
   const { address, isConnected } = useAccount();
@@ -1393,7 +1395,7 @@ export function App() {
     <>
     <div className={cs.AppContainer}>
       <header>
-        <img className={cs.headerLogo} src="./src/img/bc_logo.png" alt="BanklessCard Logo" /> 
+        <img className={cs.headerLogo} src={logoUrl} alt="BanklessCard Logo" /> 
         <ul className={cs.headerLinks}>
           <li><a href="https://banklesscard.xyz">About Us</a></li>
           <li className={cs.wcBtn}><Web3Button /></li>
