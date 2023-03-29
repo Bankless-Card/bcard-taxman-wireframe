@@ -1365,6 +1365,9 @@ let daoSel = {
 }
 
 import logoUrl from './img/bc_logo.png'
+import arrowUrl from './img/click-arrow.png'
+import instaUrl from './img/insta.png'
+import twitterUrl from './img/tw.png'
 
 export function App() {
   // this to get connected accouunt info from WalletConnect
@@ -1425,7 +1428,7 @@ export function App() {
           <div className={cs.bigButton}>
             <h2>
               <a href="#info"> 
-                <img src="./src/img/click-arrow.png" alt="click-arrow" />
+                <img src={arrowUrl} alt="click-arrow" />
                 &nbsp;Click here to start
               </a>
             </h2>
@@ -1614,8 +1617,8 @@ export function App() {
         <footer>
           <div>Made with &#x2764; by Bankless Card</div>
           <ul className='socials'>
-            <li><a href="https://www.instagram.com/bankless_card/" target="_blank"><img src="./src/img/insta.png" alt="Instagram" /></a></li>
-            <li><a href="https://twitter.com/BanklessCard" target="_blank"><img src="./src/img/tw.png" alt="Twitter" /></a></li>
+            <li><a href="https://www.instagram.com/bankless_card/" target="_blank"><img src={instaUrl} alt="Instagram" /></a></li>
+            <li><a href="https://twitter.com/BanklessCard" target="_blank"><img src={twitterUrl} alt="Twitter" /></a></li>
           </ul>
           <div>&copy; 2023 Bankless Card | All rights reserved</div>
         </footer>
