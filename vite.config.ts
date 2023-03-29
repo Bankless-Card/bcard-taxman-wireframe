@@ -10,7 +10,7 @@ export default defineConfig({
   define: {
     global: 'globalThis',
   },
-  base: "/bcard-taxman-wireframe/",
+  base: "/",
   resolve: {
     alias: {
       process: 'process/browser',
