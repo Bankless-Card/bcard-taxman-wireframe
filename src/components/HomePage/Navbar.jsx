@@ -1,4 +1,7 @@
 import React, { useState } from "react";
+
+import { Web3Button } from '@web3modal/react'
+
 import styles from "./styles.module.css";
 import { useUI } from "../../context/UIContext";
 import MenuMobile from "./MenuMobile";
@@ -34,6 +37,7 @@ const Navbar = () => {
             </a>
           </li>
         ))}
+        <li><Web3Button /></li>
       </ul>
       {/* Menu icon */}
       <div className={styles.menu_mobile_icon_container} onClick={handleClick}>

@@ -38,3 +38,21 @@ footer ul li {
 .socials img {
   cursor: pointer;
 }
+
+.tokenLogo {
+  width: 30px;
+  height: 30px;
+  margin: 0 5px;
+}
+
+.inBadge {
+  width: 30px;
+  height: 30px;
+  margin: 0 5px;
+}
+
+.incBadge {
+  width: 30px;
+  height: 30px;
+  margin: 0 5px;
+}

@@ -4,11 +4,11 @@ import cs from '../style.module.css'
 export function getTokenLogo(asset:any) {
 
   if(asset === "BANK"){
-    return '<img class='+cs.tokenLogo+' src="./src/img/dao.jpg" alt="Bankless DAO" />';
+    return "./img/dao.jpg";
   } else if(asset === "WETH"){
-    return '<img class='+cs.tokenLogo+' src="./src/img/eth-logo.png" alt="Wrapped Ethereum Ether" />';
+    return './img/eth-logo.png';
   } else if(asset === "DAI"){
-    return '<img class='+cs.tokenLogo+' src="./src/img/dai-logo.png" alt="DAI Stablecoin" />';
+    return '/img/dai-logo.png';
   }
 
   // TODO: add more assets here

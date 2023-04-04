@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react";
 import styles from "./styles.module.css";
 import { motion, AnimatePresence } from "framer-motion";
 
+import { useAccount } from 'wagmi';
+import { Web3Button } from '@web3modal/react'
+
 const FormFirstStep = ({ currentStep }) => {
+
+  const { address, isConnected } = useAccount();
+
   const [countryNames, setCountryNames] = useState([]);
   useEffect(() => {
     const getCOuntryNames = async () => {
@@ -31,20 +37,26 @@ const FormFirstStep = ({ currentStep }) => {
           <p className={styles.form_first_step_label}>
             What’s your ETH address?
           </p>
-          <input type="text" />
+          <input type="text" defaultValue={address}/>
           {/* here give fucntionality to connect the wallet to the button */}
-          <button className={styles.connect_wallet_button}>
+          {/* <button className={styles.connect_wallet_button}>
             Connect Wallet
-          </button>
+          </button> */}
+          <Web3Button />
           <p className={styles.form_first_step_label}>
             Choose your country for pay taxes
           </p>
           <div className={styles.select_container}>
-            <select>
-              <option value="">Country</option>
+            <select 
+              value="Canada"
+              onChange={(e) => console.log(e.target.value)}
+            >
+              <option>Country</option>
 
               {countryNames.map((item) => (
-                <option>{item?.name?.common}</option>
+                <option
+                  key={item?.name?.common}
+                >{item?.name?.common}</option>
               ))}
             </select>
           </div>

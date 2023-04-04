@@ -25,6 +25,9 @@ const TransactionModal = () => {
 
     document.body.removeChild(tempElement);
   }
+
+  // console.log(item);
+
   return (
     <>
       <div
@@ -47,18 +50,21 @@ const TransactionModal = () => {
               justifyContent: "space-around",
             }}
           >
-            <TransactionListItemComponent
+            {/* <TransactionListItemComponent
               id={1}
               avatar_url="./img/dao.jpg"
               userName="Bankless DAO"
               crypto="20000 BANKS"
               currency="$48.77 CAD"
-            />
+            /> */}
             <div>
               <p className={styles.transaction_date}>
                 November 20, 2022 | 18:30 EST
               </p>
-              <button className={styles.tx_button}>
+              <button 
+                className={styles.tx_button}
+                onClick={() => window.open("https://etherscan.io/tx/0xa3f0d915fe0099471d567b2e8b0e540c2c3215563767b18dd000bbecf6a84446", '_blank')}
+              >
                 <p className={styles.tx_button_text}>View TX on Etherscan</p>
               </button>
             </div>
@@ -77,8 +83,11 @@ const TransactionModal = () => {
                 <img src="./img/copy.svg" alt="Copy icon" />
               </div>
 
-              <button className={styles.tx_button}>
-                <p className={styles.tx_button_text}>View TX on Etherscan</p>
+              <button 
+                className={styles.tx_button}
+                onClick={() => window.open("https://etherscan.io/address/0x522d634b6bffb444fdbcde5932738995a4cfd1f1", '_blank')}
+              >
+                <p className={styles.tx_button_text}>View Sender on Etherscan</p>
               </button>
             </div>
             {/* Income switch */}
@@ -89,9 +98,9 @@ const TransactionModal = () => {
                 </span>
                 Not Income
               </p>
-              <label class={styles.switch}>
+              <label className={styles.switch}>
                 <input type="checkbox" />
-                <span class={styles.slider}></span>
+                <span className={styles.slider}></span>
               </label>
               <p>
                 <span>

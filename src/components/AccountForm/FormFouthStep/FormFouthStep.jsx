@@ -4,6 +4,8 @@ import { useUI } from "../../../context/UIContext";
 import TransactionListItem from "../TransactionList/TransactionListItem";
 import styles from "./styles.module.css";
 
+import { finishButton } from "../../../functions";
+
 const transactionsData = [
   {
     id: 1,
@@ -19,8 +21,24 @@ const transactionsData = [
     ],
   },
 ];
-const FormFourthStep = () => {
+
+
+
+const FormFourthStep = ({txData}) => {
   const [{ showEmailInput }] = useUI();
+
+  // let finishBtnOutput = finishButton("CAD");
+  // console.log(finishBtnOutput);
+
+  console.log(txData);    // ok here
+
+  function finishButtonOutput() {
+    return finishButton(txData)[0];
+  }
+
+  //let num = FinishButtonOutput();
+
+  let niceFormat = parseFloat( finishButtonOutput() ).toFixed(3);
 
   return (
     <AnimatePresence>
@@ -35,19 +53,20 @@ const FormFourthStep = () => {
         <TransactionListItem transactions={transactionsData[0].transactions} />
         <div className={styles.row}>
           <p>Total Income</p>
-          <p>$751.29 CAD</p>
+          <p>${niceFormat} CAD</p>
         </div>
         <div className={styles.row}>
           <p>Tax Rate</p>
           <div className={styles.tax_number_container}>
-            <input defaultValue={0} type="number" step="0.1" suffix="%" />
+            <input defaultValue={100} type="number" step="1" suffix="%" />
             <p className={styles.porcentage}>%</p>
           </div>
         </div>
         <div className={styles.row_total}>
-          <p>TOTAL TAX OWNED</p>
-          <p>$217.87 CAD</p>
+          <p>TOTAL DAO INCOME TO CLAIM FOR TAX</p>
+          <p>${niceFormat} CAD</p>
         </div>
+        {/* <FinishButtonOutput /> Total Income */}
         {showEmailInput && (
           <input type="email" placeholder="Write your email..." />
         )}
