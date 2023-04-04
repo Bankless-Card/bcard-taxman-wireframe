@@ -23,7 +23,7 @@ const Footer = () => {
         <p>Made with 🤍 by Bankless Card</p>
         <ul className="socials">
           {socialMedia.map((item) => (
-            <li>
+            <li key={item.id}>
               <a href={item.href} target="_blank" rel="noopener noreferrer">
                 <img src={item.img} alt={item.alt} />
               </a>

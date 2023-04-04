@@ -19,15 +19,15 @@ const FormSecondStep = ({ currentStep }) => {
 
           <div className={styles.daos_scrollable_container}>
             <div className={styles.row}>
-              <input type="checkbox" id="BANK" />
+              <input type="checkbox" id="BANK" checked />
               <label htmlFor="BANK">Bankless DAO (BANK)</label>
             </div>
             <div className={styles.row}>
-              <input type="checkbox" id="DAI" />
+              <input type="checkbox" id="DAI" checked />
               <label htmlFor="DAI">DAI</label>
             </div>
             <div className={styles.row}>
-              <input type="checkbox" id="WETH" />
+              <input type="checkbox" id="WETH" checked />
               <label htmlFor="WETH">WETH</label>
             </div>
             <div className={styles.row}>

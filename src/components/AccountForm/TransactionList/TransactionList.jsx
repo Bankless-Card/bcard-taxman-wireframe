@@ -3,67 +3,29 @@ import TransactionListItem from "./TransactionListItem";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./styles.module.css";
 
+// import { alchemyGo } from "../../../functions/alchemyGo";
+
 //mock data
 // for BE/web3 dev its better to use an infinite scroll component here and render data acoording usser scroll to bottom
 // I recomend this array in order to render data in a efficient way
 
-const transactionsData = [
-  {
-    id: 1,
-    date: "November 2022",
-    transactions: [
-      {
-        id: 1,
-        avatar_url: "./img/dao.jpg",
-        userName: "Bankless DAO",
-        crypto: "20000 BANKS",
-        currency: "$48.77 CAD",
-      },
-      {
-        id: 2,
-        avatar_url: "./img/dao.jpg",
-        userName: "Bankless DAO",
-        crypto: "20000 BANKS",
-        currency: "$48.77 CAD",
-      },
-    ],
-  },
-  {
-    id: 1,
-    date: "December 2022",
-    transactions: [
-      {
-        id: 1,
-        avatar_url: "./img/dao.jpg",
-        userName: "Bankless DAO",
-        crypto: "20000 BANKS",
-        currency: "$48.77 CAD",
-      },
-      {
-        id: 1,
-        avatar_url: "./img/dao.jpg",
-        userName: "Bankless DAO",
-        crypto: "20000 BANKS",
-        currency: "$48.77 CAD",
-      },
-      {
-        id: 1,
-        avatar_url: "./img/dao.jpg",
-        userName: "Bankless DAO",
-        crypto: "20000 BANKS",
-        currency: "$48.77 CAD",
-      },
-      {
-        id: 1,
-        avatar_url: "./img/dao.jpg",
-        userName: "Bankless DAO",
-        crypto: "20000 BANKS",
-        currency: "$48.77 CAD",
-      },
-    ],
-  },
-];
-const TransactionList = () => {
+
+const TransactionList = ({txData}) => {
+
+  // console.log(txData);
+  // txData contains all three networks data
+
+  // let ethObj = {
+  //   id: 3,
+  //   date: "Ethereum Mainnet",
+  //   transactions: txData,
+  // }
+
+  // let myData = [];    // set to first data  
+ 
+  // myData.push(ethObj);
+  // console.log(myData);  
+
   return (
     <AnimatePresence>
       <motion.div
@@ -72,10 +34,10 @@ const TransactionList = () => {
         transition={{ delay: 0.15 }}
         className={styles.transaction_list_container}
       >
-        {transactionsData.map((item) => (
+        {txData.map((item) => (
           <TransactionListItem
             key={item.id}
-            date={item.date}
+            title={item.title}
             transactions={item.transactions}
           />
         ))}

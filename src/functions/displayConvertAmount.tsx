@@ -40,7 +40,7 @@ export function displayConvertAmount(value:any, asset:any, timestamp:any, fiat:s
     });
 
     let output = "$"+fiat+" "+(bankFIAT*parseFloat(value)).toFixed(2) + " @ " +bankFIAT.toFixed(4);
-    console.log(output);
+    // console.log(output);
 
     // return the price in FIAT terms, based on timestamp
     return output;
@@ -48,7 +48,7 @@ export function displayConvertAmount(value:any, asset:any, timestamp:any, fiat:s
 
   } else if(asset === "WETH") {
 
-    console.log("real lookup for prices here...");
+    // console.log("real lookup for prices here...");
     let wethFIAT = 2000.0101;   // 1 WETH = 0.01 default (or newer price)
     let wethHistory = ethPrices2022.ethCad.prices;    // default CAD
 
@@ -67,14 +67,14 @@ export function displayConvertAmount(value:any, asset:any, timestamp:any, fiat:s
     });
 
     let output = "$"+fiat+" "+(wethFIAT*parseFloat(value)).toFixed(2) + " @ " +wethFIAT.toFixed(4);
-    console.log(output);
+    // console.log(output);
 
     // return the price in FIAT terms, based on timestamp
     return output;
 
   } else if(asset === "DAI") {
 
-    console.log("real lookup for prices here...");
+    // console.log("real lookup for prices here...");
     let daiFIAT = 1.0101;   // 1 DAI = 0.01 default (or newer price)
     let daiHistory = daiPrices2022.daiCad.prices;    // default CAD
 
@@ -93,7 +93,7 @@ export function displayConvertAmount(value:any, asset:any, timestamp:any, fiat:s
     });
 
     let output = "$"+fiat+" "+(daiFIAT*parseFloat(value)).toFixed(2) + " @ " +daiFIAT.toFixed(4);
-    console.log(output);
+    // console.log(output);
 
     // return the price in FIAT terms, based on timestamp
     return output;
