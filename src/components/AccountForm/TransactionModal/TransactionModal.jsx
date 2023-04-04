@@ -4,13 +4,23 @@ import { useUI } from "../../../context/UIContext";
 import TransactionListItemComponent from "../TransactionList/TransactionListItemComponent";
 import TransactionModalButtons from "./TransactionModalButtons";
 
-const TransactionModal = () => {
+const TransactionModal = (props) => {
   const [, { setShowTransactionModal }] = useUI();
+
+  console.log(props.activeItem);
+
+  let txDate = new Date(props.activeItem.metadata.blockTimestamp);
+  // console.log(txDate.toLocaleString());
 
   // wallet state
   const [walletText, setWalletText] = useState(
-    "0xb794f5ea0ba39494ce839613fffba74279579268"
+    props.activeItem.from
   );
+
+  //const [activeItem, setActiveItem] = useState();
+
+  // console.log(activeItem);
+  // console.log(txData);
 
   // Function for coying
   function copyToClipboard(text) {
@@ -26,7 +36,21 @@ const TransactionModal = () => {
     document.body.removeChild(tempElement);
   }
 
+  function toggleIncomeClick(){
+    // also need to buffer the state of the income switch in case CANCEL is pressed and we need to revert
+
+    console.log(props.activeItem.incomeState);
+    props.activeItem.incomeState = !props.activeItem.incomeState;
+
+  }
+
   // console.log(item);
+
+  // NEEDS
+
+  // wallet address for sender link
+  // etherscan link - needs tx hash
+  // tx date (nice format)
 
   return (
     <>
@@ -39,7 +63,10 @@ const TransactionModal = () => {
           <div className={styles.close_container}>
             <img
               src="./img/close2.svg"
-              onClick={() => setShowTransactionModal(false)}
+              onClick={() => {
+                setShowTransactionModal(false);
+                console.log("IF not income, highlight in main display list?");
+              }}
             />
           </div>
           <div
@@ -59,11 +86,12 @@ const TransactionModal = () => {
             /> */}
             <div>
               <p className={styles.transaction_date}>
-                November 20, 2022 | 18:30 EST
+                {/* November 20, 2022 | 18:30 EST */}
+                { txDate.toGMTString() }
               </p>
               <button 
                 className={styles.tx_button}
-                onClick={() => window.open("https://etherscan.io/tx/0xa3f0d915fe0099471d567b2e8b0e540c2c3215563767b18dd000bbecf6a84446", '_blank')}
+                onClick={() => window.open("https://etherscan.io/tx/"+props.activeItem.hash, '_blank')}
               >
                 <p className={styles.tx_button_text}>View TX on Etherscan</p>
               </button>
@@ -85,7 +113,7 @@ const TransactionModal = () => {
 
               <button 
                 className={styles.tx_button}
-                onClick={() => window.open("https://etherscan.io/address/0x522d634b6bffb444fdbcde5932738995a4cfd1f1", '_blank')}
+                onClick={() => window.open("https://etherscan.io/address/"+walletText, '_blank')}
               >
                 <p className={styles.tx_button_text}>View Sender on Etherscan</p>
               </button>
@@ -99,7 +127,14 @@ const TransactionModal = () => {
                 Not Income
               </p>
               <label className={styles.switch}>
-                <input type="checkbox" />
+                <input 
+                  type="checkbox" 
+                  onChange={() => {
+                    console.log("toogleIncomeClicked");
+                    toggleIncomeClick();
+                  }}
+                  defaultChecked={props.activeItem.incomeState}
+                />
                 <span className={styles.slider}></span>
               </label>
               <p>

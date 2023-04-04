@@ -147,13 +147,15 @@ async function callAlchemyGo(address) {
 
     // Income Label - Toggle SWITCH
     
-    let incomeState = "NOT";
+    let incomeState = false;
     // console.log("add other assets here to autoflag as income");
+
+    let activeAssets = ["BANK", "WETH", "DAI" ];
 
     // BANK is always income
     // console.log(daoSel["BANK"]);
-    if(thisRow.asset === "BANK"){
-      incomeState = "INCOME";
+    if(activeAssets.includes(thisRow.asset)){
+      incomeState = true;
     }
 
     // save to globalTxs
@@ -161,7 +163,7 @@ async function callAlchemyGo(address) {
     thisRow.currency = displayConvertAmount(thisRow.value, thisRow.asset, unixT, "CAD");
     thisRow.img_url = getTokenLogo(thisRow.asset);      //"./img/dao.jpg";
     thisRow.tokenLabel = getTokenLabel(thisRow.asset);
-
+    thisRow.incomeState = incomeState;    // "NOT" for unmatched txs by default
     thisRow.crypto = displayTokenAmount(thisRow.value,thisRow.asset);
 
   }  
@@ -453,6 +455,9 @@ const AccountForm = () => {
   const [step, setStep] = useState(1);
 
   const [txData, setTxData] = useState([]);
+  //const [thisTx, setThisTx] = useState([]);
+
+  const [activeItem, setActiveItem] = useState(null);
 
   const { address, isConnected } = useAccount();
 
@@ -479,7 +484,7 @@ const AccountForm = () => {
       {isCTAclicked && (
         <>
           {screenSize === "small" && showTransactionModal ? (
-            <TransactionModalMobile />
+            <TransactionModalMobile activeItem={activeItem} />
           ) : (
             <motion.div
               initial={{ opacity: 0, x: 300 }}
@@ -494,15 +499,15 @@ const AccountForm = () => {
                   <div style={{ flex: "1" }}>
                     {step === 1 && <FormFirstStep currentStep={step} />}
                     {step === 2 && <FormSecondStep currentStep={step} />}
-                    {step === 3 && <FormThirdStep currentStep={step} txData={txData} />}
+                    {step === 3 && <FormThirdStep currentStep={step} txData={txData} setActiveItem={setActiveItem} />}
                     {step === 4 && <FormFourthStep txData={txData} />}
                   </div>
                   <FormButton currentStep={step} stepChange={setStep} />
                 </div>
               </form>
-              <div id="output"></div>
+              {/* <div id="output"></div> */}
               {showTransactionModal && screenSize === "large" && (
-                <TransactionModal />
+                <TransactionModal activeItem={activeItem} />
               )}
             </motion.div>
           )}
