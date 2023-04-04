@@ -24,22 +24,30 @@ export function finishButton(txData:any) {
       
 
       if(assetList.includes(tx.asset)){
-        console.log("this is an INCOME tx");
-        console.log(tx.crypto, tx.currency);
+        //its an actively tracked token
+        if(tx.incomeState){
+          console.log("this is an INCOME tx");
+          console.log(tx.crypto, tx.currency);
 
-        if(tx.asset === "BANK"){
-          totalBANK += tx.value;
-        } else if(tx.asset === "WETH"){
-          totalWETH += tx.value;
-        } else if(tx.asset === "DAI"){
-          totalDAI += tx.value;
+          if(tx.asset === "BANK"){
+            totalBANK += tx.value;
+          } else if(tx.asset === "WETH"){
+            totalWETH += tx.value;
+          } else if(tx.asset === "DAI"){
+            totalDAI += tx.value;
+          }
+
+          totalIncome += parseFloat(tx.currency.split(" ")[1]);
+        } else {
+          // not income, dont sum it
         }
-
-        totalIncome += parseFloat(tx.currency.split(" ")[1]);
       }
 
     });
   });
+
+  /* Everything else afer here obsolete? */
+  /* redo basics as jsx instead of tsx? */
 
   // console.log("! have to pre-setup the output div in the DOM - app.tsx");
 

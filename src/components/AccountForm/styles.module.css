@@ -14,6 +14,10 @@
   height: 100%;
 }
 
+[data-incomestate="false"] {
+  border-bottom:3px solid red;
+}
+
 .form_container form {
   width: 430px;
   height: auto;

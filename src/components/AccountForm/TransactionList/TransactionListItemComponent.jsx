@@ -18,13 +18,14 @@ const TransactionListItemComponent = ({
   crypto,
   currency,
   onClick,
+  incomeState,
 }) => {
   if(tokenLabelList.includes(tokenLabel)){
 
     // console.log(img_url,tokenLabel,crypto,currency);
     // render the item
     return (
-      <div key={id} className={styles.item_container} onClick={onClick}>
+      <div key={id} data-incomestate={incomeState} className={styles.item_container} onClick={onClick}>
         <div className={styles.avatar_container}>
           <img src={img_url} className={styles.avatar_img} />
           <div className={styles.inner_container}>

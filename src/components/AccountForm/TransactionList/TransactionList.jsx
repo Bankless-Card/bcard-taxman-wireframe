@@ -3,28 +3,12 @@ import TransactionListItem from "./TransactionListItem";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./styles.module.css";
 
-// import { alchemyGo } from "../../../functions/alchemyGo";
-
 //mock data
 // for BE/web3 dev its better to use an infinite scroll component here and render data acoording usser scroll to bottom
 // I recomend this array in order to render data in a efficient way
 
 
-const TransactionList = ({txData}) => {
-
-  // console.log(txData);
-  // txData contains all three networks data
-
-  // let ethObj = {
-  //   id: 3,
-  //   date: "Ethereum Mainnet",
-  //   transactions: txData,
-  // }
-
-  // let myData = [];    // set to first data  
- 
-  // myData.push(ethObj);
-  // console.log(myData);  
+const TransactionList = ({txData, setActiveItem}) => {
 
   return (
     <AnimatePresence>
@@ -39,6 +23,7 @@ const TransactionList = ({txData}) => {
             key={item.id}
             title={item.title}
             transactions={item.transactions}
+            setActiveItem={setActiveItem}
           />
         ))}
       </motion.div>
