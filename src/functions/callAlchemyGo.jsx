@@ -26,8 +26,8 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
     // receives addresses so can be used for connected or inserted wallet address
     // maybe move this logic to the function call in the parent component
 
-    console.log(address);
-    console.log(addrOverride);
+    // console.log(address);
+    // console.log(addrOverride);
     
     // get address to use
     let walletAddress = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045";   // vitalik.eth
@@ -106,7 +106,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
     let polyArr = polyRes.transfers;
     let opArr = opRes.transfers;
 
-    console.log("Get active assets here from index");
+    // console.log("Get active assets here from index");
     console.log(country, activeAssets);    // OK
     // let activeAssets = ["BANK", "WETH", "DAI" ];
 

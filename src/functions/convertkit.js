@@ -45,4 +45,6 @@ export const convertKitEmail = async (email, walletaddress) => {
     return "error";
   });
 
+  return true;
+
 };

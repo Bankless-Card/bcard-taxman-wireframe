@@ -39,7 +39,9 @@ const AccountForm = () => {
   const [country, setCountry] = useState("Canada");
   const [activeAssets, setActiveAssets] = useState(["BANK","WETH", "DAI"]);
   const [txData, setTxData] = useState([]);
+  const [loading, setLoading] = useState(true); // loading state for tx data
   const [activeItem, setActiveItem] = useState(null);
+  const [tax, setTax] = useState(100);
 
   const { address, isConnected } = useAccount();
 
@@ -112,18 +114,28 @@ const AccountForm = () => {
                       <FormThirdStep 
                         currentStep={step} 
                         txData={txData} 
+                        loading={loading}
                         setActiveItem={setActiveItem} 
                       />}
-                    {step === 4 && <FormFourthStep txData={txData} />}
+                    {step === 4 && 
+                      <FormFourthStep 
+                        txData={txData} 
+                        activeAssets={activeAssets}
+                        country={country} 
+                        tax={tax}
+                        setTax={setTax}
+                      />}
                   </div>
                   <FormButton 
                     currentStep={step} 
                     stepChange={setStep} 
                     addrOverride={addrOverride} 
+                    setLoading={setLoading}
                     txData={txData} 
                     setTxData={setTxData} 
                     activeAssets={activeAssets}
                     country={country}
+                    tax={tax}
                     />
                 </div>
               </form>

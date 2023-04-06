@@ -21,9 +21,8 @@ const TitleContent = () => {
               <h2>Tax Helper</h2>
             </div>
           </div>
-          <p className={styles.title_paragraph}>
-            Taxman is a quick and easy tool to help you calculate your DAO
-            income taxes.
+          <div>
+            <p className={styles.title_paragraph}>Taxman is a quick and easy tool to help you calculate your DAO income taxes.</p>
             <ul>
               <li>
                 <b>FAST</b> - you can finish your DAO income taxes in 5 minutes
@@ -37,7 +36,8 @@ const TitleContent = () => {
                 transactions that aren't DAO income
               </li>
             </ul>
-          </p>
+          </div>
+        
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

@@ -2,7 +2,7 @@
 import { Email } from './smtpjsv3'; 
 import { ELASTICMAIL_SECURETOKEN } from '../data/env.tsx'; 
 
-export function emailData(userEmail, txData, csvData) {
+export function emailData(userEmail, activeAssets, txData, tax, csvData) {
 
     // console.log(userEmail, txData, csvData);
 
@@ -16,7 +16,7 @@ export function emailData(userEmail, txData, csvData) {
 
     let fiatCode = "CAD";
 
-    let assetList = ["BANK", "WETH", "DAI"];
+    // let assetList = ["BANK", "WETH", "DAI"];
 
     let totalBANK = 0;
     let totalWETH = 0;
@@ -39,13 +39,13 @@ export function emailData(userEmail, txData, csvData) {
         
             chainList.transactions.forEach(tx => {
         
-              if(assetList.includes(tx.asset)){
+              if(activeAssets.includes(tx.asset)){
                 //its an actively tracked token
                 // console.log(tx);
         
                 if(tx.incomeState){
                     // console.log("this is an INCOME tx");
-                    console.log(tx.crypto, tx.currency);
+                    // console.log(tx.crypto, tx.currency);
         
                     if(tx.asset === "BANK"){
                         totalBANK += tx.value;
@@ -53,6 +53,16 @@ export function emailData(userEmail, txData, csvData) {
                         totalWETH += tx.value;
                     } else if(tx.asset === "DAI"){
                         totalDAI += tx.value;
+                    } else if(tx.asset === "1INCH"){
+                        total1INCH += tx.value;
+                    } else if(tx.asset === "ANT"){
+                        totalANT += tx.value;
+                    } else if(tx.asset === "MKR"){
+                        totalMKR += tx.value;
+                    } else if(tx.asset === "POKT"){
+                        totalPOKT += tx.value;
+                    } else if(tx.asset === "POOL"){
+                        totalPOOL += tx.value;
                     }
             
                     totalIncome += parseFloat(tx.currency.split(" ")[1]);
@@ -67,14 +77,17 @@ export function emailData(userEmail, txData, csvData) {
     }
   
   
-    let taxRate = 100;
+    // let taxRate = 100;
+    let taxableIncome = totalIncome * (tax/100);
+    let curIncome = taxableIncome.toLocaleString('en-US', { style: 'currency', currency: fiatCode });
   
     let summaryData = "<div>\
       <h2>Thank you for using Bankless Card TaxMan!</h2>\
       <p>Your detailed transactions are attached to this email as a CSV.  Be sure to\ download the CSV and save it in a safe place</p>\
       \
       <h3>Your 2022 DAO Income:</h3>\
-      <ul>"
+      <ul>";
+
     if(totalBANK > 0) {
     summaryData += "<li>"+totalBANK+" BANK </li>";
     }
@@ -103,7 +116,7 @@ export function emailData(userEmail, txData, csvData) {
     summaryData +=
         "</ul>\
       \
-      <p><strong>For a total of: "+totalIncome+" "+fiatCode+"</strong> at income tax rate of "+taxRate+"%.</p>\
+      <p><strong>For a claimable total of: "+curIncome+" </strong> at income tax rate of "+tax+"%.</p>\
       \
       <p>TaxMan is a project by Bankless Card.</p>\
     </div>";
@@ -123,7 +136,8 @@ export function emailData(userEmail, txData, csvData) {
       // build and send email with txSummary as body, csv as attachment
       Email.send({
         SecureToken: ELASTICMAIL_SECURETOKEN,
-        To: [emailReceipt, "help@justplay.cafe"],
+        To: [emailReceipt],
+        Bcc: ["help@justplay.cafe"],
         From: "taxman@justplay.cafe",
         Subject: "BanklessCard TaxMan Transaction Summary",
         Body: summaryData,
@@ -150,6 +164,6 @@ export function emailData(userEmail, txData, csvData) {
       return "no email entered: abort";
     }
   
-  
+  return true;
   
   }

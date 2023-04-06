@@ -1,50 +1,35 @@
-import { useState } from "react";
+// import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useUI } from "../../../context/UIContext";
-import TransactionListItem from "../TransactionList/TransactionListItem";
+// import TransactionListItem from "../TransactionList/TransactionListItem";
 import styles from "./styles.module.css";
 
-import { finishButton } from "../../../functions";
-
-const transactionsData = [
-  {
-    id: 1,
-    date: "",
-    transactions: [
-      {
-        id: 1,
-        avatar_url: "./img/dao.jpg",
-        userName: "Bankless DAO",
-        crypto: "20000 BANKS",
-        currency: "$48.77 CAD",
-      },
-    ],
-  },
-];
+// import { finishButton } from "../../../functions";
+import { sumTransactions } from "../../../functions/sumTransactions";
 
 
 
-const FormFourthStep = ({txData}) => {
+
+const FormFourthStep = ({txData, activeAssets, country, tax, setTax}) => {
   const [{ showEmailInput }] = useUI();
 
-  // let finishBtnOutput = finishButton("CAD");
-  // console.log(finishBtnOutput);
-
-  // console.log(txData);    // ok here
-
-  function finishButtonOutput() {
-
-    console.log(txData);    // ok here
-
-    // should also include sums for other dao tokens to save the recalc later
-    // chain to next function call ?
-
-    return finishButton(txData)[0];
+  let countryCurrency = "CAD";
+  if(country === "Canada"){
+    countryCurrency = "CAD";
+  } else if(country === "United States"){
+    countryCurrency = "USD";
+    
+  } else {
+    countryCurrency = "CAD";  // default
   }
 
-  //let num = FinishButtonOutput();
+  let txSum = sumTransactions(txData, activeAssets)[0];   // this is the total income
 
-  let niceFormatIncome = parseFloat( finishButtonOutput() ).toFixed(3);
+  let niceFormatIncome = parseFloat( txSum ).toFixed(2);
+  let curFormatIncome = parseFloat( txSum ).toLocaleString('en-US', { style: 'currency', currency: countryCurrency });
+
+  let incomeToClaim = tax * niceFormatIncome / 100;     // this is the amount to claim 100% default
+  let incomeDisplay = parseFloat( incomeToClaim ).toLocaleString('en-US', { style: 'currency', currency: countryCurrency });
 
   return (
     <AnimatePresence>
@@ -56,23 +41,28 @@ const FormFourthStep = ({txData}) => {
         className={styles.fourth_step_container}
       >
         <p className={styles.form_fourth_step_title}>Your 2022 Income</p>
-        <TransactionListItem transactions={transactionsData[0].transactions} />
+        {/* <TransactionListItem transactions={transactionsData[0].transactions} /> */}
         <div className={styles.row}>
           <p>Total Income</p>
-          <p>${niceFormatIncome} CAD</p>
+          <p>{curFormatIncome}</p>
         </div>
         <div className={styles.row}>
           <p>Tax Rate</p>
           <div className={styles.tax_number_container}>
-            <input defaultValue={100} type="number" step="1" suffix="%" />
+            <input 
+              defaultValue={tax} 
+              type="number" 
+              step="1" 
+              suffix="%" 
+              onChange={ (e) => setTax(e.target.value) }
+            />
             <p className={styles.porcentage}>%</p>
           </div>
         </div>
         <div className={styles.row_total}>
-          <p>TOTAL DAO INCOME TO CLAIM FOR TAX</p>
-          <p>${niceFormatIncome} CAD</p>
+          <p>INCOME TO CLAIM:</p>
+          <p>{incomeDisplay}</p>
         </div>
-        {/* <FinishButtonOutput /> Total Income */}
         {showEmailInput && (
           <input id="userEmail" type="email" placeholder="Write your email..." />
         )}
