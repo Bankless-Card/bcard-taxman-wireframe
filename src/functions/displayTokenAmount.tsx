@@ -5,22 +5,19 @@ export function displayTokenAmount(value:any, asset:any){
   let niceFormat = new Intl.NumberFormat('en-US', { maximumSignificantDigits: 9, minimumFractionDigits: 3,
     maximumFractionDigits: 3 }).format(value);
 
-  if(asset === "BANK"){
-    // Limit to three significant digits
-    // let niceFormat = new Intl.NumberFormat('en-US', { maximumSignificantDigits: 9, minimumFractionDigits: 3,
-    //   maximumFractionDigits: 3 }).format(value);
-    // console.log(niceFormat);
-    // Expected output: "1,23,000"
+  // niceformat variable by country?
 
-    return niceFormat + " " + asset;
+  // better to list all assets here andthen if matched, return the basic value
+  let assets = ["BANK", "WETH", "DAI", "1INCH", "ANT", "MKR", "POKT", "POOL"]
 
-    // return  parseFloat(value).toFixed(3) + " " + asset;
-  } else if(asset === "WETH"){
-    return parseFloat(value).toFixed(8) + " " + asset;
-  } else if(asset === "DAI"){
+  if(asset === "WETH"){
+    // adjust to 6 for ETH
+    return parseFloat(value).toFixed(6) + " " + asset;
+
+  } else if(assets.includes(asset)){
+    // catch all return for matched assets
     return niceFormat + " " + asset;
-    // return parseFloat(value).toFixed(3) + " " + asset;
-  }
+  } 
 
   // add more assets here
 

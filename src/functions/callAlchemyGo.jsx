@@ -1,9 +1,7 @@
 import { Alchemy, Network, AssetTransfersCategory } from 'alchemy-sdk';
 
 // data imports
-import { REACT_APP_ALCHEMY_API_KEY, ELASTICMAIL_SECURETOKEN } from '../data/env.tsx' 
-
-// const REACT_APP_ALCHEMY_API_KEY = "szbJviwD1JXcAcbDNY0Mk7qn6uql-sN9";
+import { REACT_APP_ALCHEMY_API_KEY } from '../data/env.tsx' 
 
 // Optional Config object, but defaults to demo api-key and eth-mainnet.
 const settings = {
@@ -23,7 +21,7 @@ import { displayTokenAmount } from "../functions/displayTokenAmount.tsx";
 import { displayConvertAmount } from "../functions/displayConvertAmount.tsx";
 
 
-export async function callAlchemyGo(address, addrOverride) {
+export async function callAlchemyGo(address, addrOverride, country, activeAssets) {
 
     // receives addresses so can be used for connected or inserted wallet address
     // maybe move this logic to the function call in the parent component
@@ -42,23 +40,6 @@ export async function callAlchemyGo(address, addrOverride) {
     } else  {
       console.log("NO wallet address - check defaults.");
     }
-  
-  
-  
-    
-  
-    // console.log(address);
-  
-    // let daoSel = {
-    //   "WETH": true,
-    //   "DAI": true,
-    //   "BANK": true,
-    //   "INCH": true,
-    //   "ANT": true,
-    //   "MKR": true,
-    //   "POKT": true,
-    //   "POOL": true,
-    // }
   
     // testing for all chains - OK
     // alchemy.core.getTokenBalances(walletAddress).then(console.log);
@@ -120,24 +101,25 @@ export async function callAlchemyGo(address, addrOverride) {
         category: [ AssetTransfersCategory.ERC20 ],
       });
     
-      // console.log(res);
-  
-    /* parse data retrieved to include reference:
-  
-    id: 1,    // ok
-    avatar_url: "./img/dao.jpg",    // can be retrieved via function
-    userName: "Bankless DAO",       // same from asset
-    crypto: "20000 BANKS",          // same from value
-    currency: "$48.77 CAD",         // needs conversion and depends on currency
-  
-    */
   
     let objArr = res.transfers;
     let polyArr = polyRes.transfers;
     let opArr = opRes.transfers;
 
-    let activeAssets = ["BANK", "WETH", "DAI" ];
+    console.log("Get active assets here from index");
+    console.log(country, activeAssets);    // OK
+    // let activeAssets = ["BANK", "WETH", "DAI" ];
 
+    // let countryImport = "Canada";   // get this from state variable
+    let countryExport = "CAD";   // label for export currency
+
+    if(country === "Canada"){
+      countryExport = "CAD";
+    } else if(country === "United States"){
+      countryExport = "USD";
+    } else {
+      countryExport = "CAD";  // default
+    }
   
     for (var i=0; i<objArr.length; i++) {
     
@@ -148,24 +130,23 @@ export async function callAlchemyGo(address, addrOverride) {
       let unixT = Date.parse(t)/1000
   
       // Income Label - Toggle SWITCH
-      
-      let incomeState = false;
-      // console.log("add other assets here to autoflag as income");
-  
-  
-      // BANK is always income
-      // console.log(daoSel["BANK"]);
-      if(activeAssets.includes(thisRow.asset)){
-        incomeState = true;
-      }
+      let incomeState = true;   // default to true, only selected tokens are flagged
   
       // save to globalTxs
       objArr[i].unixT = unixT;   // add unix timestamp to global object
-      thisRow.currency = displayConvertAmount(thisRow.value, thisRow.asset, unixT, "CAD");
+      thisRow.currency = displayConvertAmount(thisRow.value, thisRow.asset, unixT, countryExport);
       thisRow.img_url = getTokenLogo(thisRow.asset);      //"./img/dao.jpg";
       thisRow.tokenLabel = getTokenLabel(thisRow.asset);
       thisRow.incomeState = incomeState;    // "NOT" for unmatched txs by default
       thisRow.crypto = displayTokenAmount(thisRow.value,thisRow.asset);
+
+      if(activeAssets.includes(thisRow.asset)){
+        // incomeState = true;
+      } else {
+        // remove from the tx list - it will be recalled latter if dao selectors are toggled
+        objArr.splice(i,1);
+        // console.log("Removed tx from list: " + thisRow.asset, objArr)
+      }
   
     }  
   
@@ -178,69 +159,24 @@ export async function callAlchemyGo(address, addrOverride) {
       let unixT = Date.parse(t)/1000;
       
         // Income Label - Toggle SWITCH
-      let incomeState = false;
-      if(activeAssets.includes(thisRow.asset)){
-        incomeState = true;
-      }
+      let incomeState = true;
   
       // save to globalTxs
       thisRow.unixT = unixT;   // add unix timestamp to global object
-      thisRow.currency = displayConvertAmount(thisRow.value, thisRow.asset, unixT, "CAD");
+      thisRow.currency = displayConvertAmount(thisRow.value, thisRow.asset, unixT, countryExport);
       thisRow.img_url = getTokenLogo(thisRow.asset);      //"./img/dao.jpg";
       thisRow.tokenLabel = getTokenLabel(thisRow.asset);
       thisRow.incomeState = incomeState;    // "NOT" for unmatched txs by default
       thisRow.crypto = displayTokenAmount(thisRow.value,thisRow.asset);
-  
-    //   let incomeState = "NOT";
-  
-    //   /** LIMIT FILTER */
-    //   let assets = ["BANK", "WETH", "DAI", "1INCH", "ANT", "MKR", "POKT", "POOL"];
-  
-    //   let asset = thisRow.asset || "";
-    //   if(assets.includes(asset)){
-  
-    //     // let incomeBadge = toggleSwitch(incomeState); // 'Income Label - Toggle SWITCH';
+
+      if(activeAssets.includes(thisRow.asset)){
+        // incomeState = true;
+      } else {
+        // remove from the tx list - it will be recalled latter if dao selectors are toggled
+        polyArr.splice(i,1);
+        // console.log("Removed tx from list: " + thisRow.asset, objArr)
+      }
     
-    //     // let tokenLogo = getTokenLogo(thisRow.asset);   // token logo - '+thisRow.asset+'
-    //     // let tokenLabel = getTokenLabel(thisRow.asset);   // token label - '+thisRow.asset+'
-    //     // let tokenAmount = displayTokenAmount(thisRow.value,thisRow.asset);   // token amount - '+thisRow.value+'
-    //     let convertAmount = displayConvertAmount(thisRow.value, thisRow.asset, unixT, "CAD")// "USD/FIAT value @ timefrom blockNum";   // USD/FIAT value @ timefrom blockNum
-    
-    //     // console.log(convertAmount);
-    
-    //     let priceParts = convertAmount.split(" ");
-    //     let convertOut = priceParts[0] + " " + priceParts[1];
-    //     let convertRatio = priceParts[2] + " " + priceParts[3] + " " + thisRow.asset + "/" + "CAD";
-    
-    //     // htmlhelpers
-    //     let clearBoth = "<div style=clear:both></div>";
-    
-    //     // console.log(asset, globalIndex);    // this index is not getting high enough
-    //     // console.log(globalTxs[globalIndex]);
-    //     // console.log(globalTxs);
-  
-    //     thisRow.currency = displayConvertAmount(thisRow.value, thisRow.asset, unixT, "CAD");
-    //     thisRow.img_url = getTokenLogo(thisRow.asset);      //"./img/dao.jpg";
-    //     thisRow.tokenLabel = getTokenLabel(thisRow.asset);
-  
-    //     thisRow.crypto = displayTokenAmount(thisRow.value,thisRow.asset);
-    
-    //     // let j = i + objArr.length;   // offset for mainnet txs
-    //     // if(globalTxs[globalIndex].asset === asset) {
-    //     //     // save to globalTxs (after mainnet txs)
-    //     //     globalTxs[globalIndex].unixT = unixT;   // add unix timestamp to global object
-    //     //     globalTxs[globalIndex].incomeState = incomeState;   // add income state to global object
-    //     //     globalTxs[globalIndex].incomeBadge = incomeBadge;   // add income state to global object
-    //     //     globalTxs[globalIndex].tokenLogo = tokenLogo;   // add income state to global object
-    //     //     globalTxs[globalIndex].tokenLabel = tokenLabel;   // add income state to global object
-    //     //     globalTxs[globalIndex].tokenAmount = tokenAmount;   // add income state to global object
-    //     //     globalTxs[globalIndex].convertAmount = convertAmount;   // add income state to global object
-    //     // }
-  
-    //   }
-      
-  
-      
   
     }   // end for all polygon transactions
   
@@ -260,11 +196,19 @@ export async function callAlchemyGo(address, addrOverride) {
     
         // save to globalTxs
         thisRow.unixT = unixT;   // add unix timestamp to global object
-        thisRow.currency = displayConvertAmount(thisRow.value, thisRow.asset, unixT, "CAD");
+        thisRow.currency = displayConvertAmount(thisRow.value, thisRow.asset, unixT, countryExport);
         thisRow.img_url = getTokenLogo(thisRow.asset);      //"./img/dao.jpg";
         thisRow.tokenLabel = getTokenLabel(thisRow.asset);
         thisRow.incomeState = incomeState;    // "NOT" for unmatched txs by default
         thisRow.crypto = displayTokenAmount(thisRow.value,thisRow.asset);
+
+        if(activeAssets.includes(thisRow.asset)){
+          // incomeState = true;
+        } else {
+          // remove from the tx list - it will be recalled latter if dao selectors are toggled
+          opArr.splice(i,1);
+          // console.log("Removed tx from list: " + thisRow.asset, objArr)
+        }
   
     }
   
