@@ -9,7 +9,7 @@ import { convertKitEmail } from "../../functions/convertkit";   // capture user 
 import { emailData } from "../../functions/emailData";        // send to user email
 
 
-const FormButton = ({ stepChange, currentStep, addrOverride, txData, setTxData, country, activeAssets }) => {
+const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData, setTxData, country, activeAssets, tax }) => {
   const [{ showTransactionModal }, { setShowEmailInput }] = useUI();
 
   const { address, isConnected } = useAccount();
@@ -24,19 +24,7 @@ const FormButton = ({ stepChange, currentStep, addrOverride, txData, setTxData, 
 
   async function fetchData(address) {
 
-    console.log(address);
-    console.log(addrOverride);
-
-    // let walletAddress = address;    // this will be 'undefined' if not connected
-
-    // if(addrOverride){
-    //   console.log("Using inserted wallet address.");
-    //   walletAddress = addrOverride;
-    // } else if(typeof address === 'undefined') {
-    //   // set default address to use
-    //   console.log("Using default wallet address.");
-    //   walletAddress = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045";   // vitalik
-    // }
+    console.log("Fetching data for: " + address);
 
     // country needed for pricing data - default to Canada
     const txDataTemp = await callAlchemyGo(address, addrOverride, country, activeAssets);
@@ -46,39 +34,30 @@ const FormButton = ({ stepChange, currentStep, addrOverride, txData, setTxData, 
     console.log("Updating transaction data.");
     console.log(txDataTemp);
 
+    setLoading(false);    // clear spinner
+
     return txDataTemp;
 
   }
   
 
   const handleFormButton = (currentStep) => {
-    // return currentStep != 4
-    //   ? stepChange(currentStep + 1)
-    //   : 
-    //   setShowEmailInput(true)
+
     if(currentStep === 1){
       console.log("SET Address & Country Code this page.");
 
       console.log(country);
 
-      // let walletAddress = address;    // default to connected wallet
-      // console.log(address, addrOverride);
-
-      // fetchData(address);
-
 
     } else if(currentStep === 2){
       console.log("Handle step 2 - DAO selection boxes - filter Income TXs for display.");
 
-      console.log(activeAssets)
-
-      // console.log(address, addrOverride);
-
+      // console.log(activeAssets)
       fetchData(address);
 
     } else if(currentStep === 3){
       
-      // display transaction summary on screen
+      // display transactions & toggles on screen
 
       
 
@@ -118,14 +97,16 @@ const FormButton = ({ stepChange, currentStep, addrOverride, txData, setTxData, 
           localAddr = "NOT CONNECTED";
         }
 
+        console.log(activeAssets);
+
         // BUILD THE CSV DATA OF THE CURRENT INCOME TRASNACTIONS
-        let csvData = exportData(txData);
+        let csvData = exportData(country, txData, activeAssets, tax);
         console.log(csvData);   // OK
 
         
         
         // CALL HERE TO SEND EMAIL DATA TO USER
-        let emailOutcome = emailData(userEmail, txData, csvData);
+        let emailOutcome = emailData(userEmail, activeAssets, txData, tax, csvData);
         console.log(emailOutcome);
 
         
