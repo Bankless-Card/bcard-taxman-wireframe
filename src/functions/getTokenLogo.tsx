@@ -1,15 +1,24 @@
-import cs from '../style.module.css'
-// import { handleOpen } from './handleOpen';
 
 export function getTokenLogo(asset:any) {
 
   if(asset === "BANK"){
-    return "./img/dao.jpg";
+    return "/img/token/dao.jpg";
   } else if(asset === "WETH"){
-    return './img/eth-logo.png';
+    return "/img/token/eth-logo.png";
   } else if(asset === "DAI"){
-    return '/img/dai-logo.png';
+    return "/img/token/dai-logo.png";
+  } else if(asset === "1INCH"){
+    return "/img/token/1inch-logo.png";
+  } else if(asset === "ANT"){
+    return "/img/token/ant-logo.png";
+  } else if(asset === "MKR"){
+    return "/img/token/mkr-logo.png";
+  } else if(asset === "POKT"){
+    return "/img/token/pokt-logo.png";
+  } else if(asset === "POOL"){
+    return "/img/token/pool-logo.png";
   }
+
 
   // TODO: add more assets here
 

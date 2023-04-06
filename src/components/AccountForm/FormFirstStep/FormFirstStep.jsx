@@ -5,9 +5,11 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAccount } from 'wagmi';
 import { Web3Button } from '@web3modal/react'
 
-const FormFirstStep = ({ currentStep, setAddrOverride }) => {
+const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry }) => {
 
   const { address, isConnected } = useAccount();
+
+  // console.log(country);
 
   const [countryNames, setCountryNames] = useState([]);
   useEffect(() => {
@@ -16,6 +18,19 @@ const FormFirstStep = ({ currentStep, setAddrOverride }) => {
         "https://restcountries.com/v3.1/all?fields=name"
       );
       const data = await response.json();
+
+      //console.log(data);
+      // console.log("Order alhabetically by country name:");
+      data.sort((a, b) => {
+        if (a.name.common < b.name.common) {
+          return -1;
+        }
+        if (a.name.common > b.name.common) {
+          return 1;
+        }
+        return 0;
+      });
+
       setCountryNames(data);
     };
     getCOuntryNames();
@@ -44,7 +59,6 @@ const FormFirstStep = ({ currentStep, setAddrOverride }) => {
               {
                 setAddrOverride(e.target.value)
                 console.log(e.target.value);
-              
             }}
           />
           {/* here give fucntionality to connect the wallet to the button */}
@@ -54,22 +68,26 @@ const FormFirstStep = ({ currentStep, setAddrOverride }) => {
           {isConnected ? (
             <p></p>
           ) : (
-            <p>or <Web3Button /> to use your connected account</p>
+            <p><Web3Button /> to use your connected account</p>
           )}
 
           <p className={styles.form_first_step_label}>
-            Choose your country for pay taxes
+            Choose your country of taxation
           </p>
           <div className={styles.select_container}>
             <select 
-              value="Canada"
-              onChange={(e) => console.log(e.target.value)}
+              value={country}
+              onChange={(e) => {
+                setCountry(e.target.value)
+                console.log(e.target.value)
+              }}
             >
               <option>Country</option>
 
               {countryNames.map((item) => (
                 <option
                   key={item?.name?.common}
+                  disabled={(item?.name?.common === "Canada" || item?.name?.common === "United States") ? false : true}
                 >{item?.name?.common}</option>
               ))}
             </select>

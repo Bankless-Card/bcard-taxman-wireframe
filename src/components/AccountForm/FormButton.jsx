@@ -9,7 +9,7 @@ import { convertKitEmail } from "../../functions/convertkit";   // capture user 
 import { emailData } from "../../functions/emailData";        // send to user email
 
 
-const FormButton = ({ stepChange, currentStep, addrOverride, txData, setTxData }) => {
+const FormButton = ({ stepChange, currentStep, addrOverride, txData, setTxData, country, activeAssets }) => {
   const [{ showTransactionModal }, { setShowEmailInput }] = useUI();
 
   const { address, isConnected } = useAccount();
@@ -38,7 +38,8 @@ const FormButton = ({ stepChange, currentStep, addrOverride, txData, setTxData }
     //   walletAddress = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045";   // vitalik
     // }
 
-    const txDataTemp = await callAlchemyGo(address, addrOverride);
+    // country needed for pricing data - default to Canada
+    const txDataTemp = await callAlchemyGo(address, addrOverride, country, activeAssets);
 
     // read and parse data first:
     setTxData(txDataTemp);
@@ -49,6 +50,50 @@ const FormButton = ({ stepChange, currentStep, addrOverride, txData, setTxData }
 
   }
   
+
+  const handleFormButton = (currentStep) => {
+    // return currentStep != 4
+    //   ? stepChange(currentStep + 1)
+    //   : 
+    //   setShowEmailInput(true)
+    if(currentStep === 1){
+      console.log("SET Address & Country Code this page.");
+
+      console.log(country);
+
+      // let walletAddress = address;    // default to connected wallet
+      // console.log(address, addrOverride);
+
+      // fetchData(address);
+
+
+    } else if(currentStep === 2){
+      console.log("Handle step 2 - DAO selection boxes - filter Income TXs for display.");
+
+      console.log(activeAssets)
+
+      // console.log(address, addrOverride);
+
+      fetchData(address);
+
+    } else if(currentStep === 3){
+      
+      // display transaction summary on screen
+
+      
+
+    } else if(currentStep === 4){
+      console.log("Handle step 4 - Sum and Finish.");
+        handleStepFour();
+    }
+
+    // step counter
+    if(currentStep != 4) {
+      stepChange(currentStep + 1);
+    } 
+
+    return currentStep;
+  };
 
   async function handleStepFour() {
 
@@ -102,56 +147,6 @@ const FormButton = ({ stepChange, currentStep, addrOverride, txData, setTxData }
     return userEmail;
   
   }
-
-  const handleFormButton = (currentStep) => {
-    // return currentStep != 4
-    //   ? stepChange(currentStep + 1)
-    //   : 
-    //   setShowEmailInput(true)
-    if(currentStep === 1){
-      console.log("SET Address & Country Code this page.");
-
-      // let walletAddress = address;    // default to connected wallet
-      console.log(address, addrOverride);
-
-      fetchData(address);
-
-      // if(addrOverride){
-      //   console.log("Using inserted wallet address. " + addrOverride);
-      //   walletAddress = addrOverride;
-      // } else if(address === "") {
-      //   walletAddress = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045";   // vitalik.eth
-      // }
-
-    } else if(currentStep === 2){
-      console.log("Handle step 2 - DAO selection boxes - filter Income TXs for display.");
-
-      // let walletAddress = address;    // default to connected wallet
-      // console.log(addrOverride);
-
-      
-
-      // if(addrOverride){
-      //   console.log("Using inserted wallet address.");
-      //   walletAddress = addrOverride;
-      // } else if(address === "") {
-      //   walletAddress = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045";   // vitalik.eth
-      // }
-
-    } else if(currentStep === 3){
-      // display transactions on screeng
-    } else if(currentStep === 4){
-      console.log("Handle step 4 - Sum and Finish.");
-        handleStepFour();
-    }
-
-    // step counter
-    if(currentStep != 4) {
-      stepChange(currentStep + 1);
-    } 
-
-    return currentStep;
-  };
 
   if(currentStep === 4) {
     console.log("Sum Up Transactions - handled with a function");
