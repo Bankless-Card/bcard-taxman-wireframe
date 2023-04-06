@@ -1,4 +1,6 @@
-const axios = require('axios');
+//const axios = require('axios');
+// import React from 'react';
+import axios from 'axios';
 
 // Replace these with your ConvertKit API key and ConvertKit form ID
 const API_KEY = 'XLzmLAWn9RcqmyHc57xV0g';
@@ -13,6 +15,8 @@ const FORM_ID = '5018315';
 
 // get email from submitting user and attach walletaddress to storage
 export const convertKitEmail = async (email, walletaddress) => {
+
+  console.log("Received email: " + email + " and walletaddress: " + walletaddress);
 
   let emailData = {
     email: email,

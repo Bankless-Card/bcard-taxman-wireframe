@@ -30,15 +30,21 @@ const FormFourthStep = ({txData}) => {
   // let finishBtnOutput = finishButton("CAD");
   // console.log(finishBtnOutput);
 
-  console.log(txData);    // ok here
+  // console.log(txData);    // ok here
 
   function finishButtonOutput() {
+
+    console.log(txData);    // ok here
+
+    // should also include sums for other dao tokens to save the recalc later
+    // chain to next function call ?
+
     return finishButton(txData)[0];
   }
 
   //let num = FinishButtonOutput();
 
-  let niceFormat = parseFloat( finishButtonOutput() ).toFixed(3);
+  let niceFormatIncome = parseFloat( finishButtonOutput() ).toFixed(3);
 
   return (
     <AnimatePresence>
@@ -53,7 +59,7 @@ const FormFourthStep = ({txData}) => {
         <TransactionListItem transactions={transactionsData[0].transactions} />
         <div className={styles.row}>
           <p>Total Income</p>
-          <p>${niceFormat} CAD</p>
+          <p>${niceFormatIncome} CAD</p>
         </div>
         <div className={styles.row}>
           <p>Tax Rate</p>
@@ -64,11 +70,11 @@ const FormFourthStep = ({txData}) => {
         </div>
         <div className={styles.row_total}>
           <p>TOTAL DAO INCOME TO CLAIM FOR TAX</p>
-          <p>${niceFormat} CAD</p>
+          <p>${niceFormatIncome} CAD</p>
         </div>
         {/* <FinishButtonOutput /> Total Income */}
         {showEmailInput && (
-          <input type="email" placeholder="Write your email..." />
+          <input id="userEmail" type="email" placeholder="Write your email..." />
         )}
       </motion.div>
     </AnimatePresence>

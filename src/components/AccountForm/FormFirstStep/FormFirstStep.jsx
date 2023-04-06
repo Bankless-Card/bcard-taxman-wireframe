@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAccount } from 'wagmi';
 import { Web3Button } from '@web3modal/react'
 
-const FormFirstStep = ({ currentStep }) => {
+const FormFirstStep = ({ currentStep, setAddrOverride }) => {
 
   const { address, isConnected } = useAccount();
 
@@ -37,12 +37,26 @@ const FormFirstStep = ({ currentStep }) => {
           <p className={styles.form_first_step_label}>
             What’s your ETH address?
           </p>
-          <input type="text" defaultValue={address}/>
+          <input 
+            type="text" 
+            defaultValue={address}
+            onChange={(e) => 
+              {
+                setAddrOverride(e.target.value)
+                console.log(e.target.value);
+              
+            }}
+          />
           {/* here give fucntionality to connect the wallet to the button */}
           {/* <button className={styles.connect_wallet_button}>
             Connect Wallet
           </button> */}
-          <Web3Button />
+          {isConnected ? (
+            <p></p>
+          ) : (
+            <p>or <Web3Button /> to use your connected account</p>
+          )}
+
           <p className={styles.form_first_step_label}>
             Choose your country for pay taxes
           </p>
