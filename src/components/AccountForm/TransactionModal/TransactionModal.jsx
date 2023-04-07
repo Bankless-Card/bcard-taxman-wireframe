@@ -60,12 +60,14 @@ const TransactionModal = (props) => {
   // prepare the links per chain
   if(txChain === "Polygon"){
     txLink = "https://polygonscan.com/tx/" + txHash;
-    fromLink = "https://bscscan.com/address/" + fromAddress;
+    txText = "View TX on Polygonscan";
+    fromLink = "https://polygonscan.com/address/" + fromAddress;
     fromText = "View Sender on Polygonscan";
   } else if(txChain === "Optimism"){
     txLink = "https://optimistic.etherscan.io/tx/" + txHash;
+    txText = "View TX on OP Etherscan";
     fromLink = "https://optimistic.etherscan.io/address/" + fromAddress;
-    fromText = "View Sender on OEtherscan";
+    fromText = "View Sender on OP Etherscan";
   }
 
 
