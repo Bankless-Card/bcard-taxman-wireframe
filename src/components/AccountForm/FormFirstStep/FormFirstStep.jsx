@@ -75,7 +75,7 @@ const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry }) =>
           )}
 
           <p className={styles.form_first_step_label}>
-            Choose your country of taxation
+            Choose your country of residence
           </p>
           <div className={styles.select_container}>
             <select 
