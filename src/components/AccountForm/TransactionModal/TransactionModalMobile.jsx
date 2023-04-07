@@ -35,9 +35,9 @@ const TransactionModalMobile = (props) => {
     fromText = "View Sender on Polygonscan";
   } else if(txChain === "Optimism"){
     txLink = "https://optimistic.etherscan.io/tx/" + txHash;
-    txText = "View Sender on OEtherscan";
+    txText = "View Sender on OP Etherscan";
     fromLink = "https://optimistic.etherscan.io/address/" + fromAddress;
-    fromText = "View Sender on OEtherscan";
+    fromText = "View Sender on OP Etherscan";
   }
 
   return (
