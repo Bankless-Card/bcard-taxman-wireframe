@@ -30,25 +30,7 @@ const FormSecondStep = ({ currentStep, activeAssets, setActiveAssets }) => {
                 onChange={(e) => setActiveAssets(e.target.checked ? [...activeAssets, "BANK"] : activeAssets.filter((asset) => asset !== "BANK"))}
               />
               <label htmlFor="BANK">Bankless DAO (BANK)</label>
-            </div>
-            <div className={styles.row}>
-              <input 
-                type="checkbox" 
-                id="DAI" 
-                defaultChecked={activeAssets.includes("DAI")}
-                onChange={(e) => setActiveAssets(e.target.checked ? [...activeAssets, "DAI"] : activeAssets.filter((asset) => asset !== "DAI"))}
-              />
-              <label htmlFor="DAI">DAI</label>
-            </div>
-            <div className={styles.row}>
-              <input 
-                type="checkbox" 
-                id="WETH" 
-                defaultChecked={activeAssets.includes("WETH")}
-                onChange={(e) => setActiveAssets(e.target.checked ? [...activeAssets, "WETH"] : activeAssets.filter((asset) => asset !== "WETH"))}
-              />
-              <label htmlFor="WETH">WETH</label>
-            </div>
+            </div>            
             <div className={styles.row}>
               {/* <input type="checkbox" id="1INCH" /> */}
               <input 
@@ -89,7 +71,6 @@ const FormSecondStep = ({ currentStep, activeAssets, setActiveAssets }) => {
               />
               <label htmlFor="POKT">Pocket DAO (POKT)</label>
             </div>
-
             <div className={styles.row}>
               {/* <input type="checkbox" id="POOL" /> */}
               <input 
@@ -98,13 +79,31 @@ const FormSecondStep = ({ currentStep, activeAssets, setActiveAssets }) => {
                 defaultChecked={activeAssets.includes("POOL")}
                 onChange={(e) => setActiveAssets(e.target.checked ? [...activeAssets, "POOL"] : activeAssets.filter((asset) => asset !== "POOL"))}
               />
-              <label htmlFor="POOL"> Pool Together (POOL)</label>
+              <label htmlFor="POOL">Pool Together (POOL)</label>
+            </div>
+            <div className={styles.row}>
+              <input 
+                type="checkbox" 
+                id="DAI" 
+                defaultChecked={activeAssets.includes("DAI")}
+                onChange={(e) => setActiveAssets(e.target.checked ? [...activeAssets, "DAI"] : activeAssets.filter((asset) => asset !== "DAI"))}
+              />
+              <label htmlFor="DAI">DAI</label>
+            </div>
+            <div className={styles.row}>
+              <input 
+                type="checkbox" 
+                id="WETH" 
+                defaultChecked={activeAssets.includes("WETH")}
+                onChange={(e) => setActiveAssets(e.target.checked ? [...activeAssets, "WETH"] : activeAssets.filter((asset) => asset !== "WETH"))}
+              />
+              <label htmlFor="WETH">WETH</label>
             </div>
           </div>
 
           <p className={styles.warning}>
-            If your DAO doesn´t appear here. You can tweet @us:
-            twitter.com/BanklessCard
+            If your DAO doesn´t appear here. You can tweet us:&nbsp;
+            <a href="https://twitter.com/BanklessCard">@BanklessCard</a>
           </p>
         </motion.div>
       )}

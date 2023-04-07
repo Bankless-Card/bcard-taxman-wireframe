@@ -23,16 +23,15 @@ const TitleContent = () => {
           </div>
           <div>
             <p className={styles.title_paragraph}>Taxman is a quick and easy tool to help you calculate your DAO income taxes.</p>
-            <ul>
+            <ul className={styles.title_benefit_list}>
               <li>
                 <b>FAST</b> - you can finish your DAO income taxes in 5 minutes
               </li>
               <li>
-                <b>FREE</b> - No credit card or crypto payment required BUILT
-                FOR
+                <b>FREE</b> - No credit card or crypto payment required 
               </li>
               <li>
-                <b>DAO CONTRIBUTORS</b> - we automatically filter out any
+                <b>BUILT FOR DAO CONTRIBUTORS</b> - we automatically filter out any
                 transactions that aren't DAO income
               </li>
             </ul>
