@@ -1,48 +1,42 @@
 import React, { useState } from "react";
 import styles from "./styles.module.css";
 import { useUI } from "../../../context/UIContext";
-import TransactionListItemComponent from "../TransactionList/TransactionListItemComponent";
+// import TransactionListItemComponent from "../TransactionList/TransactionListItemComponent";
 import TransactionModalButtons from "./TransactionModalButtons";
+
+import { copyToClipboard } from "../../../functions/copyToClipboard";
 
 const TransactionModal = (props) => {
   const [, { setShowTransactionModal }] = useUI();
 
-  console.log(props.activeItem);
+  console.log(props.activeItem);    // gets the active item from the props
 
   let txDate = new Date(props.activeItem.metadata.blockTimestamp);
-  // console.log(txDate.toLocaleString());
 
   // wallet state
-  const [walletText, setWalletText] = useState(
-    props.activeItem.from
-  );
+  const [walletText, setWalletText] = useState(props.activeItem.from);
 
-  //const [activeItem, setActiveItem] = useState();
+  // // Function for copying
+  // function copyToClipboard(text) {
+  //   const tempElement = document.createElement("textarea");
+  //   tempElement.value = text;
+  //   document.body.appendChild(tempElement);
 
-  // console.log(activeItem);
-  // console.log(txData);
+  //   tempElement.select();
+  //   tempElement.setSelectionRange(0, 99999);
 
-  // Function for coying
-  function copyToClipboard(text) {
-    const tempElement = document.createElement("textarea");
-    tempElement.value = text;
-    document.body.appendChild(tempElement);
+  //   document.execCommand("copy");
 
-    tempElement.select();
-    tempElement.setSelectionRange(0, 99999);
+  //   document.body.removeChild(tempElement);
+  // }
 
-    document.execCommand("copy");
+  // function toggleIncomeClick(){
+  //   // also need to buffer the state of the income switch in case CANCEL is pressed and we need to revert
 
-    document.body.removeChild(tempElement);
-  }
+  //   // console.log(props.activeItem.incomeState);
+  //   props.activeItem.incomeState = !props.activeItem.incomeState;
 
-  function toggleIncomeClick(){
-    // also need to buffer the state of the income switch in case CANCEL is pressed and we need to revert
-
-    console.log(props.activeItem.incomeState);
-    props.activeItem.incomeState = !props.activeItem.incomeState;
-
-  }
+  // }
 
   // console.log(item);
 
@@ -77,16 +71,8 @@ const TransactionModal = (props) => {
               justifyContent: "space-around",
             }}
           >
-            {/* <TransactionListItemComponent
-              id={1}
-              avatar_url="./img/dao.jpg"
-              userName="Bankless DAO"
-              crypto="20000 BANKS"
-              currency="$48.77 CAD"
-            /> */}
             <div>
               <p className={styles.transaction_date}>
-                {/* November 20, 2022 | 18:30 EST */}
                 { txDate.toGMTString() }
               </p>
               <button 
@@ -131,7 +117,7 @@ const TransactionModal = (props) => {
                   type="checkbox" 
                   onChange={() => {
                     console.log("toogleIncomeClicked");
-                    toggleIncomeClick();
+                    props.activeItem.incomeState = !props.activeItem.incomeState;
                   }}
                   defaultChecked={props.activeItem.incomeState}
                 />
