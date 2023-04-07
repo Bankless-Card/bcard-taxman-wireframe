@@ -113,6 +113,7 @@ const AccountForm = () => {
                     {step === 3 && 
                       <FormThirdStep 
                         currentStep={step} 
+                        address={address}
                         txData={txData} 
                         loading={loading}
                         setActiveItem={setActiveItem} 

@@ -7,7 +7,7 @@ import Spinner from "../Spinner";
 // I recommend to add a loader spiner while the data is loaading on Transaction List, this is an example
 // this settimeOut is to simulate this behavior
 
-const FormThirdStep = ({ currentStep, txData, setActiveItem, loading }) => { 
+const FormThirdStep = ({ currentStep, address, txData, setActiveItem, loading }) => { 
 
   // useEffect(() => {
 
@@ -30,10 +30,11 @@ const FormThirdStep = ({ currentStep, txData, setActiveItem, loading }) => {
           className={styles.form_third_step}
         >
           <p className={styles.form_third_step_title}>
-            We’ve automatically classified your transactions
+            <span title={address}>
+            Your transactions</span>
           </p>
           <p className={styles.form_third_step_label}>
-            Verify that each one is correct.
+            Click any line to view details and mark if it's 'Not Income'. Click Save to go to next line.
           </p>
           <>{loading ? <Spinner /> : <TransactionList txData={txData} setActiveItem={setActiveItem} />}</>
         </motion.div>
