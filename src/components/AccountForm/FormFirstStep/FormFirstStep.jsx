@@ -14,10 +14,12 @@ const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry }) =>
   const [countryNames, setCountryNames] = useState([]);
   useEffect(() => {
     const getCOuntryNames = async () => {
-      const response = await fetch(
+      /*const response = await fetch(
         "https://restcountries.com/v3.1/all?fields=name"
       );
-      const data = await response.json();
+      const data = await response.json();*/
+
+      const data = [{"name":{"common":"Canada","official":"Canada","nativeName":{"eng":{"official":"Canada","common":"Canada"},"fra":{"official":"Canada","common":"Canada"}}}}, {"name":{"common":"United States","official":"United States of America","nativeName":{"eng":{"official":"United States of America","common":"United States"}}}}]
 
       //console.log(data);
       // console.log("Order alhabetically by country name:");
@@ -53,6 +55,7 @@ const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry }) =>
             What’s your ETH address?
           </p>
           <input 
+            className={styles.form_first_step_ETH}
             type="text" 
             defaultValue={address}
             onChange={(e) => 
@@ -68,11 +71,11 @@ const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry }) =>
           {isConnected ? (
             <p></p>
           ) : (
-            <p><Web3Button /> to use your connected account</p>
+            <Web3Button />
           )}
 
           <p className={styles.form_first_step_label}>
-            Choose your country of taxation
+            Choose your country of residence
           </p>
           <div className={styles.select_container}>
             <select 

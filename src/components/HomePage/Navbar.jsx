@@ -37,7 +37,6 @@ const Navbar = () => {
             </a>
           </li>
         ))}
-        <li><Web3Button /></li>
       </ul>
       {/* Menu icon */}
       <div className={styles.menu_mobile_icon_container} onClick={handleClick}>
