@@ -60,7 +60,7 @@ const FormFourthStep = ({txData, activeAssets, country, tax, setTax}) => {
           </div>
         </div>
         <div className={styles.row_total}>
-          <p>INCOME TO CLAIM:</p>
+          <p>TOTAL TAX OWED:</p>
           <p>{incomeDisplay}</p>
         </div>
         {showEmailInput && (
