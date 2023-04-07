@@ -41,7 +41,7 @@ const AccountForm = () => {
   const [txData, setTxData] = useState([]);
   const [loading, setLoading] = useState(true); // loading state for tx data
   const [activeItem, setActiveItem] = useState(null);
-  const [tax, setTax] = useState(100);
+  const [tax, setTax] = useState(20);
 
   const { address, isConnected } = useAccount();
 
