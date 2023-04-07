@@ -2,7 +2,7 @@
 import { Email } from './smtpjsv3'; 
 import { ELASTICMAIL_SECURETOKEN } from '../data/env.tsx'; 
 
-export function emailData(userEmail, activeAssets, txData, tax, csvData) {
+export function emailData(country, userEmail, activeAssets, txData, tax, csvData) {
 
     // console.log(userEmail, txData, csvData);
 
@@ -15,9 +15,17 @@ export function emailData(userEmail, activeAssets, txData, tax, csvData) {
   
 
     let fiatCode = "CAD";
+    if(country === "Canada"){
+      fiatCode = "CAD";
+    } else if(country === "United States"){
+      fiatCode = "USD";
+    } else if(country === "United Kingdom"){
+      // not available yet
+    } else {
+      fiatCode = "CAD";
+    }
 
-    // let assetList = ["BANK", "WETH", "DAI"];
-
+    
     let totalBANK = 0;
     let totalWETH = 0;
     let totalDAI = 0;
