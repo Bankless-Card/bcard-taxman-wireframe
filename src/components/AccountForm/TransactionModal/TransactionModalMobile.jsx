@@ -11,12 +11,33 @@ const TransactionModalMobile = (props) => {
 
   let txDate = new Date(props.activeItem.metadata.blockTimestamp);
 
-  function viewSenderOnExplorer(){
+  // function viewSenderOnExplorer(){
 
-  }
+  // }
 
-  function viewTxOnExplorer(){
+  // function viewTxOnExplorer(){
 
+  // }
+
+  let txChain = props.activeItem.chain;
+  let txHash = props.activeItem.hash;
+  let txLink = "https://etherscan.io/tx/" + txHash;   //default eth
+  let txText = "View TX on Etherscan";
+  let fromAddress = props.activeItem.from;
+  let fromLink = "https://etherscan.io/address/" + fromAddress;  //default eth
+  let fromText = "View Sender on Etherscan";
+  
+  // prepare the links per chain
+  if(txChain === "Polygon"){
+    txLink = "https://polygonscan.com/tx/" + txHash;
+    txText = "View Sender on Polygonscan";
+    fromLink = "https://polygonscan.com/address/" + fromAddress;
+    fromText = "View Sender on Polygonscan";
+  } else if(txChain === "Optimism"){
+    txLink = "https://optimistic.etherscan.io/tx/" + txHash;
+    txText = "View Sender on OEtherscan";
+    fromLink = "https://optimistic.etherscan.io/address/" + fromAddress;
+    fromText = "View Sender on OEtherscan";
   }
 
   return (
@@ -62,9 +83,11 @@ const TransactionModalMobile = (props) => {
                 </p>
                 <button 
                   className={styles.tx_button}
-                  onClick={() => window.open("https://etherscan.io/tx/"+props.activeItem.hash, '_blank')}
+                  onClick={() => window.open(txLink, '_blank')}
                 >
-                  <p className={styles.tx_button_text}>View TX on Etherscan</p>
+                  <p className={styles.tx_button_text}>
+                    {txText}
+                  </p>
                 </button>
               </div>
               {/* walllet text  */}
@@ -81,9 +104,11 @@ const TransactionModalMobile = (props) => {
 
                 <button 
                   className={styles.tx_button}
-                  onClick={() => window.open("https://etherscan.io/address/"+walletText, '_blank')}
+                  onClick={() => window.open(fromLink, '_blank')}
                 >
-                  <p className={styles.tx_button_text}>View Sender on Etherscan</p>
+                  <p className={styles.tx_button_text}>
+                    {fromText}
+                  </p>
                 </button>
               </div>
               {/* Income switch */}

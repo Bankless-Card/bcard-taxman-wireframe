@@ -139,6 +139,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
       thisRow.tokenLabel = getTokenLabel(thisRow.asset);
       thisRow.incomeState = incomeState;    // "NOT" for unmatched txs by default
       thisRow.crypto = displayTokenAmount(thisRow.value,thisRow.asset);
+      thisRow.chain = "Ethereum";
 
       if(activeAssets.includes(thisRow.asset)){
         // incomeState = true;
@@ -168,6 +169,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
       thisRow.tokenLabel = getTokenLabel(thisRow.asset);
       thisRow.incomeState = incomeState;    // "NOT" for unmatched txs by default
       thisRow.crypto = displayTokenAmount(thisRow.value,thisRow.asset);
+      thisRow.chain = "Polygon";
 
       if(activeAssets.includes(thisRow.asset)){
         // incomeState = true;
@@ -201,6 +203,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
         thisRow.tokenLabel = getTokenLabel(thisRow.asset);
         thisRow.incomeState = incomeState;    // "NOT" for unmatched txs by default
         thisRow.crypto = displayTokenAmount(thisRow.value,thisRow.asset);
+        thisRow.chain = "Optimism";
 
         if(activeAssets.includes(thisRow.asset)){
           // incomeState = true;

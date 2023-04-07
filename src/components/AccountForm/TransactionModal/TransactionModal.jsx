@@ -9,6 +9,9 @@ import { copyToClipboard } from "../../../functions/copyToClipboard";
 const TransactionModal = (props) => {
   const [, { setShowTransactionModal }] = useUI();
 
+  // if it is shown already showTransactionModal = true
+  // then we need to close the curren tinstance before opening a new one.
+
   console.log(props.activeItem);    // gets the active item from the props
 
   let txDate = new Date(props.activeItem.metadata.blockTimestamp);
@@ -46,6 +49,26 @@ const TransactionModal = (props) => {
   // etherscan link - needs tx hash
   // tx date (nice format)
 
+  let txChain = props.activeItem.chain;
+  let txHash = props.activeItem.hash;
+  let txLink = "https://etherscan.io/tx/" + txHash;   //default eth
+  let txText = "View TX on Etherscan";
+  let fromAddress = props.activeItem.from;
+  let fromLink = "https://etherscan.io/address/" + fromAddress;  //default eth
+  let fromText = "View Sender on Etherscan";
+  
+  // prepare the links per chain
+  if(txChain === "Polygon"){
+    txLink = "https://polygonscan.com/tx/" + txHash;
+    fromLink = "https://bscscan.com/address/" + fromAddress;
+    fromText = "View Sender on Polygonscan";
+  } else if(txChain === "Optimism"){
+    txLink = "https://optimistic.etherscan.io/tx/" + txHash;
+    fromLink = "https://optimistic.etherscan.io/address/" + fromAddress;
+    fromText = "View Sender on OEtherscan";
+  }
+
+
   return (
     <>
       <div
@@ -77,9 +100,11 @@ const TransactionModal = (props) => {
               </p>
               <button 
                 className={styles.tx_button}
-                onClick={() => window.open("https://etherscan.io/tx/"+props.activeItem.hash, '_blank')}
+                onClick={() => window.open(txLink, '_blank')}
               >
-                <p className={styles.tx_button_text}>View TX on Etherscan</p>
+                <p className={styles.tx_button_text}>
+                  {txText}
+                </p>
               </button>
             </div>
             {/* walllet text  */}
@@ -99,9 +124,11 @@ const TransactionModal = (props) => {
 
               <button 
                 className={styles.tx_button}
-                onClick={() => window.open("https://etherscan.io/address/"+walletText, '_blank')}
+                onClick={() => window.open(fromLink, '_blank')}
               >
-                <p className={styles.tx_button_text}>View Sender on Etherscan</p>
+                <p className={styles.tx_button_text}>
+                  {fromText}
+                </p>
               </button>
             </div>
             {/* Income switch */}
