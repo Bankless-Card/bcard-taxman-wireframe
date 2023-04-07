@@ -37,7 +37,8 @@ const AccountForm = () => {
 
   const [addrOverride, setAddrOverride] = useState("");
   const [country, setCountry] = useState("Canada");
-  const [activeAssets, setActiveAssets] = useState(["BANK","WETH", "DAI"]);
+  // assets default: DAO's on, WETH, DAI off
+  const [activeAssets, setActiveAssets] = useState(["BANK", "ANT", "MKR", "1INCH", "POKT", "POOL"]);
   const [txData, setTxData] = useState([]);
   const [loading, setLoading] = useState(true); // loading state for tx data
   const [activeItem, setActiveItem] = useState(null);
