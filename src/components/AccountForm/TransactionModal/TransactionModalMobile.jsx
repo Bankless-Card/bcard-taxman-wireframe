@@ -1,11 +1,24 @@
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./styles.module.css";
 import { useUI } from "../../../context/UIContext";
-import TransactionListItemComponent from "../TransactionList/TransactionListItemComponent";
+// import TransactionListItemComponent from "../TransactionList/TransactionListItemComponent";
 import TransactionModalButtons from "./TransactionModalButtons";
 
-const TransactionModalMobile = () => {
+import { copyToClipboard } from "../../../functions/copyToClipboard";
+
+const TransactionModalMobile = (props) => {
   const [, { setShowTransactionModal }] = useUI();
+
+  let txDate = new Date(props.activeItem.metadata.blockTimestamp);
+
+  function viewSenderOnExplorer(){
+
+  }
+
+  function viewTxOnExplorer(){
+
+  }
+
   return (
     <AnimatePresence>
       <motion.div
@@ -35,35 +48,42 @@ const TransactionModalMobile = () => {
                 justifyContent: "space-around",
               }}
             >
-              <TransactionListItemComponent
+              {/* <TransactionListItemComponent
                 id={1}
                 avatar_url="./img/dao.jpg"
                 userName="Bankless DAO"
                 crypto="20000 BANKS"
                 currency="$48.77 CAD"
-              />
+              /> */}
               <div>
                 <p className={styles.transaction_date}>
-                  November 20, 2022 | 18:30 EST
+                  {/* November 20, 2022 | 18:30 EST */}
+                  {txDate.toGMTString()}
                 </p>
-                <button className={styles.tx_button}>
+                <button 
+                  className={styles.tx_button}
+                  onClick={() => window.open("https://etherscan.io/tx/"+props.activeItem.hash, '_blank')}
+                >
                   <p className={styles.tx_button_text}>View TX on Etherscan</p>
                 </button>
               </div>
               {/* walllet text  */}
               <div>
-                <div className={styles.wallet_container}>
+                <div className={styles.wallet_container} onClick={copyToClipboard(props.activeItem.from)}>
                   <div className={styles.wallet_container_inner}>
                     <p>From:</p>
                     <p className={styles.wallet_container_inner_walletText}>
-                      0xb794f5ea0ba39494ce839613fffba74279579268
+                      {props.activeItem.from}
                     </p>
                   </div>
                   <img src="./img/copy.svg" />
                 </div>
 
-                <button className={styles.tx_button}>
-                  <p className={styles.tx_button_text}>View TX on Etherscan</p>
+                <button 
+                  className={styles.tx_button}
+                  onClick={() => window.open("https://etherscan.io/address/"+walletText, '_blank')}
+                >
+                  <p className={styles.tx_button_text}>View Sender on Etherscan</p>
                 </button>
               </div>
               {/* Income switch */}
@@ -74,9 +94,16 @@ const TransactionModalMobile = () => {
                   </span>
                   Not Income
                 </p>
-                <label class={styles.switch}>
-                  <input type="checkbox" checked />
-                  <span class={styles.slider}></span>
+                <label className={styles.switch}>
+                <input 
+                  type="checkbox" 
+                  onChange={() => {
+                    console.log("toogleIncomeClicked");
+                    props.activeItem.incomeState = !props.activeItem.incomeState;
+                  }}
+                  defaultChecked={props.activeItem.incomeState}
+                />
+                  <span className={styles.slider}></span>
                 </label>
                 <p>
                   <span>

@@ -30,17 +30,33 @@ const TransactionListItemComponent = ({
           <img src={img_url} className={styles.avatar_img} />
           <div className={styles.inner_container}>
             <p className={styles.avatar_userName}>{tokenLabel}</p>
-            <p className={styles.income_received}>
+
+            {incomeState ? (
+            <p className={styles.income_received}>    
               <span>
                 {" "}
                 <img
                   style={{ width: "10px" }}
                   src="./img/inBadge.png"
-                  alt="icon"
+                  alt="income"
                 />
               </span>{" "}
               Income | Received
             </p>
+            ) : (
+            <p className={styles.income_received}>
+              <span>
+                {" "}
+                <img
+                  style={{ width: "10px" }}
+                  src="./img/close2.svg"
+                  alt="NOT"
+                />
+              </span>{" "}
+              Not Income
+            </p>
+            )}
+
           </div>
         </div>
         <div>
