@@ -18,7 +18,7 @@ const FormSecondStep = ({ currentStep, activeAssets, setActiveAssets }) => {
           className={styles.form_second_step}
         >
           <p className={styles.form_second_step_title}>
-            Which DAOs are you part of?
+            Which DAOs are you in and which other tokens have you received for work done?
           </p>
 
           <div className={styles.daos_scrollable_container}>
