@@ -1,5 +1,4 @@
-import cs from '../style.module.css'
-import { handleOpen } from './handleOpen';
+// import cs from '../style.module.css'
 
 // export function getTokenLogo(asset:any) {
 export function getTokenLabel(asset:any){

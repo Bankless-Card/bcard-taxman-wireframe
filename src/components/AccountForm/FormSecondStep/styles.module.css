@@ -1,0 +1,58 @@
+.form_second_step {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.form_second_step label {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  height: 50px;
+}
+.row {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+input[type="checkbox"] {
+  background-color: #ffdde6 !important;
+  border: none !important;
+  margin-right: 10px;
+}
+.daos_scrollable_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  overflow-y: auto;
+  height: 25vh;
+}
+
+.daos_scrollable_container::-webkit-scrollbar {
+  width: 6px;
+  background-color: #ffdde6;
+}
+
+.daos_scrollable_container::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #c02cae 0%, #f62e54 113.54%);
+}
+.form_second_step_title {
+  font-weight: 500;
+  font-size: 24px;
+  text-align: center;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+.warning {
+  text-align: center;
+}
+
+@media screen and (max-width: 600px) {
+  .form_second_step_title {
+    font-size: 20px;
+  }
+}

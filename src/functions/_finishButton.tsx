@@ -1,18 +1,17 @@
-import cs from '../style.module.css'
-export function finishButton(FIAT:string) {
+import React, { useEffect, useState } from "react";
+import cs from '../style.module.css';
 
-  // console.log("! have to pre-setup the output div in the DOM - app.tsx");
+import { emailData } from "./emailData";
 
-  console.log("finish button has been clicked");
+export function finishButton(txData:any) {
 
-  // find all clickable elements and add event listener
-  // let clickable = document.querySelectorAll(cs.clickable);
-  // console.log(clickable);
+  // const [txData, setTxData] = useState();
 
-  // change the background image
-  document.body.style.backgroundImage = "url('./src/img/bg.jpg')";
+  let assetList = ["BANK", "WETH", "DAI"];
 
-  // output the displayed tx summary
+  // console.log(txData);
+
+    // output the displayed tx summary
   let totalIncome = 0;
   let totalBalance = 0;
 
@@ -24,6 +23,61 @@ export function finishButton(FIAT:string) {
   let totalMKR = 0;
   let totalPOKT = 0;
   let totalPOOL = 0;
+
+  txData.forEach(chainList => {
+    //console.log(chainList);
+    console.log(chainList.title);
+
+    chainList.transactions.forEach(tx => {
+
+      if(assetList.includes(tx.asset)){
+        //its an actively tracked token
+        // console.log(tx);
+
+        if(tx.incomeState){
+          // console.log("this is an INCOME tx");
+          console.log(tx.crypto, tx.currency);
+
+          if(tx.asset === "BANK"){
+            totalBANK += tx.value;
+          } else if(tx.asset === "WETH"){
+            totalWETH += tx.value;
+          } else if(tx.asset === "DAI"){
+            totalDAI += tx.value;
+          }
+
+          totalIncome += parseFloat(tx.currency.split(" ")[1]);
+        } else {
+          // not income, dont sum it
+        }
+      }
+
+    });
+  });
+
+  // call the function to build the csv
+
+  // call the function to capture the user email and wallet address
+
+  // call the function to send the user the email with the csv
+
+  /* Everything else afer here obsolete? */
+  /* redo basics as jsx instead of tsx? */
+
+  // console.log("! have to pre-setup the output div in the DOM - app.tsx");
+
+  console.log("finish button has been clicked");
+
+  // find all clickable elements and add event listener
+
+  // change the background image
+  // document.body.style.backgroundImage = "url('./img/bg.jpg')";
+
+
+
+  let FIAT = "CAD";
+
+  let htmlDataOut = "";
 
 
   // let totalBANKincome = 0;
@@ -153,39 +207,46 @@ export function finishButton(FIAT:string) {
   // DOM Output
   // console.log(totalIncome.toFixed(2), totalBalance.toFixed(3));
 
-  let txSummary = document.getElementById("txSummary");
+  // let txSummary = document.getElementById("txSummary");
 
-  if(txSummary){
+  if(true){
 
     // check out which checkboxes are enabled on DAO select
-    let daoSelect = document.getElementById("dao-select");
-    let daoCheckboxes = daoSelect!.querySelectorAll("input[type=checkbox]");
-    let daoNames:any = [];
-    [].forEach.call(daoCheckboxes, function (el:any) {
-      if(el.checked){
-        console.log(el);
-        daoNames.push(el.id);
-      }
-    });
+    // let daoSelect = document.getElementById("dao-select");
+    // let daoCheckboxes = daoSelect!.querySelectorAll("input[type=checkbox]");
+    // let daoNames:any = [];
+    // [].forEach.call(daoCheckboxes, function (el:any) {
+    //   if(el.checked){
+    //     console.log(el);
+    //     daoNames.push(el.id);
+    //   }
+    // });
 
-    console.log(daoNames);
+    let daoNames = ["BANK", "WETH", "DAI"];
+
+    // console.log(daoNames);
+
+    console.log("TODO: really use the tax rate input");
+    console.log("TODO: Create a HDD file to store the user data");
+    console.log("TODO: Create a temp file to store the user csv");
 
     // add class to txSummary
 
     let taxRate = 100;
-    txSummary.innerHTML = "<p>Ensure all DAO tokens you want included are checked in <a href='#dao-page'>DAO select</a> above & flagged as income in the <a href='#tx-page'>tx list</a>.</p>";   // empty to start fresh
+    htmlDataOut = totalIncome + "<p>Ensure all DAO tokens you want included are checked in <a href='#dao-page'>DAO select</a> above & flagged as income in the <a href='#tx-page'>tx list</a>.</p>";   // empty to start fresh
 
     console.log(totalIncome.toFixed(2), totalBalance.toFixed(3));
 
     if(daoNames.includes("BANK")){
-      txSummary.innerHTML += "<h3>2022 BANK income: <span id=totalBANK>"+totalBANK.toFixed(3)+"</span> BANK</h3>";
+      htmlDataOut += "<h3>2022 BANK income: <span id=totalBANK>"+totalBANK.toFixed(3)+"</span> BANK</h3>";
     } 
     if(daoNames.includes("WETH")){
-      txSummary.innerHTML += "<h3>2022 WETH income: <span id=totalWETH>"+totalWETH.toFixed(3)+"</span> WETH</h3>";
+      htmlDataOut += "<h3>2022 WETH income: <span id=totalWETH>"+totalWETH.toFixed(3)+"</span> WETH</h3>";
     } 
     if(daoNames.includes("DAI")){
-      txSummary.innerHTML += "<h3>2022 DAI income: <span id=totalDAI>"+totalDAI.toFixed(3)+"</span> DAI</h3>";
+      htmlDataOut += "<h3>2022 DAI income: <span id=totalDAI>"+totalDAI.toFixed(3)+"</span> DAI</h3>";
     } 
+<<<<<<< HEAD:src/functions/finishButton.tsx
     if(daoNames.includes("1INCH") && total1INCH > 0){
       txSummary.innerHTML += "<h3>2022 1INCH income: <span id=total1INCH>"+total1INCH.toFixed(3)+"</span> DAI</h3>";
     } 
@@ -206,21 +267,34 @@ export function finishButton(FIAT:string) {
 
       // income needs to be sum of all DAO & selected tokens
     txSummary.innerHTML += "<h3>2022 Total DAO income: "+totalIncome.toFixed(2) + " $"+FIAT+"</h3>";
+=======
+
+
+
+    // income needs to be sum of all DAO tokens
+    htmlDataOut += "<h3>2022 Total DAO income: "+totalIncome.toFixed(2) + " $"+FIAT+"</h3>";
+>>>>>>> dev-merge:src/functions/_finishButton.tsx
   
     // onChange="+changingTax()+"
-    txSummary.innerHTML += "<h3 title='Your tax rate - most countries classify 100% of income from any source as taxable.'>Tax Rate: <input type='number' id='taxRate' value='"+taxRate+"' />%</h3><hr />";
+    htmlDataOut += "<h3 title='Your tax rate - most countries classify 100% of income from any source as taxable.'>Tax Rate: <input type='number' id='taxRate' value='"+taxRate+"' />%</h3><hr />";
 
-    txSummary.innerHTML += "<h2>Total Income to Report: $<span id=totalIncome>"+(totalIncome*taxRate/100).toFixed(2)+"</span></h2>";
+    htmlDataOut += "<h2>Total Income to Report: $<span id=totalIncome>"+(totalIncome*taxRate/100).toFixed(2)+"</span></h2>";
 
-    txSummary.innerHTML += "<h3 title=''><input type='email' class='"+cs.mailSubmit+"' id='mailSubmit' placeholder='Write your email...' /></h3><hr />";
+    htmlDataOut += "<h3 title=''><input type='email' class='"+cs.mailSubmit+"' id='mailSubmit' placeholder='Write your email...' /></h3><hr />";
   
     // enable button for Send to email
-    let exportBtn = document.getElementById(cs.exportBtn);
-    console.log(exportBtn);
-    exportBtn!.style.display = "block";
+    // let exportBtn = document.getElementById(cs.exportBtn);
+    // console.log(exportBtn);
+    // exportBtn!.style.display = "block";
+
+    console.log(totalBANK,totalWETH,totalDAI,totalIncome);
+
+    return [totalIncome, htmlDataOut];
   
   } else  {
     console.log("no txSummary div found");
+
+    return "no txSummary div found";
   }
 }
 

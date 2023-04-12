@@ -1,13 +1,12 @@
-import cs from '../style.module.css'
-// import { handleOpen } from './handleOpen';
 
 export function getTokenLogo(asset:any) {
 
   if(asset === "BANK"){
-    return '<img class='+cs.tokenLogo+' src="./src/img/dao.jpg" alt="Bankless DAO" />';
+    return "/img/token/dao.jpg";
   } else if(asset === "WETH"){
-    return '<img class='+cs.tokenLogo+' src="./src/img/eth-logo.png" alt="Wrapped Ethereum Ether" />';
+    return "/img/token/eth-logo.png";
   } else if(asset === "DAI"){
+<<<<<<< HEAD
     return '<img class='+cs.tokenLogo+' src="./src/img/dai-logo.png" alt="DAI Stablecoin" />';
   } else if(asset === "1INCH"){
     return '<img class='+cs.tokenLogo+' src="./src/img/1inch-logo.png" alt="1INCH Token" />';
@@ -19,6 +18,19 @@ export function getTokenLogo(asset:any) {
     return '<img class='+cs.tokenLogo+' src="./src/img/pokt-logo.png" alt="POKT Network Token" />';
   } else if(asset === "POOL"){
     return '<img class='+cs.tokenLogo+' src="./src/img/pool-logo.png" alt="Pooltogether Token" />';
+=======
+    return "/img/token/dai-logo.png";
+  } else if(asset === "1INCH"){
+    return "/img/token/1inch-logo.png";
+  } else if(asset === "ANT"){
+    return "/img/token/ant-logo.png";
+  } else if(asset === "MKR"){
+    return "/img/token/mkr-logo.png";
+  } else if(asset === "POKT"){
+    return "/img/token/pokt-logo.png";
+  } else if(asset === "POOL"){
+    return "/img/token/pool-logo.png";
+>>>>>>> dev-merge
   }
 
 

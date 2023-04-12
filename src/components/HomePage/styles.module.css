@@ -1,0 +1,313 @@
+.app_container {
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  overflow: hidden;
+  background-image: url("../../../public/img/bg.jpg");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
+
+.app_container_account {
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  overflow: hidden;
+  background-image: url("../../../public/img/bg3.png");
+  background-size: cover;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  transition: background-image 0.5s ease-in-out;
+}
+
+.main {
+  width: 90%;
+  margin: auto;
+}
+.logo {
+  width: 206px;
+  height: 54px;
+  cursor: pointer;
+}
+
+.nav_container {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 45px;
+  position: relative;
+}
+.menu_container {
+  list-style: none;
+  color: white;
+  display: flex;
+  font-size: 16px;
+  gap: 60px;
+}
+.menu_container > li > a {
+  text-decoration: none;
+  color: white;
+}
+.menu_button {
+  background: rgba(220, 190, 238, 0.2);
+  border: 1px solid #ffffff;
+  backdrop-filter: blur(20px);
+  border: 2px solid #ffffff;
+  text-transform: uppercase;
+  padding: 10px 30px;
+  border-radius: 20px;
+  transition: cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+.menu_button:hover {
+  background: rgba(209, 176, 228, 0.667);
+}
+
+.title_container {
+  display: flex;
+  align-items: center;
+  margin-top: 80px;
+  margin-bottom: 30px;
+}
+
+.title_container h1 {
+  margin: 0;
+  font-size: 145px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+  margin-right: 40px;
+}
+
+.title_container h2 {
+  font-weight: 400;
+  font-size: 32px;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+
+.title_paragraph {
+  font-weight: 400;
+  font-size: 16px;
+  width: 40%;
+}
+
+.title_benefit_list {
+  list-style-type: none;
+  width: 40%;
+}
+
+.footer_container {
+  width: 90%;
+  position: absolute;
+  bottom: 0;
+}
+.footer_container footer {
+  width: 100%;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.footer_container footer p {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 16px;
+}
+
+.special_button_container {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateX(-70px);
+}
+.special_button_container_mobile {
+  display: none;
+}
+
+.special_button {
+  width: 300px;
+  height: 280px;
+  background: rgba(220, 190, 238, 0.2);
+  display: flex;
+  align-items: center;
+  border: 2px solid #ffffff;
+  backdrop-filter: blur(20px);
+  margin-bottom: 40px;
+  /* Note: backdrop-filter has minimal browser support */
+  cursor: pointer;
+  border-radius: 10px;
+  transition: cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.special_button:hover {
+  scale: 1.01;
+}
+.special_button div {
+  display: flex;
+  justify-content: center;
+}
+.special_button img {
+  width: 50px;
+  height: 50px;
+}
+.special_button p {
+  font-weight: 300;
+  font-size: 48px;
+  text-align: end;
+  padding-right: 30px;
+}
+.mobile_menu_button {
+  display: none;
+}
+.menu_mobile_icon_container {
+  display: none;
+}
+.mobile_menu_container {
+  display: none;
+}
+
+@media screen and (max-width: 600px) {
+  .title_container {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    margin-bottom: 20px;
+  }
+  .title_container h1 {
+    font-size: 60px;
+    margin: 0;
+  }
+  .title_container h2 {
+    font-size: 24px;
+  }
+  .title_paragraph {
+    font-weight: 400;
+    font-size: 14px;
+    width: 100%;
+    text-align: center;
+  }
+  .title_benefit_list {
+    width: auto;
+  }
+  .special_button_container {
+    display: none;
+  }
+  .special_button_container_mobile {
+    display: block;
+  }
+  .special_button_mobile {
+    background: rgba(220, 190, 238, 0.2);
+    border: 2px solid #ffffff;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
+    padding: 10px 10px;
+    font-size: 20px;
+    width: 70%;
+    margin: 20px auto;
+  }
+  .special_button_mobile img {
+    width: 30px;
+    height: 30px;
+    margin-bottom: 10px;
+  }
+  .footer_container {
+    width: 90%;
+    position: relative;
+  }
+  .footer_container footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 70px;
+  }
+  .footer_container footer p {
+    text-align: center;
+  }
+  .footer_container ul {
+    max-width: 180px;
+  }
+  .menu_container {
+    display: none;
+  }
+  .mobile_menu_button {
+    display: block;
+  }
+  .main {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .menu_mobile_icon_container {
+    display: block;
+    height: 50px;
+    width: 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 1000;
+  }
+  .menu_mobile_icon_row {
+    background: linear-gradient(180deg, #c02cad 0%, #f42e57 100%);
+    border-radius: 40px;
+    width: 100%;
+    height: 8px;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .menu_mobile_icon_row.active {
+    background-color: #fff;
+  }
+
+  .menu_mobile_icon_row.active:first-child {
+    transform: rotate(45deg) translate(8px, 26px);
+  }
+
+  .menu_mobile_icon_row.active:nth-child(2) {
+    opacity: 0;
+  }
+
+  .menu_mobile_icon_row.active:last-child {
+    transform: rotate(-45deg) translate(5px, -21px);
+  }
+  .mobile_menu_container {
+    display: block;
+    height: 100vh;
+    width: 100vw;
+    background: #ffdde6;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+  }
+  .mobile_menu_list {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .mobile_menu_list_item {
+    list-style: none;
+    font-weight: 500;
+    background: linear-gradient(90deg, #c02cae 0%, #f62e54 113.54%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-fill-color: transparent;
+    font-size: 50px;
+    padding-top: 20px;
+    padding-right: 20px;
+  }
+  .mobile_menu_list_item a {
+    text-decoration: none;
+  }
+}

@@ -1,0 +1,103 @@
+p {
+  margin: 0px;
+}
+.transaction_list_container {
+  height: 35vh;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  padding-right: 10px;
+}
+/* Cambiar el color de fondo de la barra de desplazamiento */
+.transaction_list_container::-webkit-scrollbar {
+  width: 6px;
+  background-color: #ffdde6;
+}
+
+/* Cambiar el color del cursor de la barra de desplazamiento */
+.transaction_list_container::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #c02cae 0%, #f62e54 113.54%);
+}
+.list_item_container {
+  border-bottom: solid 1px white;
+  margin: 20px 0;
+}
+.date {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  margin-bottom: 16px;
+  /* color */
+  background: linear-gradient(90deg, #c02cae 0%, #f62e54 113.54%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+.inner_container {
+  margin-left: 10px;
+}
+.item_container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  cursor: pointer;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-radius: 10px;
+}
+.item_container:hover {
+  background: rgba(255, 221, 230, 0.2);
+}
+.avatar_container {
+  display: flex;
+  align-items: center;
+}
+
+.avatar_img {
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+}
+
+.income_received {
+  font-family: "Roboto";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  text-decoration-line: underline;
+  background: linear-gradient(90deg, #c02cae 0%, #f62e54 113.54%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
+
+.avatar_userName {
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.crypto {
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+}
+
+.currency {
+  font-family: "Roboto" sans-serif;
+  font-weight: 500;
+  font-size: 10px;
+  text-align: right;
+
+  /* color */
+  background: linear-gradient(90deg, #c02cae 0%, #f62e54 113.54%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
+}
