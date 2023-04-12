@@ -11,10 +11,6 @@ export default defineConfig({
     global: "globalThis",
   },
   base: "/",
-<<<<<<< HEAD
-=======
-
->>>>>>> dev-merge
   resolve: {
     alias: {
       process: "process/browser",
