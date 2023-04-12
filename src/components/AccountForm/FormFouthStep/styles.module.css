@@ -1,0 +1,58 @@
+.form_fourth_step_title {
+  font-weight: 500;
+  font-size: 23px;
+  text-align: center;
+  letter-spacing: 0.04em;
+  margin: 0;
+}
+.row {
+  display: flex;
+  font-size: 16px;
+  align-items: center;
+  justify-content: space-between;
+  font-family: "Inter", sans-serif;
+  text-transform: uppercase;
+  padding: 16px 0px;
+}
+.tax_number_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.row input[type="number"] {
+  width: 70px;
+}
+.porcentage {
+  position: absolute;
+  top: 20px;
+}
+
+.row_total {
+  display: flex;
+  font-size: 16px;
+  font-weight: bold;
+  justify-content: space-between;
+  font-family: "Inter", sans-serif;
+  text-transform: uppercase;
+  padding: 16px 0px;
+  border-top: 1px solid white;
+}
+
+.fourth_step_container input {
+  width: 90%;
+  background: rgba(220, 190, 238, 0.2);
+  border: 1px solid #ffffff;
+  border-radius: 9px;
+  padding: 12px 16px;
+  color: #ffffff;
+  outline: none;
+  margin-top: 8px;
+  font-family: "Inter", sans-serif;
+}
+
+.fourth_step_container input::placeholder {
+  color: #ffffff;
+  font-size: 16px;
+  font-family: "Inter", sans-serif;
+}

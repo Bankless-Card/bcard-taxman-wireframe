@@ -1,0 +1,158 @@
+.form_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 75vh;
+  width: 100%;
+}
+.form_inner_container {
+  width: 80%;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+[data-incomestate="false"] {
+  border-bottom:3px solid red;
+}
+
+.form_container form {
+  width: 430px;
+  height: auto;
+  max-height: 600px;
+  background: rgba(220, 190, 238, 0.2);
+  border: 2px solid #ffffff;
+  backdrop-filter: blur(20px);
+  border-radius: 10px;
+}
+
+.steps_buttons_contaier {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+  height: 50px;
+}
+.step_button {
+  width: 70px;
+  height: 5px;
+  background: #ffdde6;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: background-image 0.5s ease-in-out;
+  border: none;
+}
+.step_button_current {
+  background-image: linear-gradient(
+    to right,
+    #be2bae,
+    #f15e64,
+    #e14e53,
+    #f72d51
+  );
+  width: 70px;
+  height: 5px;
+  border-radius: 40px;
+  transition: background-image 0.5s ease-in-out;
+  border: none;
+}
+.next_step_button {
+  background-image: linear-gradient(
+    to right,
+    #be2bae,
+    #f15e64,
+    #e14e53,
+    #f72d51
+  );
+  box-shadow: 0 5px 15px rgba(242, 97, 103, 0.4);
+  font-size: 16px;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  color: #ffffff;
+  cursor: pointer;
+  width: 100%;
+  border-radius: 9px;
+  padding: 19px 0px;
+  border: none;
+  margin: 18px 0px;
+  transition: all 0.5s ease-in-out;
+  background-size: 300% 100%;
+  moz-transition: all 0.4s ease-in-out;
+  -o-transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.4s ease-in-out;
+  transition: all 0.4s ease-in-out;
+}
+.next_step_button_disabled {
+  font-size: 16px;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  color: #ffffff;
+  cursor: pointer;
+  width: 100%;
+  border-radius: 9px;
+  padding: 19px 0px;
+  border: none;
+  margin: 18px 0px;
+}
+
+.next_step_button:hover {
+  background-position: 100% 0;
+  moz-transition: all 0.4s ease-in-out;
+  -o-transition: all 0.4s ease-in-out;
+  -webkit-transition: all 0.4s ease-in-out;
+  transition: all 0.4s ease-in-out;
+}
+
+.spinner_container {
+  height: 30vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner_img {
+  width: 50px;
+  height: 50px;
+  animation: spin 1s infinite linear;
+}
+
+/* Transaction Modal styles */
+
+.form_container_with_modal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  height: 75vh;
+  width: 100%;
+}
+.form_container_with_modal form {
+  width: 430px;
+  height: auto;
+  max-height: 600px;
+
+  backdrop-filter: blur(20px);
+  border-radius: 10px 0px 0px 10px;
+  border-top: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
+  border-left: 2px solid #ffffff;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media screen and (max-width: 600px) {
+  .step_button {
+    width: 50px;
+  }
+  .step_button_current {
+    width: 50px;
+  }
+}
