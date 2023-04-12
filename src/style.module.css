@@ -10,16 +10,11 @@ body {
   color: #fff;
   padding: 0 0 0px 0;
   margin: 0;
-<<<<<<< HEAD
-
   background-image: url('./img/bg.jpg');
   background-size: cover;
   background-position: center center;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  
-=======
->>>>>>> dev-merge
 }
 
 footer {
