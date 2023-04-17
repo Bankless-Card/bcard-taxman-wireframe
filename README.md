@@ -7,14 +7,25 @@ At its heart, this is a [wagmi](https://wagmi.sh) + [Web3Modal](https://web3moda
 
 The amazing UI was designed by @jasu and developed by @titesan with inception and integration work by @links and additional development by @tomtranmer.
 
+## New tokens requested (in no particular order)
+### To request new tokens added, please tweet at us @BanklessCard
+- USDC
+- USDT
+- FF (forefront)
+- UNITY
+- MATIC
+- WMATIC
+
+
 ## Adding new tokens - a basic guide
-1. Get Info: token label - as output on chain record - e.g. "USDC"
+1. Get Info: data/possibleAssets.jsx - active token label array for possibilities - as output on chain record - e.g. "USDC" Note: Order of display on selection list is determined by the order of this data array.
 ### Make app aware of token in lookup
-2. TOKEN NAME DISPLAY: functions/getTokenLabel.tsx - e.g. if(asset==="USDC"){ return "USDC Stablecoin" }
+2. TOKEN NAME DISPLAY: functions/getTokenLabel.tsx - this will control the output of the NAME of the token in APP e.g. if(asset==="USDC"){ return "USDC Stablecoin" }
 3. TOKEN LOGO DISPLAY: functions/getTokenLogo.tsx - e.g. if(asset === "USDC"){ return "/img/token/usdc-logo.png" } && add file in public/img/token - prefer min. 400x400px min square or transparent image and will be displayed as round. Limit to ~100kB image.
 4. TOKEN DISPLAY AMOUNT (optional override): functions/displayTokenAmount.tsx - for tokens that require a more or fewer than 3 significant digits (i.e. ETH, WBTC) - e.g. if(asset === "WETH"){ return parseFloat(value).toFixed(6) + " " + asset }
 5. TOKEN CONVERT AMOUNT: functions/displayConvertAmount.tsx - e.g. if(asset === "WETH") { //a bit more heavy lifting with this one, requiring data , contact tom }
-
+### Update UI to allow selection of Token
+6. TOKEN VISUAL CHECKBOX: components/AccountForm/FormSecondStep.jsx - updated in possible assets && activeAssets state variable to include new selectable token.
 
 
 

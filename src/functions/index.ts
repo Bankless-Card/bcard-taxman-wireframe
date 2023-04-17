@@ -1,7 +1,6 @@
-// export { toggleAlts } from './toggleAlts'
-// export { toggleDetail } from './toggleDetail'
-// export { toggleSwitch } from './toggleSwitch'
-// export { handleOpen } from './handleOpen'
+
+export { possibleAssets } from '../data/possibleAssets'
+
 export { getTokenLogo } from './getTokenLogo'
 export { getTokenLabel } from './getTokenLabel'
 export { displayTokenAmount } from './displayTokenAmount'

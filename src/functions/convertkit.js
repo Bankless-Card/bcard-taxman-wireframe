@@ -1,10 +1,5 @@
-//const axios = require('axios');
-// import React from 'react';
 import axios from 'axios';
-
-// Replace these with your ConvertKit API key and ConvertKit form ID
-const API_KEY = 'XLzmLAWn9RcqmyHc57xV0g';
-const FORM_ID = '5018315';
+import { CONVERT_KIT_API_KEY, CONVERT_KIT_FORM_ID } from '../data' 
 
 // Data to send in the email TEMPLATE
 // const emailData = {
@@ -20,7 +15,7 @@ export const convertKitEmail = async (email, walletaddress) => {
 
   let emailData = {
     email: email,
-    api_key: API_KEY,
+    api_key: CONVERT_KIT_API_KEY,
     tags: ['3763229'],
     fields: {
       walletaddress: walletaddress
@@ -30,7 +25,7 @@ export const convertKitEmail = async (email, walletaddress) => {
   // Send email using ConvertKit API
   axios({
     method: 'post',
-    url: `https://api.convertkit.com/v3/forms/${FORM_ID}/subscribe`,
+    url: `https://api.convertkit.com/v3/forms/${CONVERT_KIT_FORM_ID}/subscribe`,
     headers: {
       'Content-Type': 'application/json'
     },

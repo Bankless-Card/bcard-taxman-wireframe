@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import styles from "./styles.module.css";
 import { motion, AnimatePresence } from "framer-motion";
 
-function setAssets() {
-
-}
+import { possibleAssets, getTokenLabel } from "../../../functions";
 
 const FormSecondStep = ({ currentStep, activeAssets, setActiveAssets }) => {
+
+  // console.log(activeAssets);
+
   return (
     <AnimatePresence>
       {currentStep == 2 && (
@@ -22,83 +23,19 @@ const FormSecondStep = ({ currentStep, activeAssets, setActiveAssets }) => {
           </p>
 
           <div className={styles.daos_scrollable_container}>
-            <div className={styles.row}>
-              <input 
-                type="checkbox" 
-                id="BANK" 
-                defaultChecked={activeAssets.includes("BANK")}
-                onChange={(e) => setActiveAssets(e.target.checked ? [...activeAssets, "BANK"] : activeAssets.filter((asset) => asset !== "BANK"))}
-              />
-              <label htmlFor="BANK">Bankless DAO (BANK)</label>
-            </div>            
-            <div className={styles.row}>
-              {/* <input type="checkbox" id="1INCH" /> */}
-              <input 
-                type="checkbox" 
-                id="1INCH" 
-                defaultChecked={activeAssets.includes("1INCH")}
-                onChange={(e) => setActiveAssets(e.target.checked ? [...activeAssets, "1INCH"] : activeAssets.filter((asset) => asset !== "1INCH"))}
-              />
-              <label htmlFor="1INCH">1inch (1INCH)</label>
-            </div>
-            <div className={styles.row}>
-              {/* <input type="checkbox" id="ANT" /> */}
-              <input 
-                type="checkbox" 
-                id="ANT" 
-                defaultChecked={activeAssets.includes("ANT")}
-                onChange={(e) => setActiveAssets(e.target.checked ? [...activeAssets, "ANT"] : activeAssets.filter((asset) => asset !== "ANT"))}
-              />
-              <label htmlFor="ANT">Aragon (ANT)</label>
-            </div>
-            <div className={styles.row}>
-              {/* <input type="checkbox" id="MKR" /> */}
-              <input 
-                type="checkbox" 
-                id="MKR" 
-                defaultChecked={activeAssets.includes("MKR")}
-                onChange={(e) => setActiveAssets(e.target.checked ? [...activeAssets, "MKR"] : activeAssets.filter((asset) => asset !== "MKR"))}
-              />
-              <label htmlFor="MKR">Maker DAO (MKR)</label>
-            </div>
-            <div className={styles.row}>
-              {/* <input type="checkbox" id="POKT" /> */}
-              <input 
-                type="checkbox" 
-                id="POKT" 
-                defaultChecked={activeAssets.includes("POKT")}
-                onChange={(e) => setActiveAssets(e.target.checked ? [...activeAssets, "POKT"] : activeAssets.filter((asset) => asset !== "POKT"))}
-              />
-              <label htmlFor="POKT">Pocket DAO (POKT)</label>
-            </div>
-            <div className={styles.row}>
-              {/* <input type="checkbox" id="POOL" /> */}
-              <input 
-                type="checkbox" 
-                id="POOL" 
-                defaultChecked={activeAssets.includes("POOL")}
-                onChange={(e) => setActiveAssets(e.target.checked ? [...activeAssets, "POOL"] : activeAssets.filter((asset) => asset !== "POOL"))}
-              />
-              <label htmlFor="POOL">Pool Together (POOL)</label>
-            </div>
-            <div className={styles.row}>
-              <input 
-                type="checkbox" 
-                id="DAI" 
-                defaultChecked={activeAssets.includes("DAI")}
-                onChange={(e) => setActiveAssets(e.target.checked ? [...activeAssets, "DAI"] : activeAssets.filter((asset) => asset !== "DAI"))}
-              />
-              <label htmlFor="DAI">DAI</label>
-            </div>
-            <div className={styles.row}>
-              <input 
-                type="checkbox" 
-                id="WETH" 
-                defaultChecked={activeAssets.includes("WETH")}
-                onChange={(e) => setActiveAssets(e.target.checked ? [...activeAssets, "WETH"] : activeAssets.filter((asset) => asset !== "WETH"))}
-              />
-              <label htmlFor="WETH">WETH</label>
-            </div>
+
+            {possibleAssets.map((item) => (
+              <div className={styles.row}>
+                <input 
+                  type="checkbox" 
+                  id={item} 
+                  defaultChecked={activeAssets.includes(item)}
+                  onChange={(e) => setActiveAssets(e.target.checked ? [...activeAssets, item] : activeAssets.filter((asset) => asset !== item))}
+                />
+                <label htmlFor={item}>{getTokenLabel(item)} ({item})</label>
+              </div>
+            ))}
+
           </div>
 
           <p className={styles.warning}>

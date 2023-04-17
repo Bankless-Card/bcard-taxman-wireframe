@@ -1,6 +1,4 @@
-// import cs from '../style.module.css'
-
-// export function getTokenLogo(asset:any) {
+// Description: This function returns the label for a given token symbol
 export function getTokenLabel(asset:any){
 
   // dao assets
