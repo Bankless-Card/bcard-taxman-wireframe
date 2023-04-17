@@ -138,7 +138,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
       thisRow.img_url = getTokenLogo(thisRow.asset);      //"./img/dao.jpg";
       thisRow.tokenLabel = getTokenLabel(thisRow.asset);
       thisRow.incomeState = incomeState;    // "NOT" for unmatched txs by default
-      thisRow.crypto = displayTokenAmount(thisRow.value,thisRow.asset);
+      thisRow.crypto = displayTokenAmount(thisRow.value,thisRow.asset, activeAssets);
       thisRow.chain = "Ethereum";
 
       if(activeAssets.includes(thisRow.asset)){
@@ -168,7 +168,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
       thisRow.img_url = getTokenLogo(thisRow.asset);      //"./img/dao.jpg";
       thisRow.tokenLabel = getTokenLabel(thisRow.asset);
       thisRow.incomeState = incomeState;    // "NOT" for unmatched txs by default
-      thisRow.crypto = displayTokenAmount(thisRow.value,thisRow.asset);
+      thisRow.crypto = displayTokenAmount(thisRow.value, thisRow.asset, activeAssets);
       thisRow.chain = "Polygon";
 
       if(activeAssets.includes(thisRow.asset)){
@@ -202,7 +202,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
         thisRow.img_url = getTokenLogo(thisRow.asset);      //"./img/dao.jpg";
         thisRow.tokenLabel = getTokenLabel(thisRow.asset);
         thisRow.incomeState = incomeState;    // "NOT" for unmatched txs by default
-        thisRow.crypto = displayTokenAmount(thisRow.value,thisRow.asset);
+        thisRow.crypto = displayTokenAmount(thisRow.value,  thisRow.asset, activeAssets);
         thisRow.chain = "Optimism";
 
         if(activeAssets.includes(thisRow.asset)){
