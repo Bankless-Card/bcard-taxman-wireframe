@@ -44,6 +44,8 @@ const AccountForm = () => {
   const [activeItem, setActiveItem] = useState(null);
   const [tax, setTax] = useState(20);
 
+  const [finalExport, setFinalExport] = useState("init");
+
   const { address, isConnected } = useAccount();
 
   useEffect(() => {
@@ -127,6 +129,8 @@ const AccountForm = () => {
                         country={country} 
                         tax={tax}
                         setTax={setTax}
+
+                        finalExport={finalExport}
                       />}
                   </div>
                   <FormButton 
@@ -139,6 +143,9 @@ const AccountForm = () => {
                     activeAssets={activeAssets}
                     country={country}
                     tax={tax}
+
+                    setFinalExport={setFinalExport}
+
                     />
                 </div>
               </form>

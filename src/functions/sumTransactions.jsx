@@ -9,8 +9,15 @@ export function sumTransactions(txData, activeAssets) {
 
     // some individuals captured as sample
   let totalBANK = 0;
+  let total1INCH = 0;
+  let totalANT = 0;
+  let totalMKR = 0;
+  let totalPOKT = 0;
+  let totalPOOL = 0;
+
   let totalWETH = 0;
   let totalDAI = 0;
+  let totalUSDC = 0;
 
   // console.log(activeAssets);
 
@@ -30,10 +37,22 @@ export function sumTransactions(txData, activeAssets) {
           //sampe token trackers
           if(tx.asset === "BANK"){
             totalBANK += tx.value;
+          } else if(tx.asset === "1INCH"){
+            total1INCH += tx.value;
+          } else if(tx.asset === "ANT"){
+              totalANT += tx.value;
+          } else if(tx.asset === "MKR"){
+              totalMKR += tx.value;
+          } else if(tx.asset === "POKT"){
+              totalPOKT += tx.value;
+          } else if(tx.asset === "POOL"){
+              totalPOOL += tx.value;
           } else if(tx.asset === "WETH"){
             totalWETH += tx.value;
           } else if(tx.asset === "DAI"){
             totalDAI += tx.value;
+          } else if(tx.asset === "USDC"){
+            totalUSDC += tx.value;
           }
 
           totalIncome += parseFloat(tx.currency.split(" ")[1]);
@@ -47,8 +66,8 @@ export function sumTransactions(txData, activeAssets) {
   });
 
   // console.log("TODO: Create a HDD file to store the user data");
-  console.log(totalIncome, totalBANK, totalWETH, totalDAI);
+  console.log(totalIncome, totalBANK, total1INCH, totalANT, totalMKR, totalPOKT, totalPOOL, totalWETH, totalDAI, totalUSDC );
 
-  return [totalIncome, totalBANK, totalWETH, totalDAI];
+  return [totalIncome, totalBANK, total1INCH, totalANT, totalMKR, totalPOKT, totalPOOL, totalWETH, totalDAI, totalUSDC];
   
 }

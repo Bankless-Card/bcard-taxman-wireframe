@@ -25,9 +25,8 @@ const FormSecondStep = ({ currentStep, activeAssets, setActiveAssets }) => {
           <div className={styles.daos_scrollable_container}>
 
             {possibleAssets.map((item) => (
-              <div className={styles.row}>
+              <div key={item} className={styles.row}>
                 <input 
-                  key={item}
                   type="checkbox" 
                   id={item} 
                   defaultChecked={activeAssets.includes(item)}
@@ -41,7 +40,7 @@ const FormSecondStep = ({ currentStep, activeAssets, setActiveAssets }) => {
 
           <p className={styles.warning}>
             If your DAO doesn´t appear here. You can tweet us:&nbsp;
-            <a href="https://twitter.com/BanklessCard">@BanklessCard</a>
+            <a target="_blank" href="https://twitter.com/BanklessCard">@BanklessCard</a>
           </p>
         </motion.div>
       )}
