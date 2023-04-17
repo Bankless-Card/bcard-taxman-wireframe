@@ -106,11 +106,8 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
     let polyArr = polyRes.transfers;
     let opArr = opRes.transfers;
 
-    // console.log("Get active assets here from index");
-    console.log(country, activeAssets);    // OK
-    // let activeAssets = ["BANK", "WETH", "DAI" ];
+    // console.log(country, activeAssets);    // OK
 
-    // let countryImport = "Canada";   // get this from state variable
     let countryExport = "CAD";   // label for export currency
 
     if(country === "Canada"){
@@ -121,6 +118,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
       countryExport = "CAD";  // default
     }
   
+    // ETH MAINNET
     for (var i=0; i<objArr.length; i++) {
     
       let thisRow = objArr[i];
@@ -142,15 +140,16 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
       thisRow.chain = "Ethereum";
 
       if(activeAssets.includes(thisRow.asset)){
-        // incomeState = true;
+        // incomeState = true;  this is default
       } else {
-        // remove from the tx list - it will be recalled latter if dao selectors are toggled
+        // remove from the tx list - it will be recalled later if dao selectors are toggled
         objArr.splice(i,1);
         // console.log("Removed tx from list: " + thisRow.asset, objArr)
       }
   
     }  
   
+    // POLYGON
     for (var i=0; i<polyArr.length; i++) {
     
       let thisRow = polyArr[i];
@@ -182,6 +181,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
   
     }   // end for all polygon transactions
   
+    // OPTIMISM
     for (var i=0; i<opArr.length; i++) {
     
         let thisRow = opArr[i];
@@ -215,33 +215,30 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
   
     }
   
-      // adjust all txs to fit the format
-      let fullObjArr = {
-        id: 1,
-        title: "Ethereum Mainnet",
-        transactions: objArr,
-      }
-  
-      let fullPolyArr = {
-        id: 2,
-        title: "Polygon Transactions",
-        transactions: polyArr
-      }
-  
-      let fullOpArr = {
-        id: 3,
-        title: "Optimism Transactions",
-        transactions: opArr
-      }
-  
-      const alTxs = [
-        fullObjArr,
-        fullPolyArr,
-        fullOpArr,
-      ];
-      // console.log(alTxs);
-  
-      // return it
+    // adjust all txs to fit the format
+    let fullObjArr = {
+      id: 1,
+      title: "Ethereum Mainnet",
+      transactions: objArr,
+    }
+
+    let fullPolyArr = {
+      id: 2,
+      title: "Polygon Transactions",
+      transactions: polyArr
+    }
+
+    let fullOpArr = {
+      id: 3,
+      title: "Optimism Transactions",
+      transactions: opArr
+    }
+
+    const alTxs = [
+      fullObjArr,
+      fullPolyArr,
+      fullOpArr,
+    ];
   
     return alTxs;
   }

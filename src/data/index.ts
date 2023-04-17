@@ -1,4 +1,8 @@
-export { REACT_APP_ALCHEMY_API_KEY, ELASTICMAIL_SECURETOKEN } from './env'
+export { 
+    REACT_APP_ALCHEMY_API_KEY, 
+    ELASTICMAIL_SECURETOKEN, 
+    CONVERT_KIT_API_KEY, 
+    CONVERT_KIT_FORM_ID } from './env'
 
 export { bankPrices2022 } from './bank_feed_2022'
 export { inchPrices2022 } from './1inch_feed_2022'
