@@ -7,6 +7,12 @@ At its heart, this is a [wagmi](https://wagmi.sh) + [Web3Modal](https://web3moda
 
 The amazing UI was designed by @jasu and developed by @titesan with inttegration work by @links and @tomtranmer.
 
+## Adding new tokens - a basic guide
+1. Get Info: token label - as output on chain record - e.g. "USDC"
+### Make app aware of token in lookup
+2. TOKEN NAME DISPLAY: functions/getTokenLabel.tsx - e.g. if(asset==="USDC"){return "USDC Stablecoin"}
+3. 
+
 # Getting Started
 
 Run `npm run dev` in your terminal, and then open [localhost:5173](http://localhost:5173) in your browser.
