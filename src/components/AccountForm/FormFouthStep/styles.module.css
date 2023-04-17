@@ -12,7 +12,7 @@
   justify-content: space-between;
   font-family: "Inter", sans-serif;
   text-transform: uppercase;
-  padding: 16px 0px;
+  padding: 8px 0px;
 }
 .tax_number_container {
   display: flex;
@@ -28,6 +28,24 @@
   top: 20px;
 }
 
+.email_input {
+  margin-top: 30px
+}
+
+.email_input_done {
+  /* margin-top: 30px; */
+  display: flex;
+  flex-direction:column;
+  justify-content: center;
+  align-items: center;
+}
+
+hr {
+  color:white;
+  border-color:white;
+  border-style: solid;
+}
+
 .row_total {
   display: flex;
   font-size: 16px;
@@ -35,8 +53,8 @@
   justify-content: space-between;
   font-family: "Inter", sans-serif;
   text-transform: uppercase;
-  padding: 16px 0px;
-  border-top: 1px solid white;
+  padding: 12px 0px;
+  /* border-top: 1px solid white; */
 }
 
 .fourth_step_container input {

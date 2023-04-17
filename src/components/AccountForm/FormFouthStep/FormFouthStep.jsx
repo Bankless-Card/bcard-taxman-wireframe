@@ -7,10 +7,10 @@ import styles from "./styles.module.css";
 // import { finishButton } from "../../../functions";
 import { sumTransactions } from "../../../functions/sumTransactions";
 
+import Spinner from "../Spinner";
 
 
-
-const FormFourthStep = ({txData, activeAssets, country, tax, setTax}) => {
+const FormFourthStep = ({txData, activeAssets, country, tax, setTax, finalExport}) => {
   const [{ showEmailInput }] = useUI();
 
   let countryCurrency = "CAD";
@@ -23,13 +23,69 @@ const FormFourthStep = ({txData, activeAssets, country, tax, setTax}) => {
     countryCurrency = "CAD";  // default
   }
 
-  let txSum = sumTransactions(txData, activeAssets)[0];   // this is the total income
+  let txSumOutput = sumTransactions(txData, activeAssets)
+  let txSum = txSumOutput[0];   // this is the total income
+  let bankSum = txSumOutput[1]; // this is the total BANK income
+  let oneInchSum = txSumOutput[2]; // this is the total 1INCH income
+  let antSum = txSumOutput[3]; // this is the total ANT income
+  let mkrSum = txSumOutput[4]; // this is the total MKR income
+  let poktSum = txSumOutput[5]; // this is the total POKT income
+  let poolSum = txSumOutput[6]; // this is the total POOL income
+  let wethSum = txSumOutput[7]; // this is the total WETH income
+  let daiSum = txSumOutput[8]; // this is the total DAI income
+  let usdcSum = txSumOutput[9]; // this is the total USDC income
 
-  let niceFormatIncome = parseFloat( txSum ).toFixed(2);
+  function returnNiceFormat(txSum){
+    return parseFloat( txSum ).toFixed(2);;
+  }
+
+
+  let niceFormatIncome = returnNiceFormat( txSum );
   let curFormatIncome = parseFloat( txSum ).toLocaleString('en-US', { style: 'currency', currency: countryCurrency });
 
   let incomeToClaim = tax * niceFormatIncome / 100;     // this is the amount to claim 100% default
   let incomeDisplay = parseFloat( incomeToClaim ).toLocaleString('en-US', { style: 'currency', currency: countryCurrency });
+
+  function finalExportCase(finalExport) {
+
+    console.log(finalExport);
+
+    let defaultState = (
+      <div id="finalExport" className={styles.email_input}>
+        <p>Enter your email to receive a CSV export of all of your DAO income tax transactions (required for most tax jurisdictions)</p>
+        <input id="userEmail" type="email" placeholder="Write your email..." /> 
+      </div>
+    );
+
+    let loadingDisplay = <Spinner />;
+
+    let finishDisplay = (
+      <div className={styles.email_input_done}>
+        <h2>You have mail! </h2>
+        <p>If you found TaxMan useful, please tell your friends.</p>
+        <a 
+          target="_blank"
+          className="twitter-share-button"
+          href="https://twitter.com/intent/tweet?text=I%20just%20did%20my%20DAO%20Income%20Taxes%20with%20TaxMan%20from%20@BanklessCard%20in%20about%5%minutes!%20taxman.banklesscard.xyz"
+          data-size="large">
+            <img src="img/twitter-logo.png" alt="twitter-logo" style={{ width:"100px"}}/>
+            <p>Share on Twitter</p>
+        </a>
+      </div>
+    );
+
+
+    switch(finalExport) {
+      case "init":
+        return defaultState;
+      case "loading":
+        return loadingDisplay;
+      case "completed":
+        return finishDisplay;
+      default:
+        return loadingDisplay;
+    }
+  }
 
   return (
     <AnimatePresence>
@@ -42,10 +98,77 @@ const FormFourthStep = ({txData, activeAssets, country, tax, setTax}) => {
       >
         <p className={styles.form_fourth_step_title}>Your 2022 Income</p>
         {/* <TransactionListItem transactions={transactionsData[0].transactions} /> */}
-        <div className={styles.row}>
+        
+        {bankSum > 0 && (
+          <div className={styles.row}>
+            <p>Total BANK</p>
+            <p>{returnNiceFormat(bankSum)}</p>
+          </div>  
+        )}
+
+        {oneInchSum > 0 && (
+          <div className={styles.row}>
+            <p>Total 1INCH</p>
+            <p>{returnNiceFormat(oneInchSum)}</p>
+          </div>
+        )}
+
+        {antSum > 0 && (
+          <div className={styles.row}>
+            <p>Total ANT</p>
+            <p>{returnNiceFormat(antSum)}</p>
+          </div>
+        )}
+
+        {mkrSum > 0 && (
+          <div className={styles.row}>
+            <p>Total MKR</p>
+            <p>{returnNiceFormat(mkrSum)}</p>
+          </div>
+        )}
+
+        {poktSum > 0 && (
+          <div className={styles.row}>
+            <p>Total POKT</p>
+            <p>{returnNiceFormat(poktSum)}</p>
+          </div>
+        )}
+
+        {poolSum > 0 && (
+          <div className={styles.row}>
+            <p>Total POOL</p>
+            <p>{returnNiceFormat(poolSum)}</p>
+          </div>
+        )}
+
+        {wethSum > 0 && (
+          <div className={styles.row}>
+            <p>Total WETH</p>
+            <p>{returnNiceFormat(wethSum)}</p>
+          </div>
+        )}
+
+        {daiSum > 0 && (
+          <div className={styles.row}>
+            <p>Total DAI</p>
+            <p>{returnNiceFormat(daiSum)}</p>
+          </div>
+        )}
+
+        {usdcSum > 0 && (
+          <div className={styles.row}>
+            <p>Total USDC</p>
+            <p>{returnNiceFormat(usdcSum)}</p>
+          </div>  
+        )}
+        
+        <hr />
+
+        <div className={styles.row_total}>
           <p>Total Income</p>
           <p>{curFormatIncome}</p>
         </div>
+
         <div className={styles.row}>
           <p>Tax Rate</p>
           <div className={styles.tax_number_container}>
@@ -59,13 +182,20 @@ const FormFourthStep = ({txData, activeAssets, country, tax, setTax}) => {
             <p className={styles.porcentage}>%</p>
           </div>
         </div>
+
         <div className={styles.row_total}>
           <p>TOTAL TAX OWED:</p>
           <p>{incomeDisplay}</p>
         </div>
-        {showEmailInput && (
-          <input id="userEmail" type="email" placeholder="Write your email..." />
-        )}
+
+        {showEmailInput && finalExportCase(finalExport)}
+
+        {/* {(showEmailInput && finalExport === "init") && (
+          <div id="finalExport" className={styles.email_input}>
+            <p>Enter your email to receive a CSV export of all of your DAO income tax transactions (required for most tax jurisdictions)</p>
+            <input id="userEmail" type="email" placeholder="Write your email..." /> 
+          </div>
+        )} */}
       </motion.div>
     </AnimatePresence>
   );

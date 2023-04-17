@@ -26,15 +26,16 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
     }
 
     
-    let totalBANK = 0;
-    let totalWETH = 0;
-    let totalDAI = 0;
-  
+    let totalBANK = 0;  
     let total1INCH = 0;
     let totalANT = 0;
     let totalMKR = 0;
     let totalPOKT = 0;
     let totalPOOL = 0;
+
+    let totalWETH = 0;
+    let totalDAI = 0;
+    let totalUSDC = 0;
   
     let totalIncome = 0;
     
@@ -57,10 +58,6 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
         
                     if(tx.asset === "BANK"){
                         totalBANK += tx.value;
-                    } else if(tx.asset === "WETH"){
-                        totalWETH += tx.value;
-                    } else if(tx.asset === "DAI"){
-                        totalDAI += tx.value;
                     } else if(tx.asset === "1INCH"){
                         total1INCH += tx.value;
                     } else if(tx.asset === "ANT"){
@@ -71,6 +68,12 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
                         totalPOKT += tx.value;
                     } else if(tx.asset === "POOL"){
                         totalPOOL += tx.value;
+                    } else if(tx.asset === "WETH"){
+                      totalWETH += tx.value;
+                    } else if(tx.asset === "DAI"){
+                      totalDAI += tx.value;
+                    } else if(tx.asset === "USDC"){
+                      totalUSDC += tx.value;
                     }
             
                     totalIncome += parseFloat(tx.currency.split(" ")[1]);
@@ -98,14 +101,7 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
 
     if(totalBANK > 0) {
     summaryData += "<li>"+totalBANK+" BANK </li>";
-    }
-    if(totalWETH > 0) {
-      summaryData += "<li>"+totalWETH+" WETH </li>";
-    }
-    if(totalDAI > 0) {
-      summaryData += "<li>"+totalDAI+" DAI </li>";
-    }
-  
+    }  
     if(total1INCH > 0) {
       summaryData += "<li>"+total1INCH+" 1INCH </li>";
     }
@@ -121,6 +117,17 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
     if(totalPOOL > 0) {
       summaryData += "<li>"+totalPOOL+" POOL </li>";
     }
+
+    if(totalWETH > 0) {
+      summaryData += "<li>"+totalWETH+" WETH </li>";
+    }
+    if(totalDAI > 0) {
+      summaryData += "<li>"+totalDAI+" DAI </li>";
+    }
+    if(totalUSDC > 0) {
+      summaryData += "<li>"+totalUSDC+" USDC </li>";
+    }
+
     summaryData +=
         "</ul>\
       \
@@ -140,7 +147,7 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
   
     if(emailReceipt !== ""){
   
-      alert("Email send -> pending. Please wait for next dialog confirmation before closing app.");
+      console.log("Email send -> pending. Please wait for next dialog confirmation before closing app.");
       // build and send email with txSummary as body, csv as attachment
       Email.send({
         SecureToken: ELASTICMAIL_SECURETOKEN,
@@ -160,7 +167,9 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
       .then(function (message) {
         console.log(message);
         if(message === "OK"){
-          alert("Email sent successfully. Thanks for using Bankless Card TaxMan! You're free to go check your mail.");
+          console.log("Email sent successfully. Thanks for using Bankless Card TaxMan! You're free to go check your mail.");
+            // set state of email area to complete
+            // setFinalExport("complete");
           return "success";
         } else {
           alert("mail failed to send with message: " + message);

@@ -9,7 +9,7 @@ import { convertKitEmail } from "../../functions/convertkit";   // capture user 
 import { emailData } from "../../functions/emailData";        // send to user email
 
 
-const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData, setTxData, country, activeAssets, tax }) => {
+const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData, setTxData, country, activeAssets, tax, setFinalExport }) => {
   const [{ showTransactionModal }, { setShowEmailInput }] = useUI();
 
   const { address, isConnected } = useAccount();
@@ -90,6 +90,9 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
 
         console.log("CAPTURE FROM EMAIL INPUT - SECOND PASS");
 
+        // set state of email area to loading
+        setFinalExport("loading");
+
         // determine address of connected wallet
         console.log(address);  // ok for address
         let localAddr = address;    // local storage of address variable
@@ -106,7 +109,7 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
         
         
         // CALL HERE TO SEND EMAIL DATA TO USER
-        let emailOutcome = emailData(country, userEmail, activeAssets, txData, tax, csvData);
+        let emailOutcome = emailData(country, userEmail, activeAssets, txData, tax, csvData, setFinalExport);
         console.log(emailOutcome);
 
         
@@ -116,14 +119,18 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
         let storeEmail = await convertKitEmail(userEmail, localAddr);  // flip to convertkit
         console.log(storeEmail); 
 
+        setFinalExport("completed");
+
+        // set button text to DONE step 5
+        stepChange(currentStep + 1);
+
   
 
+      } else {
+        // no email available
+        alert("Please enter a valid email address to receive your CSV file.");
       }
-    } else {
-      // no email available
-      
-    }
-    
+    }     
   
     return userEmail;
   
@@ -142,7 +149,10 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
       type="button"
       disabled={showTransactionModal}
     >
-      {currentStep === 4 ? "Send to my email" : "Next Step"}
+      {
+        currentStep === 4 ? "Send CSV to my email" : 
+          currentStep === 5 ? "Done" : "Next Step"
+      }
     </button>
   );
 };
