@@ -73,6 +73,13 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
       stepChange(currentStep + 1);
     } 
 
+    if(currentStep === 5){
+      // LAST STEP: reset the form
+      console.log("Handle step 5 and exit. reset.");
+      stepChange(1);
+      setFinalExport("init");
+    }
+
     return currentStep;
   };
 
