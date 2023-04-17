@@ -6,8 +6,8 @@ export { getTokenLabel } from './getTokenLabel'
 export { displayTokenAmount } from './displayTokenAmount'
 export { displayConvertAmount } from './displayConvertAmount'
 
-// add convertkit
-// add alchemyGo
-// add emailData
-// add exportdata
-// sumTransactions
+export { convertKitEmail } from './convertkit'
+export { callAlchemyGo } from './callAlchemyGo'
+export { emailData } from './emailData'
+export { exportData } from './exportData'
+export { sumTransactions } from './sumTransactions'

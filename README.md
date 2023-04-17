@@ -27,6 +27,7 @@ The amazing UI was designed by @jasu and developed by @titesan with inception an
 ### Update UI to allow selection of Token
 6. TOKEN VISUAL CHECKBOX: components/AccountForm/FormSecondStep.jsx - updated in possible assets && activeAssets state variable to include new selectable token.
 7. DATA FILES UPDATE: data/XYZ_feed_2022.tsx - provide USD, CAD pricing objects in output bundle. Using https://www.coingecko.com/en/api/documentation. Import data file into functions/displayConvertAmount.tsx & set convertion specifications.
+8. OUTPUT LABELS: functions/exportData.jsx && functions/exportData.jsx - Labels for output - TBD automate import and formatting from possibleAssets data.
 
 
 # Developers Getting Started

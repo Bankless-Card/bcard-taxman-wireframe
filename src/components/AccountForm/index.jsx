@@ -52,6 +52,7 @@ const AccountForm = () => {
     // this obsoleted on index load - triggered on arrival at step 2
     async function fetchData() {
 
+      // THIS FUNCTION NOT USED - NOT CALLED 
       console.log(address);
       console.log(addrOverride);
 
