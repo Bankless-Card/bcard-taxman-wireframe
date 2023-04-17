@@ -6,7 +6,7 @@ import TransactionListItemComponent from "./TransactionListItemComponent";
 const TransactionListItem = ({ title, transactions, setActiveItem }) => {
   const [, { setShowTransactionModal }] = useUI();
 
-  // const [activeItem, setActiveItem] = useState(null);
+  // console.log(transactions);
 
   return (
     <div className={styles.list_item_container}>
@@ -17,13 +17,15 @@ const TransactionListItem = ({ title, transactions, setActiveItem }) => {
           id={item.uniqueId}
           img_url={item.img_url}
           tokenLabel={item.tokenLabel}
+          asset={item.asset}
           crypto={item.crypto}
           currency={item.currency}
           incomeState={item.incomeState}
+
           onClick={() => 
             {
               setShowTransactionModal(true);
-              console.log(item);  // need to add his item to the modal 
+              console.log(item);  // need to add this item to the state 
               setActiveItem(item);
             }}
         />

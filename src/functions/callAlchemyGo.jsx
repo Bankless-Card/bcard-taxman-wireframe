@@ -1,7 +1,7 @@
 import { Alchemy, Network, AssetTransfersCategory } from 'alchemy-sdk';
 
 // data imports
-import { REACT_APP_ALCHEMY_API_KEY } from '../data/env.tsx' 
+import { REACT_APP_ALCHEMY_API_KEY } from '../data' 
 
 // Optional Config object, but defaults to demo api-key and eth-mainnet.
 const settings = {
@@ -15,10 +15,10 @@ const optimism = new Alchemy({ apiKey: REACT_APP_ALCHEMY_API_KEY, network: Netwo
 
 
 // other functions
-import { getTokenLogo } from "../functions/getTokenLogo.tsx";
-import { getTokenLabel } from "../functions/getTokenLabel.tsx";
-import { displayTokenAmount } from "../functions/displayTokenAmount.tsx";
-import { displayConvertAmount } from "../functions/displayConvertAmount.tsx";
+import { getTokenLogo } from "../functions";
+import { getTokenLabel } from "../functions";
+import { displayTokenAmount } from "../functions";
+import { displayConvertAmount } from "../functions";
 
 
 export async function callAlchemyGo(address, addrOverride, country, activeAssets) {
@@ -78,35 +78,35 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
       category: [ AssetTransfersCategory.ERC20],
     });
     
-      // AssetTransfersCategory.EXTERNAL, AssetTransfersCategory.INTERNAL, AssetTransfersCategory.ERC721, AssetTransfersCategory.ERC1155,
-    
-      // POLYGON
-      const polyRes = await polygon.core.getAssetTransfers({
-        fromBlock: polyStart,
-        toBlock: polyEnd,
-        toAddress: toAddress,
-        excludeZeroValue: true,
-        withMetadata: true,
-        category: [ AssetTransfersCategory.ERC20 ],
-      });
-    
-      // OPTIMISM  
-      const opRes = await optimism.core.getAssetTransfers({
-        fromBlock: opStart,
-        toBlock: opEnd,
-        toAddress: toAddress,
-        excludeZeroValue: true,
-        withMetadata: true,
-        // order: "desc",       // default asc for ascending
-        category: [ AssetTransfersCategory.ERC20 ],
-      });
+    // AssetTransfersCategory.EXTERNAL, AssetTransfersCategory.INTERNAL, AssetTransfersCategory.ERC721, AssetTransfersCategory.ERC1155,
+  
+    // POLYGON
+    const polyRes = await polygon.core.getAssetTransfers({
+      fromBlock: polyStart,
+      toBlock: polyEnd,
+      toAddress: toAddress,
+      excludeZeroValue: true,
+      withMetadata: true,
+      category: [ AssetTransfersCategory.ERC20 ],
+    });
+  
+    // OPTIMISM  
+    const opRes = await optimism.core.getAssetTransfers({
+      fromBlock: opStart,
+      toBlock: opEnd,
+      toAddress: toAddress,
+      excludeZeroValue: true,
+      withMetadata: true,
+      // order: "desc",       // default asc for ascending
+      category: [ AssetTransfersCategory.ERC20 ],
+    });
     
   
     let objArr = res.transfers;
     let polyArr = polyRes.transfers;
     let opArr = opRes.transfers;
 
-    // console.log(country, activeAssets);    // OK
+    // console.log(objArr, activeAssets);    // OK
 
     let countryExport = "CAD";   // label for export currency
 
@@ -139,12 +139,21 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
       thisRow.crypto = displayTokenAmount(thisRow.value,thisRow.asset, activeAssets);
       thisRow.chain = "Ethereum";
 
+      // console.log(thisRow);
+
+      // if(thisRow.asset === "USDC")  {
+      //   console.log("USDC: ", i,  thisRow, activeAssets);
+      // }
+
       if(activeAssets.includes(thisRow.asset)){
-        // incomeState = true;  this is default
+        incomeState = true;  // this is default
+        // console.log("Added", thisRow);
       } else {
         // remove from the tx list - it will be recalled later if dao selectors are toggled
+        incomeState = false;    // ensure no display
+        // console.log( objArr[i] );
         objArr.splice(i,1);
-        // console.log("Removed tx from list: " + thisRow.asset, objArr)
+        // console.log("Removed tx from list: ", thisRow)
       }
   
     }  
@@ -239,6 +248,8 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
       fullPolyArr,
       fullOpArr,
     ];
+
+    // console.log(alTxs);
   
     return alTxs;
   }

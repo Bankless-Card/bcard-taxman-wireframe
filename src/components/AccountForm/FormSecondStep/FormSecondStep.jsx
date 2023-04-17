@@ -27,6 +27,7 @@ const FormSecondStep = ({ currentStep, activeAssets, setActiveAssets }) => {
             {possibleAssets.map((item) => (
               <div className={styles.row}>
                 <input 
+                  key={item}
                   type="checkbox" 
                   id={item} 
                   defaultChecked={activeAssets.includes(item)}
