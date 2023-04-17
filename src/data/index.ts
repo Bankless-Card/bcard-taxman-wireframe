@@ -13,3 +13,4 @@ export { poolPrices2022 } from './pool_feed_2022'
 
 export { ethPrices2022 } from './eth_feed_2022'
 export { daiPrices2022 } from './dai_feed_2022'
+export { usdcPrices2022 } from './usdc_feed_2022'

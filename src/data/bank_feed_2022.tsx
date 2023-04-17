@@ -1,4 +1,4 @@
-import react from 'react';
+// slug: bankless-dao
 
 export const bankCad = {
     "prices": [
