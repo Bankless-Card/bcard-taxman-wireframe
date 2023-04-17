@@ -6,7 +6,8 @@ import {
   poktPrices2022, 
   poolPrices2022,
   ethPrices2022, 
-  daiPrices2022 } from "../data";
+  daiPrices2022,
+  usdcPrices2022 } from "../data";
 
 // this function is IMPORTANT in calculating the price of the asset based on historical price data
 export function displayConvertAmount(value:any, asset:any, timestamp:any, fiat:string){
@@ -241,26 +242,26 @@ export function displayConvertAmount(value:any, asset:any, timestamp:any, fiat:s
 
   } else if(asset === "USDC") {
 
-    console.log("USING DAI PRICES FOR NOW...");
+    // console.log("USING DAI PRICES FOR NOW...");
 
-    let daiFIAT = 1.0101;   // 1 DAI = 0.01 default (or newer price)
-    let daiHistory = daiPrices2022.daiCad.prices;    // default CAD
+    let usdcFIAT = 1.0101;   // 1 DAI = 0.01 default (or newer price)
+    let usdcHistory = usdcPrices2022.usdcCad.prices;    // default CAD
 
     if(fiat === 'USD'){
-      // use CAD price
-      daiHistory = daiPrices2022.daiUsd.prices;
+      // use USD price
+      usdcHistory = usdcPrices2022.usdcUsd.prices;
     } 
 
-    daiHistory.forEach((item:any) => {
+    usdcHistory.forEach((item:any) => {
       // if time of item is less than or equal to timestamp
       if(item[0] <= timestamp*1000){
-        daiFIAT = item[1];    // set price up to timestamp
+        usdcFIAT = item[1];    // set price up to timestamp
       } 
       // next item
 
     });
 
-    let output = "$"+fiat+" "+(daiFIAT*parseFloat(value)).toFixed(2) + " @ " +daiFIAT.toFixed(4);
+    let output = "$"+fiat+" "+(usdcFIAT*parseFloat(value)).toFixed(2) + " @ " +usdcFIAT.toFixed(4);
     // console.log(output);
 
     // return the price in FIAT terms, based on timestamp
