@@ -3,10 +3,12 @@ import styles from "./styles.module.css";
 import { useUI } from "../../context/UIContext";
 import { useAccount } from "wagmi";
 
-import { callAlchemyGo } from "../../functions/callAlchemyGo";  // get tx data on chain for user
-import { exportData } from "../../functions/exportData";      // export data to csv
-import { convertKitEmail } from "../../functions/convertkit";   // capture user email and address
-import { emailData } from "../../functions/emailData";        // send to user email
+import { 
+  callAlchemyGo,
+  exportData,
+  convertKitEmail,
+  emailData
+ } from "../../functions";  // import functions
 
 
 const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData, setTxData, country, activeAssets, tax, setFinalExport }) => {

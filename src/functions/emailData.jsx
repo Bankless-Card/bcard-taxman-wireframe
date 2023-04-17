@@ -25,6 +25,10 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
       fiatCode = "CAD";
     }
 
+    activeAssets.forEach(asset => {
+      // build a storage variable for each asset
+      console.log(asset);
+    });
     
     let totalBANK = 0;  
     let total1INCH = 0;
