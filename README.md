@@ -10,8 +10,9 @@ The amazing UI was designed by @jasu and developed by @titesan with inttegration
 ## Adding new tokens - a basic guide
 1. Get Info: token label - as output on chain record - e.g. "USDC"
 ### Make app aware of token in lookup
-2. TOKEN NAME DISPLAY: functions/getTokenLabel.tsx - e.g. if(asset==="USDC"){return "USDC Stablecoin"}
-3. 
+2. TOKEN NAME DISPLAY: functions/getTokenLabel.tsx - e.g. if(asset==="USDC"){ return "USDC Stablecoin" }
+3. TOKEN LOGO DISPLAY: functions/getTokenLogo.tsx - e.g. if(asset === "USDC"){ return "/img/token/usdc-logo.png" } && add file in public/img/token - prefer min. 400x400px min square or transparent image and will be displayed as round. Limit to ~100kB image.
+
 
 # Getting Started
 
