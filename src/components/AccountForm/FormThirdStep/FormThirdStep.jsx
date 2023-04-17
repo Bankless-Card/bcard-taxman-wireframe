@@ -7,17 +7,7 @@ import Spinner from "../Spinner";
 // I recommend to add a loader spiner while the data is loaading on Transaction List, this is an example
 // this settimeOut is to simulate this behavior
 
-const FormThirdStep = ({ currentStep, address, txData, setActiveItem, loading }) => { 
-
-  // useEffect(() => {
-
-  //   // loading timeout - sample not real
-  //   setTimeout(() => {
-  //     setLoading(false);
-  //   }, 1000);
-
-  // }, []);
-  
+const FormThirdStep = ({ currentStep, address, txData, setActiveItem, loading, activeAssets }) => { 
 
   return (
     <>

@@ -117,6 +117,7 @@ const AccountForm = () => {
                         address={address}
                         txData={txData} 
                         loading={loading}
+                        activeAssets={activeAssets}
                         setActiveItem={setActiveItem} 
                       />}
                     {step === 4 && 
