@@ -133,6 +133,18 @@ const AccountForm = () => {
 
                         finalExport={finalExport}
                       />}
+
+                    {step === 5 && 
+                      <FormFourthStep 
+                        txData={txData} 
+                        activeAssets={activeAssets}
+                        country={country} 
+                        tax={tax}
+                        setTax={setTax}
+
+                        finalExport={finalExport}
+                      />}
+                      
                   </div>
                   <FormButton 
                     currentStep={step} 
