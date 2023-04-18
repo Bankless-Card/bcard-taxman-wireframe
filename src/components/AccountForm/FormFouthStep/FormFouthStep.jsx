@@ -66,7 +66,7 @@ const FormFourthStep = ({txData, activeAssets, country, tax, setTax, finalExport
         <a 
           target="_blank"
           className="twitter-share-button"
-          href="https://twitter.com/intent/tweet?text=I%20just%20did%20my%20DAO%20Income%20Taxes%20with%20TaxMan%20from%20@BanklessCard%20in%20about%5%minutes!%20taxman.banklesscard.xyz"
+          href="https://twitter.com/intent/tweet?text=I%20just%20did%20my%20DAO%20Income%20Taxes%20with%20TaxMan%20from%20@BanklessCard%20in%20about%20five%20minutes!%20https://taxman.banklesscard.xyz"
           data-size="large">
             <img src="img/twitter-logo.png" alt="twitter-logo" style={{ width:"100px"}}/>
             <p>Share on Twitter</p>
