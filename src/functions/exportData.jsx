@@ -7,22 +7,22 @@ export function exportData(country, txData, activeAssets, tax) {
     let csvData = "txID, timestamp, asset, tokenAmount, fiatRatio, fiatAmount, fiatLabel" + "\r\n";
 
     // console.log("GET FIAT CODE HERE FROM GLOBAL SETTINGS");
-    let fiatCode = "CAD";
-    if(country === "Canada"){
-      fiatCode = "CAD";   // also default
-    } else if(country === "United States"){
-      fiatCode = "USD";
-    } else if(country === "United Kingdom"){
-      fiatCode = "GBP";
-    } else if(country === "Japan"){
-      fiatCode = "JPY";
-    } else if(country === "Australia"){
-      fiatCode = "AUD";
-    } else if(country === "Singapore"){
-      fiatCode = "SGD";
-    } else if(country === "Hong Kong"){
-      fiatCode = "HKD";
-    } 
+    let fiatCode = country;
+    // if(country === "Canada"){
+    //   fiatCode = "CAD";   // also default
+    // } else if(country === "United States"){
+    //   fiatCode = "USD";
+    // } else if(country === "United Kingdom"){
+    //   fiatCode = "GBP";
+    // } else if(country === "Japan"){
+    //   fiatCode = "JPY";
+    // } else if(country === "Australia"){
+    //   fiatCode = "AUD";
+    // } else if(country === "Singapore"){
+    //   fiatCode = "SGD";
+    // } else if(country === "Hong Kong"){
+    //   fiatCode = "HKD";
+    // } 
 
     let totalIncome = 0;
 

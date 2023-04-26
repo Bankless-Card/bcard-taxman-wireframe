@@ -108,15 +108,15 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
 
     // console.log(objArr, activeAssets);    // OK
 
-    let countryExport = "CAD";   // label for export currency
+    let countryExport = country;  //"CAD";   // label for export currency
 
-    if(country === "Canada"){
-      countryExport = "CAD";
-    } else if(country === "United States"){
-      countryExport = "USD";
-    } else {
-      countryExport = "CAD";  // default
-    }
+    // if(country === "Canada"){
+    //   countryExport = "CAD";
+    // } else if(country === "United States"){
+    //   countryExport = "USD";
+    // } else {
+    //   countryExport = "CAD";  // default
+    // }
   
     // ETH MAINNET
     for (var i=0; i<objArr.length; i++) {

@@ -13,15 +13,15 @@ import Spinner from "../Spinner";
 const FormFourthStep = ({txData, activeAssets, country, tax, setTax, finalExport}) => {
   const [{ showEmailInput }] = useUI();
 
-  let countryCurrency = "CAD";
-  if(country === "Canada"){
-    countryCurrency = "CAD";
-  } else if(country === "United States"){
-    countryCurrency = "USD";
+  let countryCurrency = country;    // set as assigned
+  // if(country === "CAD"){
+  //   countryCurrency = "CAD";
+  // } else if(country === "United States"){
+  //   countryCurrency = "USD";
     
-  } else {
-    countryCurrency = "CAD";  // default
-  }
+  // } else {
+  //   countryCurrency = "CAD";  // default
+  // }
 
   let txSumOutput = sumTransactions(txData, activeAssets)
   let txSum = txSumOutput[0];   // this is the total income
@@ -50,10 +50,40 @@ const FormFourthStep = ({txData, activeAssets, country, tax, setTax, finalExport
 
     console.log(finalExport);
 
+    /* sample fix
+
+    document.getElementById("userEmail")
+    .addEventListener("keyup", function(event) {
+      event.preventDefault();
+      if (event.keyCode === 13) {
+        document.getElementById("finalExport").click();
+      }
+    });
+
+    */
+
+    function handleEmailFix(event){
+      
+      console.log('! RETURN KEYPRESS ERROR BUG. FIX THIS !');
+
+      if (event.keyCode === 13) {
+        event.preventDefault();   // this is the fix to remove the default behavour
+
+        document.getElementById("formButton").click();   // this instead redirects the return to click on the finish button.
+      }
+
+      return true
+    }
+
     let defaultState = (
       <div id="finalExport" className={styles.email_input}>
         <p>Enter your email to receive a CSV export of all of your DAO income tax transactions (required for most tax jurisdictions)</p>
-        <input id="userEmail" type="email" placeholder="Write your email..." /> 
+        <input 
+          id="userEmail" 
+          type="email" 
+          placeholder="Write your email..." 
+          onKeyDown={(e) => handleEmailFix(e) }
+          /> 
       </div>
     );
 
