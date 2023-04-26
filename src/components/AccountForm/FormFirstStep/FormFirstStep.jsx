@@ -19,7 +19,11 @@ const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry }) =>
       );
       const data = await response.json();*/
 
-      const data = [{"name":{"common":"Canada","official":"Canada","nativeName":{"eng":{"official":"Canada","common":"Canada"},"fra":{"official":"Canada","common":"Canada"}}}}, {"name":{"common":"United States","official":"United States of America","nativeName":{"eng":{"official":"United States of America","common":"United States"}}}}]
+      const data = [
+        {"name":{"common":"Canadian Dollar","official":"CAD","nativeName":{"eng":{"official":"Canada","common":"Canada"},"fra":{"official":"Canada","common":"Canada"}}}}, 
+        {"name":{"common":"US Dollar","official":"USD","nativeName":{"eng":{"official":"United States of America","common":"United States"}}}},
+        {"name":{"common":"Euro","official":"EUR","nativeName":{"eng":{"official":"The European Union Currency","common":"Euro"}}}}
+      ]
 
       //console.log(data);
       // console.log("Order alhabetically by country name:");
@@ -75,7 +79,7 @@ const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry }) =>
           )}
 
           <p className={styles.form_first_step_label}>
-            Choose your country of residence
+            Choose your currency of taxation
           </p>
           <div className={styles.select_container}>
             <select 
@@ -90,7 +94,8 @@ const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry }) =>
               {countryNames.map((item) => (
                 <option
                   key={item?.name?.common}
-                  disabled={(item?.name?.common === "Canada" || item?.name?.common === "United States") ? false : true}
+                  // disabled={(item?.name?.common === "Canada" || item?.name?.common === "United States") ? false : true}
+                  value={item?.name?.official}
                 >{item?.name?.common}</option>
               ))}
             </select>

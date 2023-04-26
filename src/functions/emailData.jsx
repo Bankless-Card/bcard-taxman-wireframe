@@ -14,16 +14,16 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
     //  -> if(income) timestamp, tokenLabel, tokenAmount, fiatConversion, fiatAmount 
   
 
-    let fiatCode = "CAD";
-    if(country === "Canada"){
-      fiatCode = "CAD";
-    } else if(country === "United States"){
-      fiatCode = "USD";
-    } else if(country === "United Kingdom"){
-      // not available yet
-    } else {
-      fiatCode = "CAD";
-    }
+    let fiatCode = country;   //"CAD";
+    // if(country === "Canada"){
+    //   fiatCode = "CAD";
+    // } else if(country === "United States"){
+    //   fiatCode = "USD";
+    // } else if(country === "United Kingdom"){
+    //   // not available yet
+    // } else {
+    //   fiatCode = "CAD";
+    // }
 
     activeAssets.forEach(asset => {
       // build a storage variable for each asset

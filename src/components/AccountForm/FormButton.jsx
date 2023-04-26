@@ -153,6 +153,7 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
 
   return (
     <button
+      id="formButton"
       onClick={() => handleFormButton(currentStep)}
       className={isButtonDisabled}
       type="button"
