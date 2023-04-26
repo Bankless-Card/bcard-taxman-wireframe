@@ -64,7 +64,7 @@ const FormFourthStep = ({txData, activeAssets, country, tax, setTax, finalExport
 
     function handleEmailFix(event){
       
-      console.log('! RETURN KEYPRESS ERROR BUG. FIX THIS !');
+      // console.log('! RETURN KEYPRESS ERROR BUG. FIX THIS !');
 
       if (event.keyCode === 13) {
         event.preventDefault();   // this is the fix to remove the default behavour

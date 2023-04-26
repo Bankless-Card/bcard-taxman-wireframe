@@ -207,6 +207,9 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
     
         // save to globalTxs
         thisRow.unixT = unixT;   // add unix timestamp to global object
+
+        // console.log(thisRow.value, thisRow.asset, unixT, countryExport);
+
         thisRow.currency = displayConvertAmount(thisRow.value, thisRow.asset, unixT, countryExport);
         thisRow.img_url = getTokenLogo(thisRow.asset);      //"./img/dao.jpg";
         thisRow.tokenLabel = getTokenLabel(thisRow.asset);
