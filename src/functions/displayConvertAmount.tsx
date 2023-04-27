@@ -5,6 +5,7 @@ import {
   mkrPrices2022, 
   poktPrices2022, 
   poolPrices2022,
+  ensPrices2022,
   ethPrices2022, 
   daiPrices2022,
   usdcPrices2022 } from "../data";
@@ -238,6 +239,32 @@ export function displayConvertAmount(value:any, asset:any, timestamp:any, fiat:s
     // });
 
     let output = "$"+fiat+" "+(poolFIAT*parseFloat(value)).toFixed(2) + " @ " +poolFIAT.toFixed(4);
+
+    // return the price in FIAT terms, based on timestamp
+    return output;
+
+  } else if(asset === "ENS") {
+
+    // console.log("TEMP POOL prices here...");
+
+    let ensFIAT = 1.0101;   // 1 DAI = 0.01 default (or newer price)
+    let ensHistory = ensPrices2022.ensCad.prices;    // default CAD
+
+    if(fiat === 'USD'){
+      // use USD price
+      ensHistory = ensPrices2022.ensUsd.prices;
+    } else if(fiat === 'EUR'){
+      // use EUR price
+      ensHistory = ensPrices2022.ensEur.prices;
+    } 
+
+    let i = 0;
+    while(timestamp > ensHistory[i][0]/1000){
+      ensFIAT = ensHistory[i][1];    // set price up to timestamp
+      i++;  // next item
+    }
+
+    let output = "$"+fiat+" "+(ensFIAT*parseFloat(value)).toFixed(2) + " @ " +ensFIAT.toFixed(4);
 
     // return the price in FIAT terms, based on timestamp
     return output;

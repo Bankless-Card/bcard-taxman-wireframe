@@ -36,6 +36,7 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
     let totalMKR = 0;
     let totalPOKT = 0;
     let totalPOOL = 0;
+    let totalENS = 0;
 
     let totalWETH = 0;
     let totalDAI = 0;
@@ -72,6 +73,8 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
                         totalPOKT += tx.value;
                     } else if(tx.asset === "POOL"){
                         totalPOOL += tx.value;
+                    } else if(tx.asset === "ENS"){
+                      totalENS += tx.value;
                     } else if(tx.asset === "WETH"){
                       totalWETH += tx.value;
                     } else if(tx.asset === "DAI"){
@@ -106,6 +109,9 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
     if(totalBANK > 0) {
     summaryData += "<li>"+totalBANK+" BANK </li>";
     }  
+    if(totalENS > 0) {
+      summaryData += "<li>"+totalENS+" ENS </li>";
+    }
     if(total1INCH > 0) {
       summaryData += "<li>"+total1INCH+" 1INCH </li>";
     }

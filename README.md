@@ -10,6 +10,11 @@ The amazing UI was designed by @jasu and developed by @titesan with inception an
 ## New tokens requested (in no particular order)
 ### To request new tokens added, please tweet at us @BanklessCard
 - USDC - implemented 4/17/2023 - tt
+- ENS (completed: testing procedure)
+    - added in possibleAssets
+    - FUNCTIONS: label, logo, (+ image file SIZE/FORMAT std?), conversion(TEMP): pool price, emailData, sumTransactions (summary functions)
+    - DATA: generated data file (copy POOL), pulled annual data from CG
+    (require user test and review for final confimration of implementation)
 - USDT
 - FF (forefront)
 - UNITY
@@ -25,7 +30,7 @@ The amazing UI was designed by @jasu and developed by @titesan with inception an
 4. TOKEN DISPLAY AMOUNT (optional override): functions/displayTokenAmount.tsx - for tokens that require a more or fewer than 3 significant digits (i.e. ETH, WBTC) - e.g. if(asset === "WETH"){ return parseFloat(value).toFixed(6) + " " + asset }
 5. TOKEN CONVERT AMOUNT: functions/displayConvertAmount.tsx - e.g. if(asset === "WETH") { //a bit more heavy lifting with this one, requiring data , contact tom }
 ### Update UI to allow selection of Token
-6. TOKEN VISUAL CHECKBOX: components/AccountForm/FormSecondStep.jsx - updated in possible assets && activeAssets state variable to include new selectable token.
+6. (auto) TOKEN VISUAL CHECKBOX: components/AccountForm/FormSecondStep.jsx - updated in possible assets && activeAssets state variable to include new selectable token.
 7. DATA FILES UPDATE: data/XYZ_feed_2022.tsx - provide USD, CAD pricing objects in output bundle. Using https://www.coingecko.com/en/api/documentation. Import data file into functions/displayConvertAmount.tsx & set convertion specifications.
 8. OUTPUT LABELS: functions/exportData.jsx && functions/exportData.jsx - Labels for output - TBD automate import and formatting from possibleAssets data.
 
