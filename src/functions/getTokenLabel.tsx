@@ -14,6 +14,8 @@ export function getTokenLabel(asset:any){
     return 'Poket Network Token';
   } else if(asset === "POOL"){
     return 'Pooltogether Token';
+  } else if(asset === "ENS"){
+    return 'ENS DAO Token';
   } 
   // non-dao assets
   else if(asset === "WETH"){

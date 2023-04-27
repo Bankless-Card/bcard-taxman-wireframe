@@ -153,7 +153,8 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
         incomeState = false;    // ensure no display
         // console.log( objArr[i] );
         objArr.splice(i,1);
-        // console.log("Removed tx from list: ", thisRow)
+        
+        // console.log("BUG: Removed tx from list: ", thisRow)
       }
   
     }  

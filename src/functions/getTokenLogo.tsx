@@ -13,6 +13,8 @@ export function getTokenLogo(asset:any) {
     return "/img/token/pokt-logo.png";
   } else if(asset === "POOL"){
     return "/img/token/pool-logo.png";
+  } else if(asset === "ENS"){
+    return "/img/token/ens-logo.png";
   }
 
   // non-DAO specific assets

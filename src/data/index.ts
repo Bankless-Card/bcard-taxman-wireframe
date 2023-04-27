@@ -10,6 +10,7 @@ export { antPrices2022 } from './ant_feed_2022'
 export { mkrPrices2022 } from './mkr_feed_2022'
 export { poktPrices2022 } from './pokt_feed_2022'
 export { poolPrices2022 } from './pool_feed_2022'
+export { ensPrices2022 } from './ens_feed_2022'
 
 export { ethPrices2022 } from './eth_feed_2022'
 export { daiPrices2022 } from './dai_feed_2022'

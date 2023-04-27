@@ -14,6 +14,7 @@ export function sumTransactions(txData, activeAssets) {
   let totalMKR = 0;
   let totalPOKT = 0;
   let totalPOOL = 0;
+  let totalENS = 0;
 
   let totalWETH = 0;
   let totalDAI = 0;
@@ -47,6 +48,8 @@ export function sumTransactions(txData, activeAssets) {
               totalPOKT += tx.value;
           } else if(tx.asset === "POOL"){
               totalPOOL += tx.value;
+          } else if(tx.asset === "ENS"){
+            totalENS += tx.value;
           } else if(tx.asset === "WETH"){
             totalWETH += tx.value;
           } else if(tx.asset === "DAI"){
@@ -66,8 +69,8 @@ export function sumTransactions(txData, activeAssets) {
   });
 
   // console.log("TODO: Create a HDD file to store the user data");
-  console.log(totalIncome, totalBANK, total1INCH, totalANT, totalMKR, totalPOKT, totalPOOL, totalWETH, totalDAI, totalUSDC );
+  console.log(totalIncome, totalBANK, total1INCH, totalANT, totalMKR, totalPOKT, totalPOOL, totalENS, totalWETH, totalDAI, totalUSDC );
 
-  return [totalIncome, totalBANK, total1INCH, totalANT, totalMKR, totalPOKT, totalPOOL, totalWETH, totalDAI, totalUSDC];
+  return [totalIncome, totalBANK, total1INCH, totalANT, totalMKR, totalPOKT, totalPOOL, totalENS, totalWETH, totalDAI, totalUSDC];
   
 }
