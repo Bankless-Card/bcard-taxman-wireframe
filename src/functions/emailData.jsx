@@ -88,12 +88,10 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
     // let taxRate = 100;
     let taxableIncome = totalIncome * (tax/100);
     let curIncome = taxableIncome.toLocaleString('en-US', { style: 'currency', currency: fiatCode });
-  
+    let totalIncomeOut = totalIncome.toLocaleString('en-US', { style: 'currency', currency: fiatCode });
+
     let summaryData = "<div>\
       <h2>Your 2022 DAO Income:</h2>\
-      <p>Your detailed transactions are attached to this email as a CSV.  Be sure to\ download the CSV and save it in a safe place</p>\
-      \
-      <h3>Your 2022 DAO Income:</h3>\
       <ul>";
 
     if(totalBANK > 0) {
@@ -131,8 +129,8 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
     summaryData +=
         "</ul>\
       \
-      <p><strong>For a total income of: "+curIncome+" </strong><br />\
-      <small>You owe "+taxableIncome+" if your tax rate is "+tax+"%</small>.</p>\
+      <p><strong>For a total income of: "+totalIncomeOut+" </strong><br />\
+      <small>You owe "+curIncome+" if your tax rate is "+tax+"%</small>.</p>\
       <p>Be sure to download the attached CSV and save it in a safe place.</p>\
       <p>TaxMan was made with ❤️by the team at <a href='https://banklesscard.xyz'>Bankless Card</a>. If you found it useful, please share with your friends: https://taxman.banklesscard.xyz</p>\
     </div>";
