@@ -9,6 +9,16 @@ import MenuMobile from "./MenuMobile";
 const Navbar = () => {
   const [, { setIsCTAclicked }] = useUI();
 
+  const twitterShare = (<a 
+          target="_blank"
+          href="https://twitter.com/intent/tweet?text=I%20just%20did%20my%20DAO%20Income%20Taxes%20with%20TaxMan%20from%20@BanklessCard%20in%20about%20five%20minutes!%20https://taxman.banklesscard.xyz"
+          >
+            <div>
+              Share
+              <img src="img/twitter-logo.png" alt="twitter-logo" style={{ width:"15px", margin: "0 5px 0 5px"}} /> 
+            </div>
+        </a>);
+
   const MenuLinks = [
     { id: 1, href: "https://banklesscard.mirror.xyz/", title: "Blog" },
     { id: 2, href: "https://banklesscard.xyz/", title: "About Us" },
@@ -37,6 +47,7 @@ const Navbar = () => {
             </a>
           </li>
         ))}
+        <li>{twitterShare}</li>
       </ul>
       {/* Menu icon */}
       <div className={styles.menu_mobile_icon_container} onClick={handleClick}>
