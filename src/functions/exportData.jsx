@@ -4,25 +4,10 @@ export function exportData(country, txData, activeAssets, tax) {
 
     // export data to CSV
     // first line is 'header'
-    let csvData = "txID, timestamp, asset, tokenAmount, fiatRatio, fiatAmount, fiatLabel" + "\r\n";
+    let csvData = "timestamp, asset, tokenAmount, fiatRatio, fiatAmount, fiatLabel" + "\r\n";
 
     // console.log("GET FIAT CODE HERE FROM GLOBAL SETTINGS");
     let fiatCode = country;
-    // if(country === "Canada"){
-    //   fiatCode = "CAD";   // also default
-    // } else if(country === "United States"){
-    //   fiatCode = "USD";
-    // } else if(country === "United Kingdom"){
-    //   fiatCode = "GBP";
-    // } else if(country === "Japan"){
-    //   fiatCode = "JPY";
-    // } else if(country === "Australia"){
-    //   fiatCode = "AUD";
-    // } else if(country === "Singapore"){
-    //   fiatCode = "SGD";
-    // } else if(country === "Hong Kong"){
-    //   fiatCode = "HKD";
-    // } 
 
     let totalIncome = 0;
 
@@ -51,8 +36,11 @@ export function exportData(country, txData, activeAssets, tax) {
                     // console.log(tx.crypto, tx.currency);
                     // console.log(tx);
 
+                    // convert unix time to human time
+                    let dateOut = new Date(tx.unixT * 1000);
+
                     // generate the csv data for each tx row
-                    newLine = index + "," + tx.unixT + "," + tx.asset + "," + tx.value + "," + tx.currency.split(" ")[3] + "," + tx.currency.split(" ")[1] + "," + tx.currency.split(" ")[0] + "\r\n";
+                    newLine = dateOut + "," + tx.asset + "," + tx.value + "," + tx.currency.split(" ")[3] + "," + tx.currency.split(" ")[1] + "," + tx.currency.split(" ")[0] + "\r\n";
   
                     // only add to csvData if income
                     csvData += newLine;
