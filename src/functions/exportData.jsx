@@ -66,9 +66,11 @@ export function exportData(country, txData, activeAssets, tax) {
     let taxableIncome = totalIncome * tax / 100;
     console.log("Taxable Income: " + taxableIncome);
 
+    let niceDateNow = new Date(Date.now());
+
     // last line of output should be summation of all income
-    csvData += "SUM, timestamp, TaxRate, Total Income to Report, FiatCode" + "\r\n";
-    csvData += "RUN@, "+ Date.now() + "," + tax + ","+ taxableIncome + "," + fiatCode + "\r\n";
+    csvData += "RUN@, TaxRate, Total Income to Report, FiatCode" + "\r\n";
+    csvData += niceDateNow + "," + tax + ","+ taxableIncome + "," + fiatCode + "\r\n";
 
     return csvData;
   
