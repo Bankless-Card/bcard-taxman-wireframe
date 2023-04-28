@@ -12,18 +12,8 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
   
     // for each tx, we need to build a row of data
     //  -> if(income) timestamp, tokenLabel, tokenAmount, fiatConversion, fiatAmount 
-  
 
     let fiatCode = country;   //"CAD";
-    // if(country === "Canada"){
-    //   fiatCode = "CAD";
-    // } else if(country === "United States"){
-    //   fiatCode = "USD";
-    // } else if(country === "United Kingdom"){
-    //   // not available yet
-    // } else {
-    //   fiatCode = "CAD";
-    // }
 
     activeAssets.forEach(asset => {
       // build a storage variable for each asset
@@ -100,7 +90,7 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
     let curIncome = taxableIncome.toLocaleString('en-US', { style: 'currency', currency: fiatCode });
   
     let summaryData = "<div>\
-      <h2>Thank you for using Bankless Card TaxMan!</h2>\
+      <h2>Your 2022 DAO Income:</h2>\
       <p>Your detailed transactions are attached to this email as a CSV.  Be sure to\ download the CSV and save it in a safe place</p>\
       \
       <h3>Your 2022 DAO Income:</h3>\
@@ -141,14 +131,13 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
     summaryData +=
         "</ul>\
       \
-      <p><strong>For a claimable total of: "+curIncome+" </strong> at income tax rate of "+tax+"%.</p>\
-      \
-      <p>TaxMan is a project by Bankless Card.</p>\
+      <p><strong>For a total income of: "+curIncome+" </strong><br />\
+      <small>You owe "+taxableIncome+" if your tax rate is "+tax+"%</small>.</p>\
+      <p>Be sure to download the attached CSV and save it in a safe place.</p>\
+      <p>TaxMan was made with ❤️by the team at <a href='https://banklesscard.xyz'>Bankless Card</a>. If you found it useful, please share with your friends: https://taxman.banklesscard.xyz</p>\
     </div>";
   
-    // console.log("get csv data as import");
-    // let csvData = "a,b,c\r\n1,2,x\r\n2,1,x\r\n3,5,y\r\n4,6,y\r\n";
-  
+    // build csv data
     let encodeCsv = btoa(csvData);
     // console.log(csvData);   // this is the csv data pre-encode
   
@@ -164,7 +153,7 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
         To: [emailReceipt],
         Bcc: ["help@justplay.cafe"],
         From: "taxman@justplay.cafe",
-        Subject: "BanklessCard TaxMan Transaction Summary",
+        Subject: "💳 Bankless Card TaxMan Report 💸",
         Body: summaryData,
         Attachments: [
           { 
