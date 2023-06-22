@@ -46,6 +46,9 @@ const AccountForm = () => {
 
   const [finalExport, setFinalExport] = useState("init");
 
+  // NEW setState for STARTDATE
+  // NEW setState for ENDDATE
+
   const { address, isConnected } = useAccount();
 
   useEffect(() => {
@@ -67,6 +70,7 @@ const AccountForm = () => {
         walletAddress = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045";   // vitalik
       }
 
+      // ADD IN STARTDATE AND ENDDATE to pass with function call
       const txDataTemp = await callAlchemyGo(walletAddress, addrOverride);
 
       // read and parse data first:

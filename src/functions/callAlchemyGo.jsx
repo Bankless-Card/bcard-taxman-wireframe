@@ -23,6 +23,9 @@ import { displayConvertAmount } from "../functions";
 
 export async function callAlchemyGo(address, addrOverride, country, activeAssets) {
 
+  // NEED TO ALSO RECEIVE HERE THE STARTDATE AND ENDDATE
+  console.log(address, addrOverride, country, activeAssets)
+
     // receives addresses so can be used for connected or inserted wallet address
     // maybe move this logic to the function call in the parent component
 
@@ -47,6 +50,21 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
     // optimism.core.getTokenBalances(walletAddress).then(console.log);
   
     const toAddress = walletAddress;    // for connected or inserted wallet address
+
+
+
+
+
+    
+
+    // CALCULATIONS FOR START AND END BLOCKS GO HERE
+    // STARTDATE && ENDDATE inputs
+    // ETH outputs (need to convert timestamp to UNIX and then to BLOCKNUMBER)
+
+
+
+
+
     
       // estimated starting eth block for 2022
       // https://etherscan.io/block/13916169
