@@ -11,7 +11,7 @@ import {
  } from "../../functions";  // import functions
 
 
-const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData, setTxData, country, activeAssets, tax, setFinalExport }) => {
+const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData, setTxData, country, activeAssets, tax, setFinalExport, dates }) => {
   const [{ showTransactionModal }, { setShowEmailInput }] = useUI();
 
   const { address, isConnected } = useAccount();
@@ -29,7 +29,7 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
     console.log("Fetching data for: " + address);
 
     // country needed for pricing data - default to Canada
-    const txDataTemp = await callAlchemyGo(address, addrOverride, country, activeAssets);
+    const txDataTemp = await callAlchemyGo(address, addrOverride, country, activeAssets, dates);
 
     // read and parse data first:
     setTxData(txDataTemp);

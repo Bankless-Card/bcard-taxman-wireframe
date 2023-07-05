@@ -1,4 +1,4 @@
-import { Web3Button } from "@web3modal/react";
+// import { Web3Button } from "@web3modal/react";
 import { useAccount } from "wagmi";
 import { createElement, useState } from "react";
 import { Alchemy, Network, AssetTransfersCategory } from "alchemy-sdk";
