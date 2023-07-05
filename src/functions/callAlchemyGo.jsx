@@ -85,22 +85,95 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
       console.log("ERROR: Start date is after end date.");
       // use defaults
       
-    } else if(dates.startDate === "2022-01-01" || dates.endDate ===  "2022-12-31") {
+    } else if(dates.startDate === "2022-01-01" && dates.endDate ===  "2022-12-31") {
       // they are actually the defaults
       console.log("Actual Defaults - no override.")
     } else {
       console.log("OK: Dates selected - setup override for blocks.");
       console.log(dates.startDate, dates.endDate);
 
-      // goals for output from this function -> block numbers corresponding to the dates
-      blockNumInt = 0;
-      endBlockNumInt = 0;
+      // frst we need UNIX timestamps
+      var startUnix = new Date(dates.startDate);
+      console.log(startUnix.getTime());
+      var endUnix = new Date(dates.endDate);
+      console.log(endUnix.getTime());
 
-      polyStartInt = 0;
-      polyEndInt = 0;
-      
-      opStartInt = 0;
-      opEndInt = 0;
+      // now we need block numbers
+
+      // https://etherscan.io/block/13916169
+      let startBlock = fetch('https://coins.llama.fi/block/ethereum/' + startUnix.getTime()/1000)
+        .then(response => response.json())
+        .then(data => {
+          // console.log(data);
+          console.log(data.height);
+          // console.log( 1641600000 - data.timestamp);
+
+          blockNumInt = data.height;
+      });
+
+      let endBlock = fetch('https://coins.llama.fi/block/ethereum/' + endUnix.getTime()/1000)
+        .then(response => response.json())
+        .then(data => {
+          // console.log(data);
+          console.log(data.height);
+          // console.log( 1641600000 - data.timestamp);
+
+          endBlockNumInt = data.height;
+      });
+
+      setTimeout(() => {
+        console.log("BLOCKS: ", blockNumInt, endBlockNumInt);
+      }, 2000);
+
+      let polyStartBlock = fetch('https://coins.llama.fi/block/polygon/' + startUnix.getTime()/1000)
+        .then(response => response.json())
+        .then(data => {
+          console.log(data.height);
+
+          polyStartInt = data.height;
+      });
+
+      let polyEndBlock = fetch('https://coins.llama.fi/block/polygon/' + endUnix.getTime()/1000)  
+      .then(response => response.json())
+      .then(data => {
+        console.log(data.height);
+
+        polyEndInt = data.height;
+      });
+
+      setTimeout(() => {
+        console.log("BLOCKS: ", blockNumInt, endBlockNumInt, polyStartInt, polyEndInt);
+      }, 2000);
+
+      let opStartBlock = fetch('https://coins.llama.fi/block/optimism/' + startUnix.getTime()/1000)
+        .then(response => response.json())
+        .then(data => {
+          console.log(data.height);
+
+          opStartInt = data.height;
+      });
+
+      let opEndBlock = fetch('https://coins.llama.fi/block/optimism/' + endUnix.getTime()/1000)
+        .then(response => response.json())
+        .then(data => {
+          console.log(data.height);
+
+          opEndInt = data.height;
+      });
+
+
+
+      // console.log(await block);
+
+      // goals for output from this function -> block numbers corresponding to the dates
+      // blockNumInt = await block.height; // 0;
+      // endBlockNumInt = 0;
+
+      // polyStartInt = 0;
+      // polyEndInt = 0;
+
+      // opStartInt = 0;
+      // opEndInt = 0;
 
     }
 

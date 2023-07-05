@@ -53,7 +53,9 @@ const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry, date
 
   // confirm dates are valid
   function isValidDate(d) {
-    return d instanceof Date && !isNaN(d);
+    // confirm single entry date is valid (either start or enddate is valid)
+    console.log(d);
+    return d; // && !isNaN(d);
   }
 
   function isValidRange(d1, d2) {
@@ -142,7 +144,7 @@ const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry, date
                 onChange={(e) => {
                   console.log("Current Start Date : "+dates.startDate);
                   console.log("Set Start Date to: "+e.target.value);
-                  setDates({...dates, startDate: new Date(e.target.value)});
+                  setDates({...dates, startDate: e.target.value});
                 }}
               />
             </div>
@@ -164,7 +166,7 @@ const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry, date
                   console.log("Set End Date to: " + e.target.value);
                   // verify range is valid
 
-                  let proposeEnd = new Date(e.target.value);
+                  let proposeEnd = e.target.value;
                   console.log("Proposed End Date : " + proposeEnd);
                   if(isValidRange(dates.startDate, proposeEnd)){
                     console.log("Valid date range.");

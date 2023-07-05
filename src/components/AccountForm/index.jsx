@@ -53,14 +53,14 @@ const AccountForm = () => {
   const defaultEndDate = new Date(2022, 11, 31);
   var defaultDateStart = defaultStartDate.toISOString().substring(0,10);
   var defaultDateEnd = defaultEndDate.toISOString().substring(0,10);
-  console.log(defaultDateStart, defaultDateEnd);   // OK for format ???
+  // console.log(defaultDateStart, defaultDateEnd);   // OK for format ???
 
   const [dates, setDates] = useState({startDate: defaultDateStart, endDate: defaultDateEnd});
 
   const { address, isConnected } = useAccount();
 
   useEffect(() => {
-    // this obsoleted on index load - triggered on arrival at step 2
+    // this obsoleted on index load - data fetch triggered on arrival at step 2
     async function fetchData() {
 
       // THIS FUNCTION NOT USED - NOT CALLED 
