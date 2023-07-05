@@ -33,6 +33,21 @@
   outline: none; /* Añadir esta línea */
 }
 
+.form_first_step_date {
+  /* background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(20px);
+  border-radius: 12px;
+  border: none;
+  width: 90%;
+  padding: 19px 20px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+  outline: none; Añadir esta línea */
+  float: right;
+}
+
 .select_container {
   background: rgba(255, 255, 255, 0.4);
   backdrop-filter: blur(20px);
