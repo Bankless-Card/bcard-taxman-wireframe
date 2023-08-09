@@ -105,7 +105,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
         .then(response => response.json())
         .then(data => {
           // console.log(data);
-          console.log(data.height);
+          // console.log(data.height);
           // console.log( 1641600000 - data.timestamp);
 
           blockNumInt = data.height;
@@ -115,20 +115,20 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
         .then(response => response.json())
         .then(data => {
           // console.log(data);
-          console.log(data.height);
+          // console.log(data.height);
           // console.log( 1641600000 - data.timestamp);
 
           endBlockNumInt = data.height;
       });
 
       setTimeout(() => {
-        console.log("BLOCKS: ", blockNumInt, endBlockNumInt);
+        console.log("ETH BLOCKS: ", blockNumInt, endBlockNumInt);
       }, 2000);
 
       let polyStartBlock = fetch('https://coins.llama.fi/block/polygon/' + startUnix.getTime()/1000)
         .then(response => response.json())
         .then(data => {
-          console.log(data.height);
+          // console.log(data.height);
 
           polyStartInt = data.height;
       });
@@ -136,19 +136,21 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
       let polyEndBlock = fetch('https://coins.llama.fi/block/polygon/' + endUnix.getTime()/1000)  
       .then(response => response.json())
       .then(data => {
-        console.log(data.height);
+        // console.log(data.height);
 
         polyEndInt = data.height;
       });
 
       setTimeout(() => {
-        console.log("BLOCKS: ", blockNumInt, endBlockNumInt, polyStartInt, polyEndInt);
+        console.log("POLY BLOCKS: ", polyStartInt, polyEndInt);
       }, 2000);
+
+      // OP Lanched in 2022, so may be funky...
 
       let opStartBlock = fetch('https://coins.llama.fi/block/optimism/' + startUnix.getTime()/1000)
         .then(response => response.json())
         .then(data => {
-          console.log(data.height);
+          console.log("opStartBlock: ", data.height);
 
           opStartInt = data.height;
       });
@@ -156,10 +158,14 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
       let opEndBlock = fetch('https://coins.llama.fi/block/optimism/' + endUnix.getTime()/1000)
         .then(response => response.json())
         .then(data => {
-          console.log(data.height);
+          console.log("OP EndBlock: ", data.height);
 
           opEndInt = data.height;
       });
+
+      setTimeout(() => {
+        console.log("OP BLOCKS: ", opStartInt, opEndInt);
+      }, 2000);
 
 
 
@@ -197,7 +203,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
       excludeZeroValue: true,
       withMetadata: true,
       // order: "desc",       // default asc for ascending
-      category: [ AssetTransfersCategory.ERC20],
+      category: [ AssetTransfersCategory.ERC20 ],
     });
     
     // AssetTransfersCategory.EXTERNAL, AssetTransfersCategory.INTERNAL, AssetTransfersCategory.ERC721, AssetTransfersCategory.ERC1155,
@@ -228,7 +234,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
     let polyArr = polyRes.transfers;
     let opArr = opRes.transfers;
 
-    // console.log(objArr, activeAssets);    // OK
+    console.log(objArr, startBlock, endBlock);    // OK
 
     let countryExport = country;  //"CAD";   // label for export currency
 

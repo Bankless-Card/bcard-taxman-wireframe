@@ -82,59 +82,54 @@ const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry, date
           <p className={styles.form_first_step_title}>
             Let’s start with some questions!
           </p>
-          <p className={styles.form_first_step_label}>
-            What’s your ETH address?
-          </p>
-          <input 
-            className={styles.form_first_step_ETH}
-            type="text" 
-            defaultValue={address}
-            placeholder="Paste your ETH address here (read only)"
-            onChange={(e) => 
-              {
-                setAddrOverride(e.target.value)
-                console.log(e.target.value);
-            }}
-          />
-          {/* here give fucntionality to connect the wallet to the button */}
-          {/* <button className={styles.connect_wallet_button}>
-            Connect Wallet
-          </button> 
-          isConnected ? (
-            <p></p>
-          ) : (
-            <Web3Button />
-          ) */ }
-
-          <p className={styles.form_first_step_label}>
-            Choose your currency of taxation
-          </p>
-          <div className={styles.select_container}>
-            <select 
-              value={country}
-              onChange={(e) => {
-                setCountry(e.target.value)
-                console.log(e.target.value)
+          <div>
+            <p className={styles.form_first_step_label}>
+              What’s your ETH address?
+            </p>
+            <input 
+              className={styles.form_first_step_ETH}
+              type="text" 
+              defaultValue={address}
+              placeholder="Paste your ETH address here (read only)"
+              onChange={(e) => 
+                {
+                  setAddrOverride(e.target.value)
+                  console.log(e.target.value);
               }}
-            >
-              <option>Country</option>
+            />
+          </div>
+          {/* here give fucntionality to connect the wallet to the button */}
+          <div>
+            <p className={styles.form_first_step_label}>
+              What's your tax currency?
+            </p>
+            <div className={styles.select_container}>
+              <select 
+                value={country}
+                onChange={(e) => {
+                  setCountry(e.target.value)
+                  console.log(e.target.value)
+                }}
+              >
+                <option>Country</option>
 
-              {countryNames.map((item) => (
-                <option
-                  key={item?.name?.common}
-                  // disabled={(item?.name?.common === "Canada" || item?.name?.common === "United States") ? false : true}
-                  value={item?.name?.official}
-                >{item?.name?.common}</option>
-              ))}
-            </select>
+                {countryNames.map((item) => (
+                  <option
+                    key={item?.name?.common}
+                    // disabled={(item?.name?.common === "Canada" || item?.name?.common === "United States") ? false : true}
+                    value={item?.name?.official}
+                  >{item?.name?.common} ({item?.name?.official})</option>
+                ))}
+              </select>
+            </div>
           </div>
 
           {/* Add In UI Elements for STARTDATE and ENDDATE picker */}
-          <div className="datepicker-container">
+          <div className={styles.datepickerContainer}>
 
-            <div>
+            <div className={styles.dateSide}>
               <p className={styles.form_first_step_label}>
-                When did you start earning?
+                What is your year start date?
               </p>
               <input
                 className={styles.form_first_step_date}
@@ -146,15 +141,17 @@ const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry, date
                   console.log("Set Start Date to: "+e.target.value);
                   setDates({...dates, startDate: e.target.value});
                 }}
+                disabled={true}
+                title="Date Selection Coming Soon"
               />
             </div>
             {/* calendar-picker UI icon */}
 
             <div style={{clear: "both"}}></div>
 
-            <div>
+            <div className={styles.dateSide}>
               <p className={styles.form_first_step_label}>
-              When did you stop earning?
+              What is your year end date?
               </p>
               <input
                 className={styles.form_first_step_date}
@@ -176,6 +173,8 @@ const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry, date
                     console.log("Invalid date range.");
                   }
                 }}
+                disabled={true}
+                title="Date Selection Coming Soon"
               />
             </div>
             {/* calendar-picker UI icon */}
