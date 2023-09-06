@@ -28,7 +28,7 @@ export function displayConvertAmount(value:any, asset:any, timestamp:any, fiat:s
     let bankFIAT = 0.0101;   // 1 BANK = 0.01 default (or newer price)
     let bankHistory = bankPrices2022.bankCad.prices;
 
-    // console.log(fiat, timestamp);
+    console.log(fiat, timestamp);
 
     // console.log(bankPrices2022[fiatCode].prices);
 
@@ -44,11 +44,16 @@ export function displayConvertAmount(value:any, asset:any, timestamp:any, fiat:s
     }
 
     let i = 0;
-    while(timestamp > bankHistory[i][0]/1000){
-      // console.log(timestamp + " SetPriceBANKFIAT: " + bankHistory[i][1]);
-      bankFIAT = bankHistory[i][1];    // set price up to timestamp
+    if(bankHistory !== undefined){
 
-      i++;  // next item
+      console.log(bankHistory[i]);
+
+      while(timestamp > bankHistory[i][0]/1000){
+        // console.log(timestamp + " SetPriceBANKFIAT: " + bankHistory[i][1]);
+        bankFIAT = bankHistory[i][1];    // set price up to timestamp
+
+        i++;  // next item
+      }
     }
 
     // REPLACED WITH WHILE LOOP ABOVE
