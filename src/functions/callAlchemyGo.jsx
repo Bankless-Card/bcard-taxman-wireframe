@@ -21,7 +21,10 @@ import { displayTokenAmount } from "../functions";
 import { displayConvertAmount } from "../functions";
 
 
-export async function callAlchemyGo(address, addrOverride, country, activeAssets) {
+export async function callAlchemyGo(address, addrOverride, country, activeAssets, dates) {
+
+  // NEED TO ALSO RECEIVE HERE THE STARTDATE AND ENDDATE
+  console.log(address, addrOverride, country, activeAssets, dates)
 
     // receives addresses so can be used for connected or inserted wallet address
     // maybe move this logic to the function call in the parent component
@@ -47,25 +50,150 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
     // optimism.core.getTokenBalances(walletAddress).then(console.log);
   
     const toAddress = walletAddress;    // for connected or inserted wallet address
+
+
+
+
+    // BLOCK SETTING DEFAULTS - May be overridden by dates input
+    // estimated starting eth block for 2022
+    // https://etherscan.io/block/13916169
+  
+    var blockNumInt = 13916169;   //for 2022 eth mainnet START - hc  
+    var endBlockNumInt = 16308155;   //for 2022 eth mainnet END - hc
     
-      // estimated starting eth block for 2022
+    var polyStartInt = 23231793;    // for 2022 polygon mainnet START - hc
+    var polyEndInt = 37466741;    // for 2022 polygon mainnet END - hc
+  
+    var opStartInt = 0;    // for 2022 optimism mainnet START - hc
+    var opEndInt = 58351868;    // for 2022 optimism mainnet END - hc
+
+
+
+
+
+
+
+    // CALCULATIONS FOR START AND END BLOCKS GO HERE
+    // STARTDATE && ENDDATE inputs
+    // ETH outputs (need to convert timestamp to UNIX and then to BLOCKNUMBER)
+
+
+    if(dates.startDate === "" || dates.endDate === ""){
+      console.log("ERROR: No dates selected.");
+      // use defaults
+    } else if(dates.startDate > dates.endDate){
+      console.log("ERROR: Start date is after end date.");
+      // use defaults
+      
+    } else if(dates.startDate === "2022-01-01" && dates.endDate ===  "2022-12-31") {
+      // they are actually the defaults
+      console.log("Actual Defaults - no override.")
+    } else {
+      console.log("OK: Dates selected - setup override for blocks.");
+      console.log(dates.startDate, dates.endDate);
+
+      // frst we need UNIX timestamps
+      var startUnix = new Date(dates.startDate);
+      console.log(startUnix.getTime());
+      var endUnix = new Date(dates.endDate);
+      console.log(endUnix.getTime());
+
+      // now we need block numbers
+
       // https://etherscan.io/block/13916169
-    
-    const blockNumInt = 13916169;   //for 2022 eth mainnet START - hc
-    const startBlock = "0x" + blockNumInt.toString(16);   // format for 0x + hex
-  
-    const endBlockNumInt = 16308155;   //for 2022 eth mainnet END - hc
-    const endBlock = "0x" + endBlockNumInt.toString(16);
-    
-    const polyStartInt = 23231793;    // for 2022 polygon mainnet START - hc
-    const polyStart = "0x"+ polyStartInt.toString(16); //f0efd5";
-    const polyEndInt = 37466741;    // for 2022 polygon mainnet END - hc
-    const polyEnd = "0x" + polyEndInt.toString(16);
-  
-    const opStartInt = 0;    // for 2022 optimism mainnet START - hc
-    const opStart = "0x"+ opStartInt.toString(16); //f0efd5";
-    const opEndInt = 58351868;    // for 2022 optimism mainnet END - hc
-    const opEnd = "0x" + opEndInt.toString(16);
+      let startBlock = fetch('https://coins.llama.fi/block/ethereum/' + startUnix.getTime()/1000)
+        .then(response => response.json())
+        .then(data => {
+          // console.log(data);
+          // console.log(data.height);
+          // console.log( 1641600000 - data.timestamp);
+
+          blockNumInt = data.height;
+      });
+
+      let endBlock = fetch('https://coins.llama.fi/block/ethereum/' + endUnix.getTime()/1000)
+        .then(response => response.json())
+        .then(data => {
+          // console.log(data);
+          // console.log(data.height);
+          // console.log( 1641600000 - data.timestamp);
+
+          endBlockNumInt = data.height;
+      });
+
+      setTimeout(() => {
+        console.log("ETH BLOCKS: ", blockNumInt, endBlockNumInt);
+      }, 2000);
+
+      let polyStartBlock = fetch('https://coins.llama.fi/block/polygon/' + startUnix.getTime()/1000)
+        .then(response => response.json())
+        .then(data => {
+          // console.log(data.height);
+
+          polyStartInt = data.height;
+      });
+
+      let polyEndBlock = fetch('https://coins.llama.fi/block/polygon/' + endUnix.getTime()/1000)  
+      .then(response => response.json())
+      .then(data => {
+        // console.log(data.height);
+
+        polyEndInt = data.height;
+      });
+
+      setTimeout(() => {
+        console.log("POLY BLOCKS: ", polyStartInt, polyEndInt);
+      }, 2000);
+
+      // OP Lanched in 2022, so may be funky...
+
+      let opStartBlock = fetch('https://coins.llama.fi/block/optimism/' + startUnix.getTime()/1000)
+        .then(response => response.json())
+        .then(data => {
+          console.log("opStartBlock: ", data.height);
+
+          opStartInt = data.height;
+      });
+
+      let opEndBlock = fetch('https://coins.llama.fi/block/optimism/' + endUnix.getTime()/1000)
+        .then(response => response.json())
+        .then(data => {
+          console.log("OP EndBlock: ", data.height);
+
+          opEndInt = data.height;
+      });
+
+      setTimeout(() => {
+        console.log("OP BLOCKS: ", opStartInt, opEndInt);
+      }, 2000);
+
+
+
+      // console.log(await block);
+
+      // goals for output from this function -> block numbers corresponding to the dates
+      // blockNumInt = await block.height; // 0;
+      // endBlockNumInt = 0;
+
+      // polyStartInt = 0;
+      // polyEndInt = 0;
+
+      // opStartInt = 0;
+      // opEndInt = 0;
+
+    }
+
+
+
+        
+    // conversions to hex
+    var startBlock = "0x" + blockNumInt.toString(16);   // format for 0x + hex
+    var endBlock = "0x" + endBlockNumInt.toString(16);
+    var polyStart = "0x"+ polyStartInt.toString(16); //f0efd5";
+    var polyEnd = "0x" + polyEndInt.toString(16);
+    var opStart = "0x"+ opStartInt.toString(16); //f0efd5";
+    var opEnd = "0x" + opEndInt.toString(16);
+
     
     // MAINNET
     const res = await alchemy.core.getAssetTransfers({
@@ -75,7 +203,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
       excludeZeroValue: true,
       withMetadata: true,
       // order: "desc",       // default asc for ascending
-      category: [ AssetTransfersCategory.ERC20],
+      category: [ AssetTransfersCategory.ERC20 ],
     });
     
     // AssetTransfersCategory.EXTERNAL, AssetTransfersCategory.INTERNAL, AssetTransfersCategory.ERC721, AssetTransfersCategory.ERC1155,
@@ -106,7 +234,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
     let polyArr = polyRes.transfers;
     let opArr = opRes.transfers;
 
-    // console.log(objArr, activeAssets);    // OK
+    console.log(objArr, startBlock, endBlock);    // OK
 
     let countryExport = country;  //"CAD";   // label for export currency
 

@@ -10,19 +10,25 @@ import {
   daiPrices2022,
   usdcPrices2022 } from "../data";
 
+
+// CREATE and IMPORT NEW function to get DYNAMIC price data for each token based on timestamps
+// NEW: USE Single pricing API call to get only a single price for each token.
+
 // this function is IMPORTANT in calculating the price of the asset based on historical price data
 export function displayConvertAmount(value:any, asset:any, timestamp:any, fiat:string){
   // USD/FIAT value @ timefrom blockNum
 
-  // console.log(value, asset, timestamp, fiat);
-  // let fiatCode = "bankCad";
+  // Since this receives a SINGLE value for asset, we are looking up only a 
+  // single price from data set with each load.
+  // parse hrough the historical data corresponding to the asset and FIAT and 
+  // return price at timestamp
 
   if(asset === "BANK"){
 
     let bankFIAT = 0.0101;   // 1 BANK = 0.01 default (or newer price)
     let bankHistory = bankPrices2022.bankCad.prices;
 
-    // console.log(fiat, timestamp);
+    console.log(fiat, timestamp);
 
     // console.log(bankPrices2022[fiatCode].prices);
 
@@ -38,11 +44,16 @@ export function displayConvertAmount(value:any, asset:any, timestamp:any, fiat:s
     }
 
     let i = 0;
-    while(timestamp > bankHistory[i][0]/1000){
-      // console.log(timestamp + " SetPriceBANKFIAT: " + bankHistory[i][1]);
-      bankFIAT = bankHistory[i][1];    // set price up to timestamp
+    if(bankHistory !== undefined){
 
-      i++;  // next item
+      console.log(bankHistory[i]);
+
+      while(timestamp > bankHistory[i][0]/1000){
+        // console.log(timestamp + " SetPriceBANKFIAT: " + bankHistory[i][1]);
+        bankFIAT = bankHistory[i][1];    // set price up to timestamp
+
+        i++;  // next item
+      }
     }
 
     // REPLACED WITH WHILE LOOP ABOVE
@@ -149,7 +160,7 @@ export function displayConvertAmount(value:any, asset:any, timestamp:any, fiat:s
       mkrHistory = mkrPrices2022.mkrUsd.prices;
     } else if(fiat === 'EUR'){
       // use EUR price
-      mkrHistory = antPrices2022.mkrEur.prices;
+      mkrHistory = mkrPrices2022.mkrEur.prices;
     } 
 
     let i = 0;
