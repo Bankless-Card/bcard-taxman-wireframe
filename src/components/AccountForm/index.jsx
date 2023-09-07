@@ -46,10 +46,21 @@ const AccountForm = () => {
 
   const [finalExport, setFinalExport] = useState("init");
 
+  // NEW setState for STARTDATE
+  // NEW setState for ENDDATE (single object with start and end dates is better)
+  // set defaults for state such that the defaults will be for 2022 as coded originally
+  const defaultStartDate = new Date(2022, 0, 1);
+  const defaultEndDate = new Date(2022, 11, 31);
+  var defaultDateStart = defaultStartDate.toISOString().substring(0,10);
+  var defaultDateEnd = defaultEndDate.toISOString().substring(0,10);
+  // console.log(defaultDateStart, defaultDateEnd);   // OK for format ???
+
+  const [dates, setDates] = useState({startDate: defaultDateStart, endDate: defaultDateEnd});
+
   const { address, isConnected } = useAccount();
 
   useEffect(() => {
-    // this obsoleted on index load - triggered on arrival at step 2
+    // this obsoleted on index load - data fetch triggered on arrival at step 2
     async function fetchData() {
 
       // THIS FUNCTION NOT USED - NOT CALLED 
@@ -67,6 +78,7 @@ const AccountForm = () => {
         walletAddress = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045";   // vitalik
       }
 
+      // ADD IN STARTDATE AND ENDDATE to pass with function call
       const txDataTemp = await callAlchemyGo(walletAddress, addrOverride);
 
       // read and parse data first:
@@ -106,6 +118,8 @@ const AccountForm = () => {
                         setAddrOverride={setAddrOverride} 
                         country={country} 
                         setCountry={setCountry} 
+                        dates={dates}
+                        setDates={setDates}
                       />}
                     {step === 2 && 
                       <FormSecondStep 
@@ -156,8 +170,9 @@ const AccountForm = () => {
                     activeAssets={activeAssets}
                     country={country}
                     tax={tax}
-
                     setFinalExport={setFinalExport}
+
+                    dates={dates}
 
                     />
                 </div>
