@@ -141,7 +141,7 @@ const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry, date
                   console.log("Set Start Date to: "+e.target.value);
                   setDates({...dates, startDate: e.target.value});
                 }}
-                disabled={true}
+                // disabled={true}
                 title="Date Selection Coming Soon"
               />
             </div>
@@ -173,7 +173,7 @@ const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry, date
                     console.log("Invalid date range.");
                   }
                 }}
-                disabled={true}
+                // disabled={true}
                 title="Date Selection Coming Soon"
               />
             </div>

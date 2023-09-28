@@ -23,6 +23,8 @@ export function displayConvertAmount(value:any, asset:any, timestamp:any, fiat:s
   // parse hrough the historical data corresponding to the asset and FIAT and 
   // return price at timestamp
 
+  console.log(asset, value, timestamp, fiat);
+
   if(asset === "BANK"){
 
     let bankFIAT = 0.0101;   // 1 BANK = 0.01 default (or newer price)
@@ -44,15 +46,26 @@ export function displayConvertAmount(value:any, asset:any, timestamp:any, fiat:s
     }
 
     let i = 0;
+
+    //console.log(bankHistory);
+    //data object must exist
     if(bankHistory !== undefined){
 
-      console.log(bankHistory[i]);
+      // console.log(bankHistory[i]);    // first item in price array
 
       while(timestamp > bankHistory[i][0]/1000){
         // console.log(timestamp + " SetPriceBANKFIAT: " + bankHistory[i][1]);
         bankFIAT = bankHistory[i][1];    // set price up to timestamp
 
         i++;  // next item
+
+        if(i > bankHistory.length){
+          console.log("Note: Price out of data range.");
+          break;
+        } else if(bankHistory[i] === undefined){
+          console.log("Note: Price is undefined.");
+          break;
+        }
       }
     }
 
@@ -71,6 +84,8 @@ export function displayConvertAmount(value:any, asset:any, timestamp:any, fiat:s
     //   // next item
 
     // });
+
+    console.log(bankFIAT);    // this needs to be tested for valid price  
 
     let output = "$"+fiat+" "+(bankFIAT*parseFloat(value)).toFixed(2) + " @ " +bankFIAT.toFixed(4);
     // console.log(output);
@@ -280,9 +295,7 @@ export function displayConvertAmount(value:any, asset:any, timestamp:any, fiat:s
     // return the price in FIAT terms, based on timestamp
     return output;
 
-  } 
-  
-  else if(asset === "WETH") {
+  } else if(asset === "WETH") {
 
     // console.log("real lookup for prices here...");
     let wethFIAT = 2000.0101;   // 1 WETH = 0.01 default (or newer price)
@@ -358,7 +371,7 @@ export function displayConvertAmount(value:any, asset:any, timestamp:any, fiat:s
 
   } else if(asset === "USDC") {
 
-    // console.log("USING DAI PRICES FOR NOW...");
+    // console.log("HELLO USDC");
 
     let usdcFIAT = 1.0101;   // 1 DAI = 0.01 default (or newer price)
     let usdcHistory = usdcPrices2022.usdcCad.prices;    // default CAD
@@ -373,7 +386,13 @@ export function displayConvertAmount(value:any, asset:any, timestamp:any, fiat:s
 
     // get the right price history
     let i = 0;
+
+    
+
     while(timestamp > usdcHistory[i][0]/1000){
+
+      // console.log(i, usdcHistory[i]);   //index and object
+
       usdcFIAT = usdcHistory[i][1];    // set price up to timestamp
       i++;  // next item
     }
