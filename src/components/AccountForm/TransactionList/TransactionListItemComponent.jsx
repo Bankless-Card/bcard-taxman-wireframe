@@ -13,6 +13,8 @@ const TransactionListItemComponent = ({
   if(incomeState){
     // render the item
 
+    // console.log(crypto, currency);
+
     return (
       <div key={id} data-incomestate={incomeState} className={styles.item_container} onClick={onClick}>
         <div className={styles.avatar_container}>
