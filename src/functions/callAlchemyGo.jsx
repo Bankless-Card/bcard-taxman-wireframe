@@ -351,9 +351,12 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
     // } else {
     //   countryExport = "CAD";  // default
     // }
-  
+
     // ETH MAINNET
-    for (var i=0; i<objArr.length; i++) {
+
+    let initEthArr = objArr;    // copy of initial array to measure length of for loop
+
+    for (var i=0; i<initEthArr.length; i++) {
     
       let thisRow = objArr[i];
   
@@ -368,7 +371,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
         thisRow.unixT = unixT;   // add unix timestamp to global object
         thisRow.tNice = tNice;   // add date/time to global object
 
-        thisRow.currency = displayConvertAmount(thisRow.value, thisRow.asset, unixT, countryExport);
+        thisRow.currency = await displayConvertAmount(thisRow.value, thisRow.asset, unixT, countryExport);
         thisRow.img_url = getTokenLogo(thisRow.asset);      //"./img/dao.jpg";
         thisRow.tokenLabel = getTokenLabel(thisRow.asset);
         thisRow.incomeState = true;    // "NOT" for unmatched txs by default
@@ -398,7 +401,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
       let tNice = new Date(t);
       let unixT = Date.parse(t)/1000;
       
-      console.log(i, thisRow, thisRow.asset, activeAssets.includes(thisRow.asset));
+      // console.log(i, thisRow, thisRow.asset, activeAssets.includes(thisRow.asset));
 
       if(activeAssets.includes(thisRow.asset)){
   
@@ -406,7 +409,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
         thisRow.unixT = unixT;   // add unix timestamp to global object
         thisRow.tNice = tNice;   // add date/time to global object
 
-        thisRow.currency = displayConvertAmount(thisRow.value, thisRow.asset, unixT, countryExport);
+        thisRow.currency = await displayConvertAmount(thisRow.value, thisRow.asset, unixT, countryExport);
         thisRow.img_url = getTokenLogo(thisRow.asset);      //"./img/dao.jpg";
         thisRow.tokenLabel = getTokenLabel(thisRow.asset);
         thisRow.incomeState = true;    // "NOT" for unmatched txs by default
@@ -415,7 +418,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
 
       } else {
 
-        console.log("No go for tx: ", thisRow.asset);
+        // console.log("No go for tx: ", thisRow.asset);
         // remove from the tx list - it will be recalled latter if dao selectors are toggled
         polyArr.splice(i,1);
         // console.log("Removed tx from list: " + thisRow.asset, objArr)
@@ -425,7 +428,10 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
     }   // end for all polygon transactions
   
     // OPTIMISM
-    for (var i=0; i<opArr.length; i++) {
+
+    let initOpArr = opArr;    // copy of initial array to measure length of for loop
+
+    for (var i=0; i<initOpArr.length; i++) {
     
         let thisRow = opArr[i];
     
@@ -441,7 +447,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
           thisRow.tNice = tNice;   // add date/time to global object
           // console.log(thisRow.value, thisRow.asset, unixT, countryExport);
 
-          thisRow.currency = displayConvertAmount(thisRow.value, thisRow.asset, unixT, countryExport);
+          thisRow.currency = await displayConvertAmount(thisRow.value, thisRow.asset, unixT, countryExport);
           thisRow.img_url = getTokenLogo(thisRow.asset);      //"./img/dao.jpg";
           thisRow.tokenLabel = getTokenLabel(thisRow.asset);
           thisRow.incomeState = true;    // "NOT" for unmatched txs by default

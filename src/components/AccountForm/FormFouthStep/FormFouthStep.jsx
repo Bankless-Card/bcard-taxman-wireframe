@@ -24,16 +24,20 @@ const FormFourthStep = ({txData, activeAssets, country, tax, setTax, finalExport
   // }
 
   let txSumOutput = sumTransactions(txData, activeAssets)
-  let txSum = txSumOutput[0];   // this is the total income
+  let txSum = txSumOutput[0];   // this is the total income in FIAT
   let bankSum = txSumOutput[1]; // this is the total BANK income
   let oneInchSum = txSumOutput[2]; // this is the total 1INCH income
   let antSum = txSumOutput[3]; // this is the total ANT income
   let mkrSum = txSumOutput[4]; // this is the total MKR income
   let poktSum = txSumOutput[5]; // this is the total POKT income
   let poolSum = txSumOutput[6]; // this is the total POOL income
-  let wethSum = txSumOutput[7]; // this is the total WETH income
-  let daiSum = txSumOutput[8]; // this is the total DAI income
-  let usdcSum = txSumOutput[9]; // this is the total USDC income
+  let ensSum = txSumOutput[7]; // this is the total ENS income
+
+  let wethSum = txSumOutput[8]; // this is the total WETH income
+  let daiSum = txSumOutput[9]; // this is the total DAI income
+  let usdcSum = txSumOutput[10]; // this is the total USDC income
+
+  console.log(txSumOutput, usdcSum);
 
   function returnNiceFormat(txSum){
     return parseFloat( txSum ).toFixed(2);;
@@ -168,6 +172,13 @@ const FormFourthStep = ({txData, activeAssets, country, tax, setTax, finalExport
           <div className={styles.row}>
             <p>Total POOL</p>
             <p>{returnNiceFormat(poolSum)}</p>
+          </div>
+        )}
+
+        {ensSum > 0 && (
+          <div className={styles.row}>
+            <p>Total ENS</p>
+            <p>{returnNiceFormat(ensSum)}</p>
           </div>
         )}
 
