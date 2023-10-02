@@ -25,6 +25,20 @@ export async function displayConvertAmount(value:any, asset:any, timestamp:any, 
 
   console.log(asset, value, timestamp, fiat);
 
+   // get active assets list and compare to asset
+
+   if(asset === "BANK" || asset === "1INCH" || asset === "ANT" || asset === "MKR" || asset === "POKT" || asset === "POOL" || asset === "ENS" || asset === "WETH" || asset === "DAI" || asset === "USDC"){
+
+    // get data output to return to front end
+    return assetDataLoop(asset, fiat, timestamp, value);
+
+   } else {
+      // unmatched token asset
+      return "Convert Token - " + value;
+    }
+
+
+    // obsoleted code below
   if(asset === "BANK"){
 
     let bankFIAT = 0.0101;   // 1 BANK = 0.01 default (or newer price)
@@ -65,6 +79,9 @@ export async function displayConvertAmount(value:any, asset:any, timestamp:any, 
           break;
         } else if(bankHistory[i] === undefined){
           console.log("Note: BANK Price for "+i+" is undefined - Call Data Lookup Function.");
+
+          bankFIAT = await getSinglePrice(asset, value, timestamp, fiat, bankFIAT);
+
           break;
         }
       }
@@ -108,6 +125,9 @@ export async function displayConvertAmount(value:any, asset:any, timestamp:any, 
           break;
         } else if(inchHistory[i] === undefined){
           console.log("Note: 1INCH Price for " + i + " is undefined - Call Data Lookup Function.");
+
+          inchFIAT = await getSinglePrice(asset, value, timestamp, fiat, inchFIAT);
+
           break;
         }
       }
@@ -156,6 +176,9 @@ export async function displayConvertAmount(value:any, asset:any, timestamp:any, 
           break;
         } else if(antHistory[i] === undefined){
           console.log("Note: ANT Price for " + i + " is undefined - Call Data Lookup Function.");
+
+          antFIAT = await getSinglePrice(asset, value, timestamp, fiat, antFIAT);
+
           break;
         }
       }
@@ -196,6 +219,9 @@ export async function displayConvertAmount(value:any, asset:any, timestamp:any, 
           break;
         } else if(mkrHistory[i] === undefined){
           console.log("Note: MKR Price for " + i + " is undefined - Call Data Lookup Function.");
+
+          mkrFIAT = await getSinglePrice(asset, value, timestamp, fiat, mkrFIAT);
+
           break;
         }
       }
@@ -236,6 +262,9 @@ export async function displayConvertAmount(value:any, asset:any, timestamp:any, 
           break;
         } else if(poktHistory[i] === undefined){
           console.log("Note: POKT Price for " + i + " is undefined - Call Data Lookup Function.");
+
+          poktFIAT = await getSinglePrice(asset, value, timestamp, fiat, poktFIAT);
+
           break;
         }
       }
@@ -275,6 +304,9 @@ export async function displayConvertAmount(value:any, asset:any, timestamp:any, 
           break;
         } else if(poolHistory[i] === undefined){
           console.log("Note: POOL Price for " + i + " is undefined - Call Data Lookup Function.");
+
+          poolFIAT = await getSinglePrice(asset, value, timestamp, fiat, poolFIAT);
+
           break;
         }
       }
@@ -313,6 +345,9 @@ export async function displayConvertAmount(value:any, asset:any, timestamp:any, 
           break;
         } else if(ensHistory[i] === undefined){
           console.log("Note: ENS Price for " + i + " is undefined - Call Data Lookup Function.");
+
+          ensFIAT = await getSinglePrice(asset, value, timestamp, fiat, ensFIAT);
+
           break;
         }
       }
@@ -328,56 +363,73 @@ export async function displayConvertAmount(value:any, asset:any, timestamp:any, 
   } else if(asset === "WETH") {
 
     // console.log("real lookup for prices here...");
-    let wethFIAT = 2000.0101;   // 1 WETH = 0.01 default (or newer price)
-    let wethHistory = ethPrices2022.ethCad.prices;    // default CAD
+    // let wethFIAT = 2000.0101;   // 1 WETH = 0.01 default (or newer price)
+    // let wethHistory = ethPrices2022.ethCad.prices;    // default CAD
 
-    if(fiat === 'USD'){
-      // use CAD price
-      wethHistory = ethPrices2022.ethUsd.prices;
-    } else if(fiat === 'EUR'){
-      // use EUR price
-      wethHistory = ethPrices2022.ethEur.prices;
-    } 
+    // if(fiat === 'USD'){
+    //   // use CAD price
+    //   wethHistory = ethPrices2022.ethUsd.prices;
+    // } else if(fiat === 'EUR'){
+    //   // use EUR price
+    //   wethHistory = ethPrices2022.ethEur.prices;
+    // } 
 
-    // console.log(fiat, timestamp, wethHistory);
+    // // console.log(fiat, timestamp, wethHistory);
 
-    let i = 0;
+    // let i = 0;
 
-    if(wethHistory !== undefined){
-      while(timestamp > wethHistory[i][0]/1000){
-        wethFIAT = wethHistory[i][1];    // set price up to timestamp
-        i++;  // next item
+    // // console.log(timestamp > wethHistory[wethHistory.length-1][0]/1000);
 
-        // check for undefined data
-        if(i > wethHistory.length){
-          console.log("Note: Price out of data range.");
-          break;
-        } else if(wethHistory[i] === undefined){
-          console.log("Note: WETH Price for " + i + " is undefined - Call Data Lookup Function.");
-          break;
-        }
-      }
-    } else {
-      console.log("Note: Token data is undefined - No data cache.");
-    }
+    // if(wethHistory !== undefined){
 
-    // wethHistory.forEach((item:any) => {
-    //   // if time of item is less than or equal to timestamp
+    //   // if the timestamp data indicates a date before the first price in the data set
+    //   if(timestamp < wethHistory[0][0]/1000){
+    //     // then we need to call for a single lookup price and skip the loop
+    //     console.log("then we need to call for a single lookup price and skip the loop");
+    //     wethFIAT = await getSinglePrice(asset, value, timestamp, fiat, wethFIAT);
 
-    //   // console.log(item[0], timestamp*1000);   // ok for mainnet, not for polygon
+    //   } else {
 
-    //   if(item[0] <= timestamp*1000){
-    //     wethFIAT = item[1];    // set price up to timestamp
-    //   } 
-    //   // next item
+    //     // otherwise, we can loop through the data set to find the right price
+    //     while(timestamp > wethHistory[i][0]/1000){
+    //       wethFIAT = wethHistory[i][1];    // set price up to timestamp
+    //       i++;  // next item
+  
+    //       // check for undefined data - it's a future date
+    //       if(i >= wethHistory.length){
+    //         console.log("Note: Loop to check price out of data range. - use last closest price.");
+    //         break;
 
-    // });
+    //       } else if(timestamp > wethHistory[wethHistory.length-1][0]/1000) {
+    //         console.log("it's a future date beyond our stored data");
 
-    let output = "$"+fiat+" "+(wethFIAT*parseFloat(value)).toFixed(2) + " @ " +wethFIAT.toFixed(4);
+    //         wethFIAT = await getSinglePrice(asset, value, timestamp, fiat, wethFIAT);
+
+    //         break;
+
+    //       } else if(wethHistory[i] === undefined){
+    //         console.log("Note: WETH Price for " + i + " is undefined - Call Data Lookup Function.");
+  
+    //         wethFIAT = await getSinglePrice(asset, value, timestamp, fiat, wethFIAT);
+  
+    //         break;
+    //       }
+    //     }
+    //   }
+
+
+
+      
+    // } else {
+    //   console.log("Note: Token data is undefined - No data cache.");
+    // }
+
+    // let output = "$"+fiat+" "+(wethFIAT*parseFloat(value)).toFixed(2) + " @ " +wethFIAT.toFixed(4);
     // console.log(output);
 
     // return the price in FIAT terms, based on timestamp
-    return output;
+    // return output;
+    return assetDataLoop(asset, fiat, timestamp, value);
 
   } else if(asset === "DAI") {
 
@@ -406,6 +458,9 @@ export async function displayConvertAmount(value:any, asset:any, timestamp:any, 
           break;
         } else if(daiHistory[i] === undefined){
           console.log("Note: DAI Price for " + i + " is undefined - Call Data Lookup Function.");
+
+          daiFIAT = await getSinglePrice(asset, value, timestamp, fiat, daiFIAT);
+
           break;
         }
       }
@@ -447,7 +502,7 @@ export async function displayConvertAmount(value:any, asset:any, timestamp:any, 
           console.log("Note: Price out of data range.");
           break;
         } else if(usdcHistory[i] === undefined){
-          
+
           // console.log("Note: USDC Price beyond " + i + " is undefined - Call Data Lookup Function.");
 
           // let temp = await getSinglePrice(asset, value, timestamp, fiat);
@@ -475,20 +530,52 @@ export async function displayConvertAmount(value:any, asset:any, timestamp:any, 
 
 }
 
+// this function is IMPORTANT in calculating the unknown price of the asset based on historical price data and FIAT input
 async function getSinglePrice(asset:any, value:any, timestamp:any, fiat:any, lastPrice:any) {
 
   let dateObj = new Date(timestamp * 1000);
 
+  // date format for CoinGecko API lookup request
   let useDate = dateObj.getDate() + "-" + (dateObj.getMonth() + 1) + "-" + dateObj.getFullYear();
 
-
+  // default for inputs
   let useAsset = asset.toLowerCase();
+  let useFiat = fiat.toLowerCase();
 
-  // get correct asset ID
-  if(asset === "USDC"){
-    useAsset = "usd-coin";
-  } else if(asset === "DAI"){
-    useAsset = "dai";
+  // get correct asset ID for coingecko API historical data lookup
+  switch(asset){
+    case "USDC":
+      useAsset = "usd-coin";
+      break;
+    case "DAI":
+      useAsset = "dai";   // same as default
+      break;
+    case "WETH":
+      useAsset = "ethereum";
+      break;
+    case "BANK":
+      useAsset = "bankless-dao";
+      break;
+    case "1INCH":
+      useAsset = "1inch";
+      break;
+    case "ANT":
+      useAsset = "aragon";
+      break;
+    case "MKR":
+      useAsset = "maker";
+      break;
+    case "POKT":
+      useAsset = "pocket-network";
+      break;
+    case "POOL":
+      useAsset = "pooltogether";
+      break;
+    case "ENS":
+      useAsset = "ethereum-name-service";
+      break;
+    default:
+      useAsset = asset.toLowerCase();
   }
 
   let url = "https://api.coingecko.com/api/v3/coins/" + useAsset + "/history?date=" + useDate + "&localization=false";
@@ -499,15 +586,26 @@ async function getSinglePrice(asset:any, value:any, timestamp:any, fiat:any, las
 
   try {
     //const response = await fetch('https://website');
-    thisPrice = await getPrice(url, fiat);
+    thisPrice = await getPrice(url);
   } catch (error) {
     // TypeError: Failed to fetch
     console.log('There was an error', error);
     return lastPrice;   // return last price
   }
 
+  switch(fiat){
+    case "CAD":
+      useFiat = "cad";
+      break;
+    case "EUR":
+      useFiat = "eur";
+      break;
+    default:
+      useFiat = "usd";
+  }
+
   // let fiatCode = fiat.toLowerCase();
-  let priceUpdate = thisPrice[fiat.toLowerCase()];
+  let priceUpdate = thisPrice[useFiat];
   console.log("Price Update: " + priceUpdate);
 
   return priceUpdate;
@@ -515,15 +613,220 @@ async function getSinglePrice(asset:any, value:any, timestamp:any, fiat:any, las
 }
 
 // general block lookup function
-const getPrice = async(url:any, fiat:any) => {
+const getPrice = async(url:any) => {
 
   let data = await fetch(url);
   let dataJSON = await data.json();
 
   // console.log(dataJSON);
-
+  // return only token prices
   return dataJSON.market_data.current_price;
 }
 
+// this function to generalize the data lookup for each asset
+async function assetDataLoop(asset:any, fiat:any, timestamp:any, value:any){
+
+  // initial pricing data to be used based on asset
+  let defaultPrice = getDefaultPrice(asset);
+  let currentPrice = defaultPrice;
+  // which data cache table to be used to lookup data
+  let priceFiatHistory = getPriceFiatTable(asset, fiat);    // default BANK history
 
 
+  // init the index for loop lookup
+  let i = 0;
+
+  if(priceFiatHistory !== undefined){
+
+    // if the timestamp data indicates a date before the first price in the data set
+    if(timestamp < priceFiatHistory[0][0]/1000){
+      // then we need to call for a single lookup price and skip the loop
+      console.log("Too Early: then we need to call for a single lookup price and skip the loop");
+      currentPrice = await getSinglePrice(asset, value, timestamp, fiat, defaultPrice);
+
+    } else if(timestamp > priceFiatHistory[priceFiatHistory.length-1][0]/1000) {
+      console.log("Too Late: it's a future date beyond our stored data, skip the looping lookup.");
+
+      currentPrice = await getSinglePrice(asset, value, timestamp, fiat, defaultPrice);
+
+    } else {
+
+      // otherwise, we can loop through the data set to find the right price
+      while(timestamp > priceFiatHistory[i][0]/1000){
+        currentPrice = priceFiatHistory[i][1];    // set price up to timestamp
+        i++;  // next item
+
+        // check for undefined data - it's a future date
+        if(i >= priceFiatHistory.length || priceFiatHistory[i] === undefined){
+          console.log("Note: Loop to check price out of data range. - lookup data, and we're out.");
+
+          // this call is different as it uses the currently stored price from the stored data (NOT NEEDED?)
+          currentPrice = await getSinglePrice(asset, value, timestamp, fiat, currentPrice);
+
+          break;
+
+        } 
+      }   // end while loop
+
+    }  // end conditional timestamp checks
+
+
+
+    
+  } else {
+    console.log("Note: Token data is undefined - No data cache.");
+  }  // end undefined check for price data history
+
+
+  let output = "$"+fiat+" "+(currentPrice*parseFloat(value)).toFixed(2) + " @ " +currentPrice.toFixed(4);
+
+  // return the price in FIAT terms, based on timestamp
+  return output;
+}
+// hard-coded defaults based on 2022 starting pri
+function getDefaultPrice(asset:any){
+
+  const defaultPrices = {
+    "bank": 0.0101,
+    "1inch": 3.0268715932288863,
+    "ant": 16.950179294162645,
+    "mkr": 2959.628120231065,
+    "pokt": 1.0101,
+    "pool": 5.277036824374893,
+    "ens": 49.39483417275808,
+    "weth": 2000.0101,
+    "dai": 1.0101,
+    "usdc": 1.0101
+  };
+
+  switch(asset){
+    case "USDC":
+      return defaultPrices.usdc;
+    case "DAI":
+      return defaultPrices.dai;   // same as default
+    case "WETH":
+      return defaultPrices.weth;
+    case "BANK":
+      return defaultPrices.bank;
+    case "1INCH":
+      return defaultPrices["1inch"];
+    case "ANT":
+      return defaultPrices.ant;
+    case "MKR":
+      return defaultPrices.mkr;
+    case "POKT":
+      return defaultPrices.pokt;
+    case "POOL":
+      return defaultPrices.pool;
+    case "ENS":
+      return defaultPrices.ens;
+    default:
+      // stablecoin default 1 USD
+      return defaultPrices.dai;
+  }
+}
+
+// needs acccess to the data cache
+function getPriceFiatTable(asset:any, fiat:any){
+  switch(asset){
+    case "USDC":
+      if(fiat === 'CAD'){
+        return usdcPrices2022.usdcCad.prices;
+      } else if(fiat === 'EUR'){
+        return usdcPrices2022.usdcEur.prices;
+      } else {
+        return usdcPrices2022.usdcUsd.prices;
+      }
+
+    case "DAI":
+      if(fiat === 'CAD'){
+        return daiPrices2022.daiCad.prices;
+      } else if(fiat === 'EUR'){
+        return daiPrices2022.daiEur.prices;
+      } else {
+        return daiPrices2022.daiUsd.prices;
+      }
+
+    case "WETH":
+      if(fiat === 'CAD'){
+        return ethPrices2022.ethCad.prices;
+      } else if(fiat === 'EUR'){
+        return ethPrices2022.ethEur.prices;
+      } else {
+        return ethPrices2022.ethUsd.prices;
+      }
+
+    case "BANK":
+      if(fiat === 'CAD'){
+        return bankPrices2022.bankCad.prices;
+      } else if(fiat === 'EUR'){
+        return bankPrices2022.bankEur.prices;
+      } else {
+        return bankPrices2022.bankUsd.prices;
+      }
+
+    case "1INCH":
+      if(fiat === 'CAD'){
+        return inchPrices2022.inchCad.prices;
+      } else if(fiat === 'EUR'){
+        return inchPrices2022.inchEur.prices;
+      } else {
+        return inchPrices2022.inchUsd.prices;
+      }
+
+    case "ANT":
+      if(fiat === 'CAD'){
+        return antPrices2022.antCad.prices;
+      } else if(fiat === 'EUR'){
+        return antPrices2022.antEur.prices;
+      } else {
+        return antPrices2022.antUsd.prices;
+      }
+
+    case "MKR":
+      if(fiat === 'CAD'){
+        return mkrPrices2022.mkrCad.prices;
+      } else if(fiat === 'EUR'){
+        return mkrPrices2022.mkrEur.prices;
+      } else {
+        return mkrPrices2022.mkrUsd.prices;
+      }
+
+    case "POKT":
+      if(fiat === 'CAD'){
+        return poktPrices2022.poktCad.prices;
+      } else if(fiat === 'EUR'){
+        return poktPrices2022.poktEur.prices;
+      } else {
+        return poktPrices2022.poktUsd.prices;
+      }
+      
+    case "POOL":
+      if(fiat === 'CAD'){
+        return poolPrices2022.poolCad.prices;
+      } else if(fiat === 'EUR'){
+        return poolPrices2022.poolEur.prices;
+      } else {
+        return poolPrices2022.poolUsd.prices;
+      }
+
+    case "ENS":
+      if(fiat === 'CAD'){
+        return ensPrices2022.ensCad.prices;
+      } else if(fiat === 'EUR'){
+        return ensPrices2022.ensEur.prices;
+      } else {
+        return ensPrices2022.ensUsd.prices;
+      }
+
+    default:
+      // BANK
+      if(fiat === 'CAD'){
+        return bankPrices2022.bankCad.prices;
+      } else if(fiat === 'EUR'){
+        return bankPrices2022.bankEur.prices;
+      } else {
+        return bankPrices2022.bankUsd.prices;
+      }
+  }
+}
