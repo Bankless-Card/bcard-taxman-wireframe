@@ -134,7 +134,7 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
       <p><strong>For a total income of: "+totalIncomeOut+" </strong><br />\
       <small>You owe "+curIncome+" if your tax rate is "+tax+"%</small>.</p>\
       <p>Be sure to download the attached CSV and save it in a safe place.</p>\
-      <p>TaxMan was made with ❤️by the team at <a href='https://banklesscard.xyz'>Bankless Card</a>. If you found it useful, please share with your friends: https://taxman.banklesscard.xyz</p>\
+      <p>TaxMan was made with ❤️by the team at <a href='https://banklesscard.xyz'>BCard</a>. If you found it useful, please share with your friends: https://taxman.banklesscard.xyz</p>\
     </div>";
   
     // build csv data
@@ -153,7 +153,7 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
         To: [emailReceipt],
         Bcc: ["help@justplay.cafe"],
         From: "taxman@justplay.cafe",
-        Subject: "💳 Bankless Card TaxMan Report 💸",
+        Subject: "💳 BCard TaxMan Report 💸",
         Body: summaryData,
         Attachments: [
           { 
@@ -166,7 +166,7 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
       .then(function (message) {
         console.log(message);
         if(message === "OK"){
-          console.log("Email sent successfully. Thanks for using Bankless Card TaxMan! You're free to go check your mail.");
+          console.log("Email sent successfully. Thanks for using BCard TaxMan! You're free to go check your mail.");
             // set state of email area to complete
             // setFinalExport("complete");
           return "success";
