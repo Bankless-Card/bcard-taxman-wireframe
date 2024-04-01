@@ -130,7 +130,7 @@ const FormFourthStep = ({txData, activeAssets, country, tax, setTax, finalExport
         transition={{ delay: 0.15 }}
         className={styles.fourth_step_container}
       >
-        <p className={styles.form_fourth_step_title}>Your 2022 Income</p>
+        <p className={styles.form_fourth_step_title}>Your Income Claim</p>
         {/* <TransactionListItem transactions={transactionsData[0].transactions} /> */}
         
         {bankSum > 0 && (
