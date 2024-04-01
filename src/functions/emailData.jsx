@@ -90,7 +90,7 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
     let curIncome = taxableIncome.toLocaleString('en-US', { style: 'currency', currency: fiatCode });
     let totalIncomeOut = totalIncome.toLocaleString('en-US', { style: 'currency', currency: fiatCode });
 
-    let year = new Date().getFullYear();
+    let year = new Date().getFullYear() -1;
 
     let summaryData = "<div>\
       <h2>Your " + year + " DAO Income:</h2>\
