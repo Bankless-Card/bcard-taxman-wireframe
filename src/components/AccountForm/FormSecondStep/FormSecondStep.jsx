@@ -40,7 +40,7 @@ const FormSecondStep = ({ currentStep, activeAssets, setActiveAssets }) => {
 
           <p className={styles.warning}>
             If your DAO doesn´t appear here. You can tweet us:&nbsp;
-            <a target="_blank" href="https://twitter.com/BanklessCard">@BanklessCard</a>
+            <a target="_blank" href="https://twitter.com/getbcard">@getbcard</a>
           </p>
         </motion.div>
       )}
