@@ -33,8 +33,8 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
     // console.log(addrOverride);
     
     // get address to use
-    //let walletAddress = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045";   // vitalik.eth
-    let walletAddress = "0x522d634b6BFfb444FdbCdE5932738995A4cfd1F1";
+    let walletAddress = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045";   // vitalik.eth
+    //let walletAddress = "0x522d634b6BFfb444FdbCdE5932738995A4cfd1F1";
     if(addrOverride){
       console.log("Using inserted wallet address. " + addrOverride);
       walletAddress = addrOverride;
