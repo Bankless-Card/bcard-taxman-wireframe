@@ -49,8 +49,8 @@ const AccountForm = () => {
   // NEW setState for STARTDATE
   // NEW setState for ENDDATE (single object with start and end dates is better)
   // set defaults for state such that the defaults will be for 2022 as coded originally
-  const defaultStartDate = new Date(2022, 0, 1);
-  const defaultEndDate = new Date(2022, 11, 31);
+  const defaultStartDate = new Date(2023, 0, 1);
+  const defaultEndDate = new Date(2023, 11, 31);
   var defaultDateStart = defaultStartDate.toISOString().substring(0,10);
   var defaultDateEnd = defaultEndDate.toISOString().substring(0,10);
   // console.log(defaultDateStart, defaultDateEnd);   // OK for format ???
