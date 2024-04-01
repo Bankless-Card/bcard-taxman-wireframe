@@ -19,7 +19,7 @@ const Navbar = () => {
 
   const MenuLinks = [
     { id: 1, href: "https://banklesscard.mirror.xyz/", title: "Blog" },
-    { id: 2, href: "https://banklesscard.xyz/", title: "About Us" },
+    { id: 2, href: "https://banklesscard.xyz", title: "About Us" },
   ];
 
   //  methods for controlling menu icon
@@ -32,9 +32,9 @@ const Navbar = () => {
   return (
     <header className={styles.nav_container}>
       <img
-        src="./img/bc_logo.png"
+        src="./img/bc_logo_new.png"
         className={styles.logo}
-        alt="BanklessCard Logo"
+        alt="BCard Logo"
         onClick={() => setIsCTAclicked(false)}
       />
       <ul className={styles.menu_container}>

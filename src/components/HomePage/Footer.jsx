@@ -12,7 +12,7 @@ const Footer = () => {
     {
       id: 5,
       img: "./img/tw.png",
-      href: "https://twitter.com/BanklessCard",
+      href: "https://twitter.com/getbcard",
       alt: "Twitter",
     },
   ];
@@ -20,7 +20,7 @@ const Footer = () => {
   return (
     <div className={styles.footer_container}>
       <footer>
-        <p>Made with 🤍 by Bankless Card</p>
+        <p>Made with 🤍 by BCard</p>
         <ul className="socials">
           {socialMedia.map((item) => (
             <li key={item.id}>
@@ -30,7 +30,7 @@ const Footer = () => {
             </li>
           ))}
         </ul>
-        <p>&copy; 2023 Bankless Card | All rights reserved</p>
+        <p>&copy; 2024 BCard | All rights reserved</p>
       </footer>
     </div>
   );
