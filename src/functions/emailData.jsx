@@ -90,8 +90,10 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
     let curIncome = taxableIncome.toLocaleString('en-US', { style: 'currency', currency: fiatCode });
     let totalIncomeOut = totalIncome.toLocaleString('en-US', { style: 'currency', currency: fiatCode });
 
+    let year = new Date().getFullYear();
+
     let summaryData = "<div>\
-      <h2>Your 2022 DAO Income:</h2>\
+      <h2>Your " + year + " DAO Income:</h2>\
       <ul>";
 
     if(totalBANK > 0) {
@@ -155,7 +157,7 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
         Body: summaryData,
         Attachments: [
           { 
-            name: "TaxManSummary2022-"+emailReceipt+".csv", 
+            name: "TaxManSummary"+year+"-"+emailReceipt+".csv", 
             data: encodeCsv,                    // this is the encoded file data
             contentType: "text/csv"
           }
