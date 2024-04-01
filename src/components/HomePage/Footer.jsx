@@ -12,7 +12,7 @@ const Footer = () => {
     {
       id: 5,
       img: "./img/tw.png",
-      href: "https://twitter.com/BanklessCard",
+      href: "https://twitter.com/getbcard",
       alt: "Twitter",
     },
   ];
