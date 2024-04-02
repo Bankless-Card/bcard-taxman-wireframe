@@ -69,13 +69,6 @@ const TransactionModalMobile = (props) => {
                 justifyContent: "space-around",
               }}
             >
-              {/* <TransactionListItemComponent
-                id={1}
-                avatar_url="./img/dao.jpg"
-                userName="Bankless DAO"
-                crypto="20000 BANKS"
-                currency="$48.77 CAD"
-              /> */}
               <div>
                 <p className={styles.transaction_date}>
                   {/* November 20, 2022 | 18:30 EST */}

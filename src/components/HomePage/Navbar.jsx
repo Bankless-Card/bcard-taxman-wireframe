@@ -9,7 +9,7 @@ const Navbar = () => {
 
   const twitterShare = (<a 
           target="_blank"
-          href="https://twitter.com/intent/tweet?text=I%20just%20did%20my%20DAO%20Income%20Taxes%20with%20TaxMan%20from%20@BanklessCard%20in%20about%20five%20minutes!%20https://taxman.banklesscard.xyz"
+          href="https://twitter.com/intent/tweet?text=I%20just%20did%20my%20DAO%20Income%20Taxes%20with%20TaxMan%20from%20@GetBCard%20in%20about%20five%20minutes!%20https://taxman.getbcard.io"
           >
             <div>
               Share
