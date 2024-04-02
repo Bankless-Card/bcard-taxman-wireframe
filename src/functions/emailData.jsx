@@ -134,7 +134,7 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
       <p><strong>For a total income of: "+totalIncomeOut+" </strong><br />\
       <small>You owe "+curIncome+" if your tax rate is "+tax+"%</small>.</p>\
       <p>Be sure to download the attached CSV and save it in a safe place.</p>\
-      <p>TaxMan was made with ❤️by the team at <a href='https://banklesscard.xyz'>BCard</a>. If you found it useful, please share with your friends: https://taxman.banklesscard.xyz</p>\
+      <p>TaxMan was made with ❤️by the team at <a href='https://banklesscard.xyz'>BCard</a>. If you found it useful, please share with your friends: https://taxman.getbcard.io</p>\
     </div>";
   
     // build csv data
@@ -152,7 +152,7 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
         SecureToken: ELASTICMAIL_SECURETOKEN,
         To: [emailReceipt],
         Bcc: ["help@justplay.cafe"],
-        From: "taxman@justplay.cafe",
+        From: "taxman@getbcard.io",
         Subject: "💳 BCard TaxMan Report 💸",
         Body: summaryData,
         Attachments: [
