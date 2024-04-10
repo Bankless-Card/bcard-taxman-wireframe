@@ -3,6 +3,9 @@ import { Alchemy, Network, AssetTransfersCategory } from 'alchemy-sdk';
 // data imports
 import { REACT_APP_ALCHEMY_API_KEY } from '../data' 
 
+const ARBITRUM_ALCHMEY_API_KEY = "4lUY2QKma35eW4nJ2G-U021FUDxCVoYN"; //process.env.REACT_APP_ARBITRUM_ALCHMEY_API_KEY;
+const BASE_ALCHMEY_API_KEY = "RDA9C_OEE6kEiJ3WsvdbfZbxozIOu2YX"; //process.env.REACT_APP_BASE_ALCHMEY_API_KEY;
+
 // Optional Config object, but defaults to demo api-key and eth-mainnet.
 const settings = {
   apiKey: REACT_APP_ALCHEMY_API_KEY, // Replace with your Alchemy API Key.
@@ -12,6 +15,10 @@ const settings = {
 const alchemy = new Alchemy(settings);
 const polygon = new Alchemy({ apiKey: REACT_APP_ALCHEMY_API_KEY, network: Network.MATIC_MAINNET });
 const optimism = new Alchemy({ apiKey: REACT_APP_ALCHEMY_API_KEY, network: Network.OPT_MAINNET });
+const arbitrum = new Alchemy({ apiKey: ARBITRUM_ALCHMEY_API_KEY, network: Network.ARB_MAINNET });
+const base = new Alchemy({ apiKey: BASE_ALCHMEY_API_KEY, network: Network.BASE_MAINNET });
+
+// console.log(Network);
 
 
 // other functions
