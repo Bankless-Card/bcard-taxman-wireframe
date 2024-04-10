@@ -19,7 +19,7 @@ const Navbar = () => {
 
   const MenuLinks = [
     { id: 1, href: "https://banklesscard.mirror.xyz/", title: "Blog" },
-    { id: 2, href: "https://banklesscard.xyz", title: "About Us" },
+    { id: 2, href: "https://getbcard.io", title: "About Us" },
   ];
 
   //  methods for controlling menu icon

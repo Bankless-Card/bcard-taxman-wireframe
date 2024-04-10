@@ -11,29 +11,29 @@ import { App } from "./App";
 // import { chains, client, walletConnectProjectId } from "./wagmi";
 // const ethereumClient = new EthereumClient(client, chains);
 
-import { WagmiConfig, createConfig, configureChains } from 'wagmi'
-import { publicProvider } from 'wagmi/providers/public'
-import { mainnet, optimism, polygon } from "wagmi/chains";
+// import { WagmiConfig, createConfig, configureChains } from 'wagmi'
+// import { publicProvider } from 'wagmi/providers/public'
+// import { mainnet, optimism, polygon } from "wagmi/chains";
  
-const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [mainnet, optimism, polygon],
-  [publicProvider()],
-)
+// const { chains, publicClient, webSocketPublicClient } = configureChains(
+//   [mainnet, optimism, polygon],
+//   [publicProvider()],
+// )
  
-const config = createConfig({
-  autoConnect: true,
-  publicClient,
-  webSocketPublicClient,
-})
+// const config = createConfig({
+//   autoConnect: true,
+//   publicClient,
+//   webSocketPublicClient,
+// })
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <WagmiConfig config={config}>
+    {/* <WagmiConfig config={config}> */}
       <App />
       {/* <Web3Modal
         projectId={walletConnectProjectId}
         ethereumClient={ethereumClient}
       /> */}
-    </WagmiConfig>
+    {/* </WagmiConfig> */}
   </React.StrictMode>
 );

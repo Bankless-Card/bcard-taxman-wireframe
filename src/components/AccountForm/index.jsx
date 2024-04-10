@@ -11,7 +11,7 @@ import StepsButtons from "./StepsButtons";
 import TransactionModal from "./TransactionModal/TransactionModal";
 import TransactionModalMobile from "./TransactionModal/TransactionModalMobile";
 
-import { useAccount } from 'wagmi';   // for connected account
+// import { useAccount } from 'wagmi';   // for connected account
 
 const AccountForm = () => {
   const [screenSize, setScreenSize] = useState("");
@@ -57,37 +57,11 @@ const AccountForm = () => {
 
   const [dates, setDates] = useState({startDate: defaultDateStart, endDate: defaultDateEnd});
 
-  const { address, isConnected } = useAccount();
+  // const { address, isConnected } = useAccount();
 
   useEffect(() => {
     // this obsoleted on index load - data fetch triggered on arrival at step 2
-    async function fetchData() {
 
-      // THIS FUNCTION NOT USED - NOT CALLED 
-      console.log(address);
-      console.log(addrOverride);
-
-      let walletAddress = address;    // this will be 'undefined' if not connected
-
-      if(addrOverride){
-        console.log("Using inserted wallet address.");
-        walletAddress = addrOverride;
-      } else if(typeof address === 'undefined') {
-        // set default address to use
-        console.log("Using default wallet address.");
-        walletAddress = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045";   // vitalik
-      }
-
-      // ADD IN STARTDATE AND ENDDATE to pass with function call
-      const txDataTemp = await callAlchemyGo(walletAddress, addrOverride);
-
-      // read and parse data first:
-      setTxData(txDataTemp);
-      // setLoading(false);
-      console.log(txDataTemp);
-
-    }
-    //fetchData();
   }, []);
 
   const classForTransactionModal = showTransactionModal
@@ -131,7 +105,7 @@ const AccountForm = () => {
                     {step === 3 && 
                       <FormThirdStep 
                         currentStep={step} 
-                        address={address}
+                        // address={null}
                         txData={txData} 
                         loading={loading}
                         activeAssets={activeAssets}

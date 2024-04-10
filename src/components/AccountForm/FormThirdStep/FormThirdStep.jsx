@@ -7,7 +7,9 @@ import Spinner from "../Spinner";
 // I recommend to add a loader spiner while the data is loaading on Transaction List, this is an example
 // this settimeOut is to simulate this behavior
 
-const FormThirdStep = ({ currentStep, address, txData, setActiveItem, loading, activeAssets }) => { 
+const FormThirdStep = ({ currentStep, txData, setActiveItem, loading, activeAssets }) => { 
+
+  // console.log(address);
 
   return (
     <>
@@ -20,8 +22,7 @@ const FormThirdStep = ({ currentStep, address, txData, setActiveItem, loading, a
           className={styles.form_third_step}
         >
           <p className={styles.form_third_step_title}>
-            <span title={address}>
-            Your transactions</span>
+            <span>Your transactions</span>
           </p>
           <p className={styles.form_third_step_label}>
             Click any line to view details and mark if it's 'Not Income'. Click Save to go to next line.

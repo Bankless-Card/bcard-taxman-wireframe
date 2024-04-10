@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 import styles from "./styles.module.css";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAccount } from 'wagmi';
+// import { useAccount } from 'wagmi';
 
 const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry, dates, setDates }) => {
 
-  const { address, isConnected } = useAccount();
+  // const { address, isConnected } = useAccount();
 
   // console.log(dates);
 
@@ -46,7 +46,7 @@ const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry, date
   // set datepicker defaults to 2022
   var curStart = dates.startDate;   // now set on init
   var curEnd = dates.endDate;     // now set on init
-  console.log(curStart, curEnd);
+  // console.log(curStart, curEnd);
   // var defaultDateStart = curStart.toISOString().substring(0,10);
   // var defaultDateEnd = curEnd.toISOString().substring(0,10);
   // console.log(defaultDateStart, defaultDateEnd);   // OK for format ???
@@ -89,7 +89,7 @@ const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry, date
             <input 
               className={styles.form_first_step_ETH}
               type="text" 
-              defaultValue={address}
+              defaultValue={null}
               placeholder="Paste your ETH address here (read only)"
               onChange={(e) => 
                 {
