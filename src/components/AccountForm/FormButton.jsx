@@ -31,16 +31,16 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
     // address may be null - if so, use the override address in callAlchemyGo
 
     // country needed for pricing data - default to Canada
-    const txDataTemp = await callAlchemyGo(address, addrOverride, country, activeAssets, dates);
+    const txData = await callAlchemyGo(address, addrOverride, country, activeAssets, dates);
 
     // read and parse data first:
-    setTxData(txDataTemp);
+    setTxData(txData);
     console.log("Updating transaction data.");
-    console.log(txDataTemp);
+    console.log(txData);
 
     setLoading(false);    // clear spinner
 
-    return txDataTemp;
+    return txData;
 
   }
   
