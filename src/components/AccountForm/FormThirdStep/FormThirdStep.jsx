@@ -9,7 +9,7 @@ import Spinner from "../Spinner";
 
 const FormThirdStep = ({ currentStep, txData, setActiveItem, loading, activeAssets }) => { 
 
-  // console.log(address);
+  // console.log(txData);
 
   return (
     <>
