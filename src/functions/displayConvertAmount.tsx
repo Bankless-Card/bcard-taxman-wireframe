@@ -155,7 +155,16 @@ async function assetDataLoop(asset:any, fiat:any, timestamp:any, value:any){
 
   // skip historical lookups for stables
   if(asset === "USDC" || asset === "DAI" || asset === "USDT"){
-    currentPrice = defaultPrice;    // same assignemnt as default
+    console.log("BUG: Need to update pricing for country currency.")
+    if(fiat === "CAD"){
+      console.log("lookup CAD/USD for timestamp supplied.");
+      currentPrice = 1.35;    // 1 CAD = 0.74 USD
+    } else if(fiat === "EUR"){
+      console.log("lookup EUR/USD for timestamp supplied.");
+      currentPrice = 0.93;    // 1 EUR = 1.07 USD
+    } else {
+      currentPrice = defaultPrice;    // same assignemnt as default
+    }
   } else {
     if(priceFiatHistory !== undefined){
 
