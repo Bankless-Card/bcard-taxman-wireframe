@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./styles.module.css";
 import { useUI } from "../../context/UIContext";
-import { useAccount } from "wagmi";
+// import { useAccount } from "wagmi";
 
 import { 
   callAlchemyGo,
@@ -14,7 +14,7 @@ import {
 const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData, setTxData, country, activeAssets, tax, setFinalExport, dates }) => {
   const [{ showTransactionModal }, { setShowEmailInput }] = useUI();
 
-  const { address, isConnected } = useAccount();
+  // const { address, isConnected } = useAccount();
 
   const isButtonDisabled = showTransactionModal
     ? styles.next_step_button_disabled
@@ -28,17 +28,19 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
 
     console.log("Fetching data for: " + address);
 
+    // address may be null - if so, use the override address in callAlchemyGo
+
     // country needed for pricing data - default to Canada
-    const txDataTemp = await callAlchemyGo(address, addrOverride, country, activeAssets, dates);
+    const txData = await callAlchemyGo(address, addrOverride, country, activeAssets, dates);
 
     // read and parse data first:
-    setTxData(txDataTemp);
+    setTxData(txData);
     console.log("Updating transaction data.");
-    console.log(txDataTemp);
+    console.log(txData);
 
     setLoading(false);    // clear spinner
 
-    return txDataTemp;
+    return txData;
 
   }
   
@@ -46,16 +48,14 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
   const handleFormButton = (currentStep) => {
 
     if(currentStep === 1){
-      console.log("SET Address & Country Code this page.");
-
-      console.log(country);
+      console.log("SET Address (Override) & Country Code: "+country+" this page.");
 
 
     } else if(currentStep === 2){
       console.log("Handle step 2 - DAO selection boxes - filter Income TXs for display.");
 
-      // console.log(activeAssets)
-      fetchData(address);
+      // console.log(addrOverride)
+      fetchData(addrOverride);
 
     } else if(currentStep === 3){
       
@@ -103,11 +103,11 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
         setFinalExport("loading");
 
         // determine address of connected wallet
-        console.log(address);  // ok for address
-        let localAddr = address;    // local storage of address variable
-        if(!isConnected){
-          localAddr = "NOT CONNECTED";
-        }
+        // console.log(address);  // ok for address
+        // let localAddr = address;    // local storage of address variable
+        // if(!isConnected){
+        //   localAddr = "NOT CONNECTED";
+        // }
 
         console.log(activeAssets);
 
@@ -125,7 +125,7 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
         
         // CAPTURE EMAIL WITH CONVERTKIT
         // console.log(userEmail);    // ok for validity conditions
-        let storeEmail = await convertKitEmail(userEmail, localAddr);  // flip to convertkit
+        let storeEmail = await convertKitEmail(userEmail, addrOverride);  // flip to convertkit
         console.log(storeEmail); 
 
         setFinalExport("completed");

@@ -7,23 +7,24 @@ export function sumTransactions(txData, activeAssets) {
   // output the displayed DAO tokens for summary
   let totalIncome = 0;
 
-    // some individuals captured as sample
-  let totalBANK = 0;
-  let total1INCH = 0;
-  let totalANT = 0;
-  let totalMKR = 0;
-  let totalPOKT = 0;
-  let totalPOOL = 0;
-  let totalENS = 0;
+  let tokenTotals = {
+    "BANK": 0,
+    "1INCH": 0,
+    "ANT": 0,
+    "MKR": 0,
+    "POKT": 0,
+    "POOL": 0,
+    "ENS": 0,
+    "ARB": 0,
+    "DEGEN": 0,
+    "WETH": 0,
+    "DAI": 0,
+    "USDC": 0,
+    "USDT": 0
+  }
 
-  let totalWETH = 0;
-  let totalDAI = 0;
-  let totalUSDC = 0;
-
-  // console.log(activeAssets);
 
   txData.forEach(chainList => {
-    //console.log(chainList);
     console.log(chainList.title);
 
     chainList.transactions.forEach(tx => {
@@ -34,30 +35,9 @@ export function sumTransactions(txData, activeAssets) {
         if(tx.incomeState){
           // this is an INCOME tx;
           // console.log(tx.crypto, tx.currency);
+          tokenTotals[tx.asset] += tx.value;
 
-          //sampe token trackers
-          if(tx.asset === "BANK"){
-            totalBANK += tx.value;
-          } else if(tx.asset === "1INCH"){
-            total1INCH += tx.value;
-          } else if(tx.asset === "ANT"){
-              totalANT += tx.value;
-          } else if(tx.asset === "MKR"){
-              totalMKR += tx.value;
-          } else if(tx.asset === "POKT"){
-              totalPOKT += tx.value;
-          } else if(tx.asset === "POOL"){
-              totalPOOL += tx.value;
-          } else if(tx.asset === "ENS"){
-            totalENS += tx.value;
-          } else if(tx.asset === "WETH"){
-            totalWETH += tx.value;
-          } else if(tx.asset === "DAI"){
-            totalDAI += tx.value;
-          } else if(tx.asset === "USDC"){
-            totalUSDC += tx.value;
-          }
-
+          // always add to income, if it is flagged as such
           totalIncome += parseFloat(tx.currency.split(" ")[1]);
           
         } else {
@@ -68,9 +48,11 @@ export function sumTransactions(txData, activeAssets) {
     });
   });
 
-  // console.log("TODO: Create a HDD file to store the user data");
-  console.log(totalIncome, totalBANK, total1INCH, totalANT, totalMKR, totalPOKT, totalPOOL, totalENS, totalWETH, totalDAI, totalUSDC );
+  // console.log(totalIncome, totalBANK, total1INCH, totalANT, totalMKR, totalPOKT, totalPOOL, totalENS, totalWETH, totalDAI, totalUSDC );
+  console.log(tokenTotals);
 
-  return [totalIncome, totalBANK, total1INCH, totalANT, totalMKR, totalPOKT, totalPOOL, totalENS, totalWETH, totalDAI, totalUSDC];
+  tokenTotals.ALL = totalIncome;
+
+  return tokenTotals;
   
 }
