@@ -8,6 +8,8 @@ import * as ReactDOM from "react-dom/client";
 
 import { App } from "./App";
 
+
+console.log(process.env);
 // import { chains, client, walletConnectProjectId } from "./wagmi";
 // const ethereumClient = new EthereumClient(client, chains);
 
