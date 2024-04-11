@@ -128,9 +128,9 @@ const FormFourthStep = ({txData, activeAssets, country, tax, setTax, finalExport
         <p className={styles.form_fourth_step_title}>Your Income Claim</p>
 
         {activeAssets.map((asset, index) => {
-          // console.log(asset);
+          console.log(asset);
           return (
-            <TokenRowReturn tokenSum={txSumOutput[asset]} tokenName={asset} />
+            <TokenRowReturn key={index} tokenSum={txSumOutput[asset]} tokenName={asset} />
           );
         })}
         
