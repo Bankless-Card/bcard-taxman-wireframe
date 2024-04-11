@@ -30,7 +30,7 @@ const Footer = () => {
             </li>
           ))}
         </ul>
-        <p>&copy; 2024 BCard | All rights reserved</p>
+        <p>&copy; 2024 BCard | <a href="https://www.coingecko.com/en/api">Pricing History Data provided by CoinGecko</a> | <a href="https://defillama.com/docs/api">Blocks by Llama.fi</a></p>
       </footer>
     </div>
   );
