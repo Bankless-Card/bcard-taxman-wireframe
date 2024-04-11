@@ -8,9 +8,12 @@ import {
   ensPrices2022,
   ethPrices2022, 
   daiPrices2022,
-  usdcPrices2022 } from "../data";
+  usdcPrices2022,
+  CG_API_KEY } from "../data";
 
 import { possibleAssetsObj } from "../data/possibleAssets";
+
+// const CG_API_KEY = "CG-jbXwiJ1kcdvbUK6hP6m8Rt1b";
 
 
 // CREATE and IMPORT NEW function to get DYNAMIC price data for each token based on timestamps
@@ -55,89 +58,6 @@ async function getSinglePrice(asset:any, value:any, timestamp:any, fiat:any, las
   let useAsset = possibleAssetsObj[asset as keyof typeof possibleAssetsObj].assetGeckoList || asset.toLowerCase();
   let useFiat = fiat.toLowerCase();
 
-  // console.log(asset);   // want it to be ARB or ARBITRUM
-
-  // console.log(asset === "ARB");
-
-
-  // let assetGeckoList:any = {
-  //   "USDC": "usd-coin",
-  //   "DAI": "dai",
-  //   "WETH": "ethereum",
-  //   "BANK": "bankless-dao",
-  //   "1INCH": "1inch",
-  //   "ANT": "aragon",
-  //   "MKR": "maker",
-  //   "POKT": "pocket-network",
-  //   "POOL": "pooltogether",
-  //   "ENS": "ethereum-name-service",
-  //   "ARB": "arbitrum",
-  //   "DEGEN": "degen-base",
-  //   "USDT": "tether"
-  // }
-  
-  // console.log(assetGeckoList[asset]);
-
-  // get correct asset ID for coingecko API historical data lookup
-  // switch(asset){
-  //   case "USDC":
-  //     useAsset = "usd-coin";
-  //     break;
-  //   case "DAI":
-  //     useAsset = "dai";   // same as default
-  //     break;
-  //   case "WETH":
-  //     useAsset = "ethereum";
-  //     break;
-  //   case "BANK":
-  //     useAsset = "bankless-dao";
-  //     break;
-  //   case "1INCH":
-  //     useAsset = "1inch";
-  //     break;
-  //   case "ANT":
-  //     useAsset = "aragon";
-  //     break;
-  //   case "MKR":
-  //     useAsset = "maker";
-  //     break;
-  //   case "POKT":
-  //     useAsset = "pocket-network";
-  //     break;
-  //   case "POOL":
-  //     useAsset = "pooltogether";
-  //     break;
-  //   case "ENS":
-  //     useAsset = "ethereum-name-service";
-  //     break;
-  //   case "ARB":
-  //     useAsset = "arbitrum";
-  //     break;
-  //   case "DEGEN":
-  //     useAsset = "degen-base";
-  //     break;
-  //   case "USDT":
-  //     useAsset = "tether";
-  //     break;
-  //   default:
-  //     useAsset = asset.toLowerCase();
-  //     break;
-  // }
-
-  // console.log("Use Asset: " + useAsset);
-
-  let url = "https://api.coingecko.com/api/v3/coins/" + useAsset + "/history?date=" + useDate + "&localization=false";
-
-  console.log("Lookup " + asset, fiat, useDate, url, useAsset);
-
-  let thisPrice = lastPrice;
-
-  try {
-    thisPrice = await getPrice(url);
-  } catch (error) {
-    console.log('There was an error', error);
-    return lastPrice;   // return last price
-  }
 
   switch(fiat){
     case "CAD":
@@ -150,23 +70,72 @@ async function getSinglePrice(asset:any, value:any, timestamp:any, fiat:any, las
       useFiat = "usd";
   }
 
-  // let fiatCode = fiat.toLowerCase();
-  let priceUpdate = thisPrice[useFiat];
-  console.log("$$API$$ Price Update: " + priceUpdate);
+  // build the URL for pricing data lookup
+  //  https://docs.coingecko.com/v3.0.1/reference/coins-id-history
+  let url = "https://api.coingecko.com/api/v3/coins/" + useAsset + "/history?date=" + useDate + "&localization=true";
 
-  return priceUpdate;
+  console.log("Lookup " + asset, fiat, useDate, url, useAsset);
+
+  let gp = await getPrice(url);   // gecko price
+  // console.log("GP: ", gp);
+
+  if(gp === 0){
+    console.log("Price Lookup is 0/error, returning last price: " + lastPrice);
+    return lastPrice;
+  } else {
+    let priceUpdate = gp[useFiat];
+    console.log("$$API$$ Price Update: " + priceUpdate);
+      
+    return priceUpdate;
+  }
 
 }
 
-// general block lookup function
+// general price/history ASYNC lookup function
 const getPrice = async(url:any) => {
 
-  let data = await fetch(url);
-  let dataJSON = await data.json();
+  
 
+  let data = await fetch(url,
+    {method: 'GET', headers: {accept: 'application/json', 'x-cg-demo-api-key': CG_API_KEY}}
+  );
+  let dataJSON = await data.json();
+  
   // console.log(dataJSON);
-  // return only token prices
-  return dataJSON.market_data.current_price;
+  if(dataJSON.error){
+    console.log("Error in getPrice: ", dataJSON.error);
+    return 0;
+  } else {
+    // return only token prices
+    return dataJSON.market_data.current_price;
+  }
+
+  
+
+//   console.log(url, " in get Price");
+//   const options = {
+//     method: 'GET',
+//     headers: {
+//       accept: 'application/json', 
+//       'x-cg-demo-api-key': 'CG-jbXwiJ1kcdvbUK6hP6m8Rt1b'
+//     }
+//   };
+
+// let dataJSON: { market_data: { current_price: any } } = { market_data: { current_price: 0 }};
+// fetch(url, options)
+//   .then(res => res.json())
+//   .then(json => {
+//     console.log(json)
+//     dataJSON = json;
+
+//     console.log(dataJSON.market_data.current_price);    // this has all currencies included here in market_price object
+
+//     return dataJSON.market_data.current_price;
+//   })
+//   .catch(err => console.error('error:' + err));
+
+
+
 }
 
 // this function to generalize the data lookup for each asset
@@ -177,6 +146,7 @@ async function assetDataLoop(asset:any, fiat:any, timestamp:any, value:any){
   // console.log("Default Price: " + defaultPrice);
   let currentPrice = defaultPrice;
   // which data cache table to be used to lookup data
+  console.log("Need to add cache for NEW assets OR remove DEFAULT of BANK from lookup.")
   let priceFiatHistory = getPriceFiatTable(asset, fiat);    // default BANK history
 
 
@@ -185,20 +155,29 @@ async function assetDataLoop(asset:any, fiat:any, timestamp:any, value:any){
 
   // skip historical lookups for stables
   if(asset === "USDC" || asset === "DAI" || asset === "USDT"){
-    currentPrice = defaultPrice;
+    currentPrice = defaultPrice;    // same assignemnt as default
   } else {
     if(priceFiatHistory !== undefined){
 
+
+      // testing call for single price lookup
+      // let cp = await getSinglePrice(asset, value, timestamp, fiat, defaultPrice);
+      // console.log("Single Price: " + cp);
+
+
+
       // if the timestamp data indicates a date before the first price in the data set
-      if(timestamp < priceFiatHistory[0][0]/1000){
+      if (timestamp < priceFiatHistory[0][0] / 1000) {
         // then we need to call for a single lookup price and skip the loop
-        console.log("Too Early: then we need to call for a single lookup price and skip the loop");
+        console.log("Pre Cache: then we need to call for a single lookup price and skip the loop");
+        currentPrice = await getSinglePrice(asset, value, timestamp, fiat, defaultPrice) || defaultPrice;
+      } else if (timestamp > priceFiatHistory[priceFiatHistory.length - 1][0] / 1000) {
+        console.log("After Cache: it's a future date beyond our stored data, skip the looping lookup.");
+
         currentPrice = await getSinglePrice(asset, value, timestamp, fiat, defaultPrice);
 
-      } else if(timestamp > priceFiatHistory[priceFiatHistory.length-1][0]/1000) {
-        console.log("Too Late: it's a future date beyond our stored data, skip the looping lookup.");
+        // console.log("FAILING Current Price: " + currentPrice);  // this is the price at timestamp
 
-        currentPrice = await getSinglePrice(asset, value, timestamp, fiat, defaultPrice);
 
       } else {
 
@@ -230,6 +209,7 @@ async function assetDataLoop(asset:any, fiat:any, timestamp:any, value:any){
       currentPrice = await getSinglePrice(asset, value, timestamp, fiat, defaultPrice);
     }  // end undefined check for price data history
   }   // end else (not stables)
+
 
 
   let output = "$"+fiat+" "+(currentPrice*parseFloat(value)).toFixed(2) + " @ " +currentPrice.toFixed(4);
@@ -393,12 +373,12 @@ function getPriceFiatTable(asset:any, fiat:any){
       }
 
     default:
-      // BANK
+      // return BANK prices to give some entry instead of empty
       if(fiat === 'CAD'){
         return bankPrices2022.bankCad.prices;
       } else if(fiat === 'EUR'){
         return bankPrices2022.bankEur.prices;
-      } else {
+      } else if(fiat === 'USD'){
         return bankPrices2022.bankUsd.prices;
       }
   }

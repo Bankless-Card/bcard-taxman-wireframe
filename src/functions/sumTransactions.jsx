@@ -20,7 +20,7 @@ export function sumTransactions(txData, activeAssets) {
     "WETH": 0,
     "DAI": 0,
     "USDC": 0,
-    "UDST": 0
+    "USDT": 0
   }
 
 

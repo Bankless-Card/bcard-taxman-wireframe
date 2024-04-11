@@ -15,72 +15,95 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
 
     let fiatCode = country;   //"CAD";
 
-    activeAssets.forEach(asset => {
-      // build a storage variable for each asset
-      console.log(asset);
-    });
+    // activeAssets.forEach(asset => {
+    //   // build a storage variable for each asset
+    //   console.log(asset);
+    // });
     
-    let totalBANK = 0;  
-    let total1INCH = 0;
-    let totalANT = 0;
-    let totalMKR = 0;
-    let totalPOKT = 0;
-    let totalPOOL = 0;
-    let totalENS = 0;
+    // let totalBANK = 0;  
+    // let total1INCH = 0;
+    // let totalANT = 0;
+    // let totalMKR = 0;
+    // let totalPOKT = 0;
+    // let totalPOOL = 0;
+    // let totalENS = 0;
 
-    let totalWETH = 0;
-    let totalDAI = 0;
-    let totalUSDC = 0;
+    // let totalWETH = 0;
+    // let totalDAI = 0;
+    // let totalUSDC = 0;
   
     let totalIncome = 0;
+
+    let tokenTotals = {
+      "BANK": 0,
+      "1INCH": 0,
+      "ANT": 0,
+      "MKR": 0,
+      "POKT": 0,
+      "POOL": 0,
+      "ENS": 0,
+      "ARB": 0,
+      "DEGEN": 0,
+      "WETH": 0,
+      "DAI": 0,
+      "USDC": 0,
+      "USDT": 0
+    }
     
     // only if there are any txs
     if(txData.length > 0){
 
         txData.forEach(chainList => {
-            //console.log(chainList);
+            // for each chain
             console.log(chainList.title);
         
             chainList.transactions.forEach(tx => {
-        
+              // for each transaction
               if(activeAssets.includes(tx.asset)){
-                //its an actively tracked token
-                // console.log(tx);
+                // its an actively tracked token
         
                 if(tx.incomeState){
-                    // console.log("this is an INCOME tx");
-                    // console.log(tx.crypto, tx.currency);
-        
-                    if(tx.asset === "BANK"){
-                        totalBANK += tx.value;
-                    } else if(tx.asset === "1INCH"){
-                        total1INCH += tx.value;
-                    } else if(tx.asset === "ANT"){
-                        totalANT += tx.value;
-                    } else if(tx.asset === "MKR"){
-                        totalMKR += tx.value;
-                    } else if(tx.asset === "POKT"){
-                        totalPOKT += tx.value;
-                    } else if(tx.asset === "POOL"){
-                        totalPOOL += tx.value;
-                    } else if(tx.asset === "ENS"){
-                      totalENS += tx.value;
-                    } else if(tx.asset === "WETH"){
-                      totalWETH += tx.value;
-                    } else if(tx.asset === "DAI"){
-                      totalDAI += tx.value;
-                    } else if(tx.asset === "USDC"){
-                      totalUSDC += tx.value;
+                    // this is an INCOME tx;
+
+                    // handle case: its new
+                    if(tokenTotals[tx.asset] === undefined){
+                      tokenTotals[tx.asset] = tx.value;
+                    } else {
+                      tokenTotals[tx.asset] += tx.value;    // this adds the token num
                     }
+
+                    // if(tx.asset === "BANK"){
+                    //     totalBANK += tx.value;
+                    // } else if(tx.asset === "1INCH"){
+                    //     total1INCH += tx.value;
+                    // } else if(tx.asset === "ANT"){
+                    //     totalANT += tx.value;
+                    // } else if(tx.asset === "MKR"){
+                    //     totalMKR += tx.value;
+                    // } else if(tx.asset === "POKT"){
+                    //     totalPOKT += tx.value;
+                    // } else if(tx.asset === "POOL"){
+                    //     totalPOOL += tx.value;
+                    // } else if(tx.asset === "ENS"){
+                    //   totalENS += tx.value;
+                    // } else if(tx.asset === "WETH"){
+                    //   totalWETH += tx.value;
+                    // } else if(tx.asset === "DAI"){
+                    //   totalDAI += tx.value;
+                    // } else if(tx.asset === "USDC"){
+                    //   totalUSDC += tx.value;
+                    // }
             
-                    totalIncome += parseFloat(tx.currency.split(" ")[1]);
+                    totalIncome += parseFloat(tx.currency.split(" ")[1]);   // this does the income sum
 
                 } 
 
               }
         
             });
-          });
+        });
+
+        tokenTotals.ALL = totalIncome;
 
     }
   
@@ -96,37 +119,49 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
       <h2>Your " + year + " DAO Income:</h2>\
       <ul>";
 
-    if(totalBANK > 0) {
-    summaryData += "<li>"+totalBANK+" BANK </li>";
-    }  
-    if(totalENS > 0) {
-      summaryData += "<li>"+totalENS+" ENS </li>";
-    }
-    if(total1INCH > 0) {
-      summaryData += "<li>"+total1INCH+" 1INCH </li>";
-    }
-    if(totalANT > 0) {
-      summaryData += "<li>"+totalANT+" ANT </li>";
-    }
-    if(totalMKR > 0) {
-      summaryData += "<li>"+totalMKR+" MKR </li>";
-    }
-    if(totalPOKT > 0) {
-      summaryData += "<li>"+totalPOKT+" POKT </li>";
-    }
-    if(totalPOOL > 0) {
-      summaryData += "<li>"+totalPOOL+" POOL </li>";
-    }
+    // for each token in the list that is non-zero, add them to the summary list
+    let tokenList = Object.keys(tokenTotals);
+    console.log(tokenList);
+    tokenList.forEach(token => {
+      if(tokenTotals[token] > 0 && token !== "ALL"){
+        summaryData += "<li>"+tokenTotals[token]+" "+token+"</li>";
+      }
+    });
 
-    if(totalWETH > 0) {
-      summaryData += "<li>"+totalWETH+" WETH </li>";
-    }
-    if(totalDAI > 0) {
-      summaryData += "<li>"+totalDAI+" DAI </li>";
-    }
-    if(totalUSDC > 0) {
-      summaryData += "<li>"+totalUSDC+" USDC </li>";
-    }
+    // if(totalBANK > 0) {
+    // summaryData += "<li>"+totalBANK+" BANK </li>";
+    // }  
+    // if(totalENS > 0) {
+    //   summaryData += "<li>"+totalENS+" ENS </li>";
+    // }
+    // if(total1INCH > 0) {
+    //   summaryData += "<li>"+total1INCH+" 1INCH </li>";
+    // }
+    // if(totalANT > 0) {
+    //   summaryData += "<li>"+totalANT+" ANT </li>";
+    // }
+    // if(totalMKR > 0) {
+    //   summaryData += "<li>"+totalMKR+" MKR </li>";
+    // }
+    // if(totalPOKT > 0) {
+    //   summaryData += "<li>"+totalPOKT+" POKT </li>";
+    // }
+    // if(totalPOOL > 0) {
+    //   summaryData += "<li>"+totalPOOL+" POOL </li>";
+    // }
+
+    // if(totalWETH > 0) {
+    //   summaryData += "<li>"+totalWETH+" WETH </li>";
+    // }
+    // if(totalDAI > 0) {
+    //   summaryData += "<li>"+totalDAI+" DAI </li>";
+    // }
+    // if(totalUSDC > 0) {
+    //   summaryData += "<li>"+totalUSDC+" USDC </li>";
+    // }
+    // if(totalUSDT > 0) {
+    //   summaryData += "<li>"+totalUSDT+" USDC </li>";
+    // }
 
     summaryData +=
         "</ul>\

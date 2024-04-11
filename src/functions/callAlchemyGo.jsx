@@ -1,31 +1,31 @@
 import { Alchemy, Network, AssetTransfersCategory } from 'alchemy-sdk';
 
 // data imports
-import { REACT_APP_ALCHEMY_API_KEY } from '../data' 
+import { REACT_APP_ALCHEMY_API_KEY, ETH_ALCHEMY_API_KEY, MATIC_ALCHEMY_API_KEY, OP_ALCHEMY_API_KEY, ARBITRUM_ALCHEMY_API_KEY, BASE_ALCHEMY_API_KEY } from '../data' 
 
-const ARBITRUM_ALCHMEY_API_KEY = "4lUY2QKma35eW4nJ2G-U021FUDxCVoYN"; //process.env.REACT_APP_ARBITRUM_ALCHMEY_API_KEY;
-const BASE_ALCHMEY_API_KEY = "RDA9C_OEE6kEiJ3WsvdbfZbxozIOu2YX"; //process.env.REACT_APP_BASE_ALCHMEY_API_KEY;
 
-// Optional Config object, but defaults to demo api-key and eth-mainnet.
-const settings = {
-  apiKey: REACT_APP_ALCHEMY_API_KEY, // Replace with your Alchemy API Key.
-  network: Network.ETH_MAINNET, // Replace with your network.
-};
+// using different alchemy keys for different networks for usage tracking
 
-const alchemy = new Alchemy(settings);
-const polygon = new Alchemy({ apiKey: REACT_APP_ALCHEMY_API_KEY, network: Network.MATIC_MAINNET });
-const optimism = new Alchemy({ apiKey: REACT_APP_ALCHEMY_API_KEY, network: Network.OPT_MAINNET });
-const arbitrum = new Alchemy({ apiKey: ARBITRUM_ALCHMEY_API_KEY, network: Network.ARB_MAINNET });
-const base = new Alchemy({ apiKey: BASE_ALCHMEY_API_KEY, network: Network.BASE_MAINNET });
+const alchemy = new Alchemy({ apiKey: ETH_ALCHEMY_API_KEY, network: Network.ETH_MAINNET});
+const polygon = new Alchemy({ apiKey: MATIC_ALCHEMY_API_KEY, network: Network.MATIC_MAINNET });
+const optimism = new Alchemy({ apiKey: OP_ALCHEMY_API_KEY, network: Network.OPT_MAINNET });
+const arbitrum = new Alchemy({ apiKey: ARBITRUM_ALCHEMY_API_KEY, network: Network.ARB_MAINNET });
+const base = new Alchemy({ apiKey: BASE_ALCHEMY_API_KEY, network: Network.BASE_MAINNET });
+
+// combine for a single usable object
+const alchemyConnect = {
+  eth: alchemy,
+  poly: polygon,
+  op: optimism,
+  arb: arbitrum,
+  base: base
+}
 
 // console.log(Network);
 
 
 // other functions
-import { getTokenLogo } from "../functions";
-import { getTokenLabel } from "../functions";
-import { displayTokenAmount } from "../functions";
-import { displayConvertAmount } from "../functions";
+import { getTokenLogo, getTokenLabel, displayTokenAmount, displayConvertAmount } from "../functions";
 
 // adjust all txs to fit the format
 function setFullStorageArr(id, title, transactions){
@@ -87,6 +87,8 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
 
   // NEED TO ALSO RECEIVE HERE THE STARTDATE AND ENDDATE
   console.log(address, addrOverride, country, activeAssets, dates)
+
+  // internal functions (requiring data from the parent component) - maybe move internal
 
     // receives addresses so can be used for connected or inserted wallet address
     // maybe move this logic to the function call in the parent component
@@ -159,7 +161,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
 
       // now we need block numbers
 
-      // general block lookup function
+      // general block lookup function using llama.fi blocknum API lookup
       const getBlock = async(chain, timestamp) => {
         let block = await fetch('https://coins.llama.fi/block/'+ chain + '/' + timestamp.getTime()/1000);
         let data = await block.json();
@@ -287,7 +289,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
         return block.height;
       }
 
-      // execute the block collection to override the defaults
+      // execute the block collection functions to generate the constants
       await getEthStartBlock();
       await getEthEndBlock();
 
@@ -304,25 +306,15 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
       await getArbEndBlock();
 
 
-      //setTimeout(() => {
+      if(true){
+        // report block outputs to UI console
         console.log("ETH BLOCKS: ", blockNumInt, endBlockNumInt);
-      //}, 2000);
-
-      //setTimeout(() => {
         console.log("POLY BLOCKS: ", polyStartInt, polyEndInt);
-      //}, 2000);
-
-      //setTimeout(() => {
         console.log("OP BLOCKS: ", opStartInt, opEndInt);
-      //}, 2000);
-
-      //setTimeout(() => {
         console.log("BASE BLOCKS: ", baseStartInt, baseEndInt);
-      //}, 2000);
-
-      //setTimeout(() => {
         console.log("ARB BLOCKS: ", arbStartInt, arbEndInt);
-      //}, 2000);
+      }
+      
 
     }
         
@@ -342,7 +334,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
 
     
     // MAINNET
-    const res = await alchemy.core.getAssetTransfers({
+    const ethRes = await alchemyConnect.eth.core.getAssetTransfers({
       fromBlock: startBlock,
       toBlock: endBlock,
       toAddress: toAddress,
@@ -352,10 +344,11 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
       category: [ AssetTransfersCategory.ERC20 ],
     });
     
+    // Other categories available:
     // AssetTransfersCategory.EXTERNAL, AssetTransfersCategory.INTERNAL, AssetTransfersCategory.ERC721, AssetTransfersCategory.ERC1155,
   
     // POLYGON
-    const polyRes = await polygon.core.getAssetTransfers({
+    const polyRes = await alchemyConnect.poly.core.getAssetTransfers({
       fromBlock: polyStart,
       toBlock: polyEnd,
       toAddress: toAddress,
@@ -365,7 +358,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
     });
   
     // OPTIMISM  
-    const opRes = await optimism.core.getAssetTransfers({
+    const opRes = await alchemyConnect.op.core.getAssetTransfers({
       fromBlock: opStart,
       toBlock: opEnd,
       toAddress: toAddress,
@@ -376,7 +369,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
     });
 
     // BASE
-    const baseRes = await base.core.getAssetTransfers({
+    const baseRes = await alchemyConnect.base.core.getAssetTransfers({
       fromBlock: baseStart,
       toBlock: baseEnd,
       toAddress: toAddress,
@@ -386,7 +379,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
     });
 
     // ARBITRUM
-    const arbRes = await arbitrum.core.getAssetTransfers({
+    const arbRes = await alchemyConnect.arb.core.getAssetTransfers({
       fromBlock: arbStart,
       toBlock: arbEnd,
       toAddress: toAddress,
@@ -395,7 +388,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
       category: [ AssetTransfersCategory.ERC20 ],
     });
   
-    let objArr = res.transfers;
+    let objArr = ethRes.transfers;
     let polyArr = polyRes.transfers;
     let opArr = opRes.transfers;
     let baseArr = baseRes.transfers;
@@ -403,95 +396,14 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
 
     let countryExport = country;  //"CAD";   // label for export currency
 
-    // ETH MAINNET
-    await processTxArr(objArr, activeAssets, countryExport, "Ethereum");
-    // let initEthArr = objArr;    // copy of initial array to measure length of for loop
-    // for (var i=0; i<initEthArr.length; i++) {
-    
-    //   let thisRow = objArr[i];
-  
-    //   let t = thisRow.metadata.blockTimestamp;    // date from tx record
-    //   let tNice = new Date(t);
-    //   let unixT = Date.parse(t)/1000;
-
-    //   // only if asset is toggled on
-    //   if(activeAssets.includes(thisRow.asset)){
-  
-    //     // save to globalTxs
-    //     thisRow.unixT = unixT;   // add unix timestamp to global object
-    //     thisRow.tNice = tNice;   // add date/time to global object
-
-    //     thisRow.currency = await displayConvertAmount(thisRow.value, thisRow.asset, unixT, countryExport);
-    //     thisRow.img_url = getTokenLogo(thisRow.asset);      //"./img/dao.jpg";
-    //     thisRow.tokenLabel = getTokenLabel(thisRow.asset);
-    //     thisRow.incomeState = true;    // "NOT" for unmatched txs by default
-    //     thisRow.crypto = displayTokenAmount(thisRow.value,thisRow.asset, activeAssets);
-    //     thisRow.chain = "Ethereum";
-
-    //   } else {
-    //     // remove from the tx list - it will be recalled later if dao selectors are toggled
-    //     thisRow.incomeState = false;    // ensure no display
-    //     // console.log( objArr[i] );
-    //     objArr.splice(i,1);
-        
-    //     // console.log("BUG: Removed tx from list: ", thisRow)
-    //   }
-  
-    // }  
-  
-    // POLYGON
-    await processTxArr(polyArr, activeAssets, countryExport, "Polygon");
-    // let initPolyArr = polyArr;    // copy of initial array to measure length of for loop
-    // for (var i=0; i < initPolyArr.length; i++) {
-    
-    //   let thisRow = polyArr[i];
-  
-    //   let t = thisRow.metadata.blockTimestamp;    // date from tx record
-    //   let tNice = new Date(t);
-    //   let unixT = Date.parse(t)/1000;
-      
-    //   // console.log(i, thisRow, thisRow.asset, activeAssets.includes(thisRow.asset));
-
-    //   if(activeAssets.includes(thisRow.asset)){
-  
-    //     // save to globalTxs
-    //     thisRow.unixT = unixT;   // add unix timestamp to global object
-    //     thisRow.tNice = tNice;   // add date/time to global object
-
-    //     thisRow.currency = await displayConvertAmount(thisRow.value, thisRow.asset, unixT, countryExport);
-    //     thisRow.img_url = getTokenLogo(thisRow.asset);      //"./img/dao.jpg";
-    //     thisRow.tokenLabel = getTokenLabel(thisRow.asset);
-    //     thisRow.incomeState = true;    // "NOT" for unmatched txs by default
-    //     thisRow.crypto = displayTokenAmount(thisRow.value, thisRow.asset, activeAssets);
-    //     thisRow.chain = "Polygon";
-
-    //   } else {
-
-    //     // console.log("No go for tx: ", thisRow.asset);
-    //     // remove from the tx list - it will be recalled latter if dao selectors are toggled
-    //     polyArr.splice(i,1);
-    //     // console.log("Removed tx from list: " + thisRow.asset, objArr)
-    //   }
-    
-  
-    // }   // end for all polygon transactions
-  
-    // OPTIMISM
+    // process each of the transaction arrays read in and filter out the unwanted assets
+    // add data to the desired transaction objects
+    await processTxArr(objArr, activeAssets, countryExport, "Ethereum");      // ETH MAINNET
+    await processTxArr(polyArr, activeAssets, countryExport, "Polygon");    // POLYGON MAINNET
     await processTxArr(opArr, activeAssets, countryExport, "Optimism");
-
-    // BASE
     await processTxArr(baseArr, activeAssets, countryExport, "Base");
-
-    // ARBITRUM
     await processTxArr(arbArr, activeAssets, countryExport, "Arbitrum")
   
-    
-
-    // let fullEthArr = setFullStorageArr(1, "Ethereum Mainnet", objArr);
-    // let fullPolyArr = setFullStorageArr(2, "Polygon Transactions", polyArr);
-    // let fullOpArr = setFullStorageArr(3, "Optimism Transactions", opArr);
-    // let fullBaseArr = setFullStorageArr(4, "Base Transactions", baseArr);
-    // let fullArbArr = setFullStorageArr(5, "Arbitrum Transactions", arbArr);
 
     const alTxs = [
       setFullStorageArr(1, "Ethereum Mainnet", objArr),
@@ -504,7 +416,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
     // console.log(alTxs);
   
     return alTxs;
-  }
+}
 
 
 
