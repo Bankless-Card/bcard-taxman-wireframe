@@ -62,7 +62,7 @@ async function getSinglePrice(asset:any, value:any, timestamp:any, fiat:any, las
   // date format for CoinGecko API lookup request
   let useDate = dateObj.getDate() + "-" + (dateObj.getMonth() + 1) + "-" + dateObj.getFullYear();
 
-  // default for inputs
+  // default for inputs - get GC asset label from possibleAssetsObj
   let useAsset = possibleAssetsObj[asset as keyof typeof possibleAssetsObj].assetGeckoList || asset.toLowerCase();
   // console.log("Asset: " +useAsset, asset);
   let useFiat = fiat.toLowerCase();
@@ -74,6 +74,9 @@ async function getSinglePrice(asset:any, value:any, timestamp:any, fiat:any, las
       break;
     case "EUR":
       useFiat = "eur";
+      break;
+    case "GBP":
+      useFiat = "gbp";
       break;
     default:
       useFiat = "usd";
@@ -193,7 +196,22 @@ async function assetDataLoop(asset:any, fiat:any, timestamp:any, value:any){
     console.log("BUG: Need to update pricing for country currency.")
     if(fiat === "CAD"){
       console.log("lookup CAD/USD for timestamp supplied.");
+
+      // price lookup using CAD/USDC     
       currentPrice = 1.35;    // 1 CAD = 0.74 USD
+
+      // build the URL to use for the lookup
+      let fiatLookupURL = CG_API_URL + "coins/usd-coin/history?date="+timestamp + "&localization=true";
+
+      console.log(fiatLookupURL);
+
+      currentPrice = await getSinglePrice("USDC", value, timestamp, fiat, defaultPrice) || defaultPrice;
+
+      console.log("STABLE Price @ " + timestamp + " : " + currentPrice);
+
+      // 'https://pro-api.coingecko.com/api/v3/coins/dai/history?date=28-03-2023';
+
+
     } else if(fiat === "EUR"){
       console.log("lookup EUR/USD for timestamp supplied.");
       currentPrice = 0.93;    // 1 EUR = 1.07 USD
