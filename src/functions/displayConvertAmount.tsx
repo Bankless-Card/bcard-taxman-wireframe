@@ -14,6 +14,7 @@ import {
 
 import { possibleAssetsObj } from "../data/possibleAssets";
 
+
 // CREATE and IMPORT NEW function to get DYNAMIC price data for each token based on timestamps
 // NEW: USE Single pricing API call to get only a single price for each token.
 
@@ -99,9 +100,12 @@ const getPrice = async(url:any) => {
 
   // console.log(url);
   // CG_API_KEY
+  const CG_API_KEY_LABEL = 'x-cg-pro-api-key';   // this changed between demo and pro API
+
+  console.log("API Key Label: ", CG_API_KEY_LABEL);
 
   let data = await fetch(url,
-    {method: 'GET', headers: {accept: 'application/json', 'x-cg-demo-api-key': "CG-jbXwiJ1kcdvbUK6hP6m8Rt1b"}}
+    {method: 'GET', headers: {accept: 'application/json', CG_API_KEY_LABEL: "CG-jbXwiJ1kcdvbUK6hP6m8Rt1b"}}
   );
   let dataJSON = await data.json();
   
