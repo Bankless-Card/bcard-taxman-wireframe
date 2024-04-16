@@ -41,7 +41,7 @@ export async function displayConvertAmount(value:any, asset:any, timestamp:any, 
     //  ){
     
     // get active assets list and compare to asset
-    console.log(asset)
+    // console.log(asset)
 
     // get data output to return to front end
     return assetDataLoop(asset, fiat, timestamp, value);
@@ -86,8 +86,8 @@ async function getSinglePrice(asset:any, value:any, timestamp:any, fiat:any, las
 
   // BUG ATM, CANNOT USE PRO API KEY
 
-  url = "https://api.coingecko.com/api/v3/coins/" + useAsset + "/history?date=" + useDate + "&localization=true";
-  console.log("Lookup using FREE API: " + asset, fiat, useDate, url, useAsset);
+  // url = "https://api.coingecko.com/api/v3/coins/" + useAsset + "/history?date=" + useDate + "&localization=true";
+  // console.log("Lookup using FREE API: " + asset, fiat, useDate, url, useAsset);
 
   let gp = await getPrice(url);   // gecko price
 
@@ -120,13 +120,16 @@ const getPrice = async(url:any) => {
     'x-cg-demo-api-key': 'CG-jbXwiJ1kcdvbUK6hP6m8Rt1b'
   }
 
+  // override headers for DEMO API
+  // headers = headersDemo;
+
   // DEMO option: 'x-cg-demo-api-key': CG-jbXwiJ1kcdvbUK6hP6m8Rt1b
 
 
-  console.log("API Key Label: ", CG_API_KEY_LABEL);
+  console.log("API headers: ", headers);
 
   let data = await fetch(url,
-    {method: 'GET', headers: headersDemo}
+    {method: 'GET', headers: headers}
   );
   let dataJSON = await data.json();
   
@@ -170,6 +173,8 @@ const getPrice = async(url:any) => {
 // this function to generalize the data lookup for each asset
 async function assetDataLoop(asset:any, fiat:any, timestamp:any, value:any){
 
+  console.log("Asset Data Loop: " + asset, fiat, timestamp, value);
+
   // initial pricing data to be used based on asset
   let defaultPrice = possibleAssetsObj[asset as keyof typeof possibleAssetsObj].defaultPrice || 1;
   // console.log("Default Price: " + defaultPrice);
@@ -182,6 +187,7 @@ async function assetDataLoop(asset:any, fiat:any, timestamp:any, value:any){
   // init the index for loop lookup
   let i = 0;
 
+  // HANDLE STABLES - USDC, DAI, USDT
   // skip historical lookups for stables
   if(asset === "USDC" || asset === "DAI" || asset === "USDT"){
     console.log("BUG: Need to update pricing for country currency.")
@@ -415,9 +421,9 @@ function getPriceFiatTable(asset:any, fiat:any){
       if(fiat === 'CAD'){
         return bankPrices2022.bankCad.prices;
       } else if(fiat === 'EUR'){
-        return bankPrices2022.bankEur.prices;
+        return undefined;
       } else if(fiat === 'USD'){
-        return bankPrices2022.bankUsd.prices;
+        return undefined;
       }
   }
 }
