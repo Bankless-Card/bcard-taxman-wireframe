@@ -113,7 +113,7 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
 
         // BUILD THE CSV DATA OF THE CURRENT INCOME TRASNACTIONS
         let csvData = exportData(country, txData, activeAssets, tax);
-        console.log(csvData);   // OK
+        // console.log(csvData);   // OK
 
         
         
@@ -146,7 +146,7 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
   }
 
   if(currentStep === 4) {
-    console.log("Sum Up Transactions - handled with a function");
+    // console.log("Sum Up Transactions - handled with a function");
 
     // console.log("globalTxList: ", globalTxList);
   }

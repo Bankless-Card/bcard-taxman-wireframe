@@ -78,6 +78,9 @@ async function getSinglePrice(asset:any, value:any, timestamp:any, fiat:any, las
     case "GBP":
       useFiat = "gbp";
       break;
+    case "AUD":
+      useFiat = "aud";
+      break;
     default:
       useFiat = "usd";
   }
@@ -129,7 +132,7 @@ const getPrice = async(url:any) => {
   // DEMO option: 'x-cg-demo-api-key': CG-jbXwiJ1kcdvbUK6hP6m8Rt1b
 
 
-  console.log("API headers: ", headers);
+  // console.log("API headers: ", headers);
 
   let data = await fetch(url,
     {method: 'GET', headers: headers}
@@ -193,31 +196,35 @@ async function assetDataLoop(asset:any, fiat:any, timestamp:any, value:any){
   // HANDLE STABLES - USDC, DAI, USDT
   // skip historical lookups for stables
   if(asset === "USDC" || asset === "DAI" || asset === "USDT"){
-    console.log("BUG: Need to update pricing for country currency.")
-    if(fiat === "CAD"){
-      console.log("lookup CAD/USD for timestamp supplied.");
+    // console.log("BUG: Need to update pricing for country currency.")
+    currentPrice = await getSinglePrice(asset, value, timestamp, fiat, defaultPrice) || defaultPrice;
 
-      // price lookup using CAD/USDC     
-      currentPrice = 1.35;    // 1 CAD = 0.74 USD
+    console.log("STABLE Price @ " + timestamp + " : " + currentPrice);
 
-      // build the URL to use for the lookup
-      let fiatLookupURL = CG_API_URL + "coins/usd-coin/history?date="+timestamp + "&localization=true";
+    // if(fiat === "CAD"){
+    //   console.log("lookup CAD/USD for timestamp supplied.");
 
-      console.log(fiatLookupURL);
+    //   // price lookup using CAD/USDC     
+    //   currentPrice = 1.35;    // 1 CAD = 0.74 USD
 
-      currentPrice = await getSinglePrice("USDC", value, timestamp, fiat, defaultPrice) || defaultPrice;
+    //   // build the URL to use for the lookup
+    //   // let fiatLookupURL = CG_API_URL + "coins/usd-coin/history?date="+timestamp + "&localization=true";
 
-      console.log("STABLE Price @ " + timestamp + " : " + currentPrice);
+    //   // console.log(fiatLookupURL);
 
-      // 'https://pro-api.coingecko.com/api/v3/coins/dai/history?date=28-03-2023';
+    //   currentPrice = await getSinglePrice("USDC", value, timestamp, fiat, defaultPrice) || defaultPrice;
+
+    //   console.log("STABLE Price @ " + timestamp + " : " + currentPrice);
+
+    //   // 'https://pro-api.coingecko.com/api/v3/coins/dai/history?date=28-03-2023';
 
 
-    } else if(fiat === "EUR"){
-      console.log("lookup EUR/USD for timestamp supplied.");
-      currentPrice = 0.93;    // 1 EUR = 1.07 USD
-    } else {
-      currentPrice = defaultPrice;    // same assignemnt as default
-    }
+    // } else if(fiat === "EUR"){
+    //   console.log("lookup EUR/USD for timestamp supplied.");
+    //   currentPrice = 0.93;    // 1 EUR = 1.07 USD
+    // } else {
+    //   currentPrice = defaultPrice;    // same assignemnt as default
+    // }
   } else {
     if(priceFiatHistory !== undefined){
 
@@ -349,8 +356,10 @@ function getPriceFiatTable(asset:any, fiat:any){
         return usdcPrices2022.usdcCad.prices;
       } else if(fiat === 'EUR'){
         return usdcPrices2022.usdcEur.prices;
-      } else {
+      } else  if(fiat === 'USD'){
         return usdcPrices2022.usdcUsd.prices;
+      } else {
+        return undefined;
       }
 
     case "DAI":
@@ -358,8 +367,10 @@ function getPriceFiatTable(asset:any, fiat:any){
         return daiPrices2022.daiCad.prices;
       } else if(fiat === 'EUR'){
         return daiPrices2022.daiEur.prices;
-      } else {
+      } else if(fiat === 'USD'){
         return daiPrices2022.daiUsd.prices;
+      } else {
+        return undefined;
       }
 
     case "WETH":
@@ -367,8 +378,10 @@ function getPriceFiatTable(asset:any, fiat:any){
         return ethPrices2022.ethCad.prices;
       } else if(fiat === 'EUR'){
         return ethPrices2022.ethEur.prices;
-      } else {
+      } else if(fiat === 'USD'){
         return ethPrices2022.ethUsd.prices;
+      } else {
+        return undefined;
       }
 
     case "BANK":
@@ -376,8 +389,10 @@ function getPriceFiatTable(asset:any, fiat:any){
         return bankPrices2022.bankCad.prices;
       } else if(fiat === 'EUR'){
         return bankPrices2022.bankEur.prices;
-      } else {
+      } else if(fiat === 'USD'){
         return bankPrices2022.bankUsd.prices;
+      } else {
+        return undefined;
       }
 
     case "1INCH":
@@ -385,8 +400,10 @@ function getPriceFiatTable(asset:any, fiat:any){
         return inchPrices2022.inchCad.prices;
       } else if(fiat === 'EUR'){
         return inchPrices2022.inchEur.prices;
-      } else {
+      } else if(fiat === 'USD'){
         return inchPrices2022.inchUsd.prices;
+      } else {
+        return undefined;
       }
 
     case "ANT":
@@ -394,8 +411,10 @@ function getPriceFiatTable(asset:any, fiat:any){
         return antPrices2022.antCad.prices;
       } else if(fiat === 'EUR'){
         return antPrices2022.antEur.prices;
-      } else {
+      } else if(fiat === 'USD'){
         return antPrices2022.antUsd.prices;
+      } else {
+        return undefined;
       }
 
     case "MKR":
@@ -403,8 +422,10 @@ function getPriceFiatTable(asset:any, fiat:any){
         return mkrPrices2022.mkrCad.prices;
       } else if(fiat === 'EUR'){
         return mkrPrices2022.mkrEur.prices;
-      } else {
+      } else if(fiat === 'USD'){
         return mkrPrices2022.mkrUsd.prices;
+      } else {
+        return undefined;
       }
 
     case "POKT":
@@ -412,8 +433,10 @@ function getPriceFiatTable(asset:any, fiat:any){
         return poktPrices2022.poktCad.prices;
       } else if(fiat === 'EUR'){
         return poktPrices2022.poktEur.prices;
-      } else {
+      } else if(fiat === 'USD'){
         return poktPrices2022.poktUsd.prices;
+      } else {
+        return undefined;
       }
       
     case "POOL":
@@ -421,8 +444,10 @@ function getPriceFiatTable(asset:any, fiat:any){
         return poolPrices2022.poolCad.prices;
       } else if(fiat === 'EUR'){
         return poolPrices2022.poolEur.prices;
-      } else {
+      } else if(fiat === 'USD'){
         return poolPrices2022.poolUsd.prices;
+      } else {
+        return undefined;
       }
 
     case "ENS":
@@ -430,14 +455,18 @@ function getPriceFiatTable(asset:any, fiat:any){
         return ensPrices2022.ensCad.prices;
       } else if(fiat === 'EUR'){
         return ensPrices2022.ensEur.prices;
-      } else {
+      } else if(fiat === 'USD'){
         return ensPrices2022.ensUsd.prices;
+      } else {
+        return undefined;
       }
 
     default:
+
+      return undefined;
       // return BANK prices to give some entry instead of empty
       if(fiat === 'CAD'){
-        return bankPrices2022.bankCad.prices;
+        return undefined;
       } else if(fiat === 'EUR'){
         return undefined;
       } else if(fiat === 'USD'){

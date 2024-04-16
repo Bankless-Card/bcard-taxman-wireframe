@@ -1,31 +1,37 @@
-// purpose is to sum up the income
+import { possibleAssets } from "../data/possibleAssets";
 
+// purpose is to sum up the income
 export function sumTransactions(txData, activeAssets) {
 
-  console.log("finish button has been clicked");
+  console.log("running sumTransactions...");
 
   // output the displayed DAO tokens for summary
   let totalIncome = 0;
+  let tokenTotals = {};
+  // build the token totals object to store the sum of each token
+  possibleAssets.forEach((asset, index) => {
+    tokenTotals[asset] = 0;
+  });
 
-  let tokenTotals = {
-    "BANK": 0,
-    "1INCH": 0,
-    "ANT": 0,
-    "MKR": 0,
-    "POKT": 0,
-    "POOL": 0,
-    "ENS": 0,
-    "ARB": 0,
-    "DEGEN": 0,
-    "WETH": 0,
-    "DAI": 0,
-    "USDC": 0,
-    "USDT": 0
-  }
+  // let tokenTotals = {
+  //   "BANK": 0,
+  //   "1INCH": 0,
+  //   "ANT": 0,
+  //   "MKR": 0,
+  //   "POKT": 0,
+  //   "POOL": 0,
+  //   "ENS": 0,
+  //   "ARB": 0,
+  //   "DEGEN": 0,
+  //   "WETH": 0,
+  //   "DAI": 0,
+  //   "USDC": 0,
+  //   "USDT": 0
+  // }
 
 
   txData.forEach(chainList => {
-    console.log(chainList.title);
+    // console.log(chainList.title);
 
     chainList.transactions.forEach(tx => {
 
@@ -49,7 +55,7 @@ export function sumTransactions(txData, activeAssets) {
   });
 
   // console.log(totalIncome, totalBANK, total1INCH, totalANT, totalMKR, totalPOKT, totalPOOL, totalENS, totalWETH, totalDAI, totalUSDC );
-  console.log(tokenTotals);
+  // console.log(tokenTotals);
 
   tokenTotals.ALL = totalIncome;
 

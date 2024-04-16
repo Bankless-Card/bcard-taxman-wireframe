@@ -2,12 +2,9 @@ import React, { useState, useEffect } from "react";
 import styles from "./styles.module.css";
 import { motion, AnimatePresence } from "framer-motion";
 // import { useAccount } from 'wagmi';
+import { fiatData } from "../../../data/possibleFiat";
 
 const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry, dates, setDates }) => {
-
-  // const { address, isConnected } = useAccount();
-
-  // console.log(dates);
 
   const [countryNames, setCountryNames] = useState([]);
   useEffect(() => {
@@ -17,15 +14,17 @@ const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry, date
       );
       const data = await response.json();*/
 
-      const data = [
-        {"name":{"common":"Canadian Dollar","official":"CAD","nativeName":{"eng":{"official":"Canada","common":"Canada"},"fra":{"official":"Canada","common":"Canada"}}}}, 
-        {"name":{"common":"US Dollar","official":"USD","nativeName":{"eng":{"official":"United States of America","common":"United States"}}}},
-        {"name":{"common":"Euro","official":"EUR","nativeName":{"eng":{"official":"The European Union Currency","common":"Euro"}}}}
-      ]
+      console.log(fiatData);
+
+      // const fiatData = [
+      //   {"name":{"common":"Canadian Dollar","official":"CAD","nativeName":{"eng":{"official":"Canada","common":"Canada"},"fra":{"official":"Canada","common":"Canada"}}}}, 
+      //   {"name":{"common":"US Dollar","official":"USD","nativeName":{"eng":{"official":"United States of America","common":"United States"}}}},
+      //   {"name":{"common":"Euro","official":"EUR","nativeName":{"eng":{"official":"The European Union Currency","common":"Euro"}}}}
+      // ]
 
       //console.log(data);
       // console.log("Order alhabetically by country name:");
-      data.sort((a, b) => {
+      fiatData.sort((a, b) => {
         if (a.name.common < b.name.common) {
           return -1;
         }
@@ -35,7 +34,7 @@ const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry, date
         return 0;
       });
 
-      setCountryNames(data);
+      setCountryNames(fiatData);
     };
     getCOuntryNames();
 

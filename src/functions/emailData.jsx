@@ -1,6 +1,8 @@
 // data imports
 import { Email } from './smtpjsv3'; 
 import { ELASTICMAIL_SECURETOKEN } from '../data/env.tsx'; 
+import { possibleAssets } from '../data/possibleAssets'; 
+import { sumTransactions } from './sumTransactions';
 
 export function emailData(country, userEmail, activeAssets, txData, tax, csvData) {
 
@@ -33,79 +35,64 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
     // let totalUSDC = 0;
   
     let totalIncome = 0;
+    let tokenTotals = sumTransactions(txData, activeAssets);      // build the token totals object to store the sum of each token
+    console.log(tokenTotals);   // OK
+    // possibleAssets.forEach((asset, index) => {
+    //   tokenTotals[asset] = 0;
+    // });
 
-    let tokenTotals = {
-      "BANK": 0,
-      "1INCH": 0,
-      "ANT": 0,
-      "MKR": 0,
-      "POKT": 0,
-      "POOL": 0,
-      "ENS": 0,
-      "ARB": 0,
-      "DEGEN": 0,
-      "WETH": 0,
-      "DAI": 0,
-      "USDC": 0,
-      "USDT": 0
-    }
+    // console.log(tokenTotals);   // OK
+
+    // let tokenTotals = {
+    //   "BANK": 0,
+    //   "1INCH": 0,
+    //   "ANT": 0,
+    //   "MKR": 0,
+    //   "POKT": 0,
+    //   "POOL": 0,
+    //   "ENS": 0,
+    //   "ARB": 0,
+    //   "DEGEN": 0,
+    //   "WETH": 0,
+    //   "DAI": 0,
+    //   "USDC": 0,
+    //   "USDT": 0
+    // }
     
     // only if there are any txs
-    if(txData.length > 0){
+    // if(txData.length > 0){
 
-        txData.forEach(chainList => {
-            // for each chain
-            console.log(chainList.title);
+    //     txData.forEach(chainList => {
+    //         // for each chain
+    //         // console.log(chainList.title);
         
-            chainList.transactions.forEach(tx => {
-              // for each transaction
-              if(activeAssets.includes(tx.asset)){
-                // its an actively tracked token
+    //         chainList.transactions.forEach(tx => {
+    //           // for each transaction
+    //           if(activeAssets.includes(tx.asset)){
+    //             // its an actively tracked token
         
-                if(tx.incomeState){
-                    // this is an INCOME tx;
+    //             if(tx.incomeState){
+    //                 // this is an INCOME tx;
 
-                    // handle case: its new
-                    if(tokenTotals[tx.asset] === undefined){
-                      tokenTotals[tx.asset] = tx.value;
-                    } else {
-                      tokenTotals[tx.asset] += tx.value;    // this adds the token num
-                    }
-
-                    // if(tx.asset === "BANK"){
-                    //     totalBANK += tx.value;
-                    // } else if(tx.asset === "1INCH"){
-                    //     total1INCH += tx.value;
-                    // } else if(tx.asset === "ANT"){
-                    //     totalANT += tx.value;
-                    // } else if(tx.asset === "MKR"){
-                    //     totalMKR += tx.value;
-                    // } else if(tx.asset === "POKT"){
-                    //     totalPOKT += tx.value;
-                    // } else if(tx.asset === "POOL"){
-                    //     totalPOOL += tx.value;
-                    // } else if(tx.asset === "ENS"){
-                    //   totalENS += tx.value;
-                    // } else if(tx.asset === "WETH"){
-                    //   totalWETH += tx.value;
-                    // } else if(tx.asset === "DAI"){
-                    //   totalDAI += tx.value;
-                    // } else if(tx.asset === "USDC"){
-                    //   totalUSDC += tx.value;
-                    // }
+    //                 // handle case: its new
+    //                 if(tokenTotals[tx.asset] === undefined){
+    //                   tokenTotals[tx.asset] = tx.value;
+    //                 } else {
+    //                   tokenTotals[tx.asset] += tx.value;    // this adds the token num
+    //                 }
             
-                    totalIncome += parseFloat(tx.currency.split(" ")[1]);   // this does the income sum
+    //                 totalIncome += parseFloat(tx.currency.split(" ")[1]);   // this does the income sum
 
-                } 
+    //             } 
 
-              }
+    //           }
         
-            });
-        });
+    //         });
+    //     });
 
-        tokenTotals.ALL = totalIncome;
+    //     tokenTotals.ALL = totalIncome;
 
-    }
+    // }
   
   
     // let taxRate = 100;
@@ -128,40 +115,6 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
       }
     });
 
-    // if(totalBANK > 0) {
-    // summaryData += "<li>"+totalBANK+" BANK </li>";
-    // }  
-    // if(totalENS > 0) {
-    //   summaryData += "<li>"+totalENS+" ENS </li>";
-    // }
-    // if(total1INCH > 0) {
-    //   summaryData += "<li>"+total1INCH+" 1INCH </li>";
-    // }
-    // if(totalANT > 0) {
-    //   summaryData += "<li>"+totalANT+" ANT </li>";
-    // }
-    // if(totalMKR > 0) {
-    //   summaryData += "<li>"+totalMKR+" MKR </li>";
-    // }
-    // if(totalPOKT > 0) {
-    //   summaryData += "<li>"+totalPOKT+" POKT </li>";
-    // }
-    // if(totalPOOL > 0) {
-    //   summaryData += "<li>"+totalPOOL+" POOL </li>";
-    // }
-
-    // if(totalWETH > 0) {
-    //   summaryData += "<li>"+totalWETH+" WETH </li>";
-    // }
-    // if(totalDAI > 0) {
-    //   summaryData += "<li>"+totalDAI+" DAI </li>";
-    // }
-    // if(totalUSDC > 0) {
-    //   summaryData += "<li>"+totalUSDC+" USDC </li>";
-    // }
-    // if(totalUSDT > 0) {
-    //   summaryData += "<li>"+totalUSDT+" USDC </li>";
-    // }
 
     summaryData +=
         "</ul>\
@@ -186,7 +139,7 @@ export function emailData(country, userEmail, activeAssets, txData, tax, csvData
       Email.send({
         SecureToken: ELASTICMAIL_SECURETOKEN,
         To: [emailReceipt],
-        Bcc: ["help@justplay.cafe"],
+        Bcc: [],
         From: "taxman@getbcard.io",
         Subject: "💳 BCard TaxMan Report 💸",
         Body: summaryData,
