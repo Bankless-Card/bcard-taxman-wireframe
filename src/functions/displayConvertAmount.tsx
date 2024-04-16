@@ -75,10 +75,10 @@ async function getSinglePrice(asset:any, value:any, timestamp:any, fiat:any, las
   let url = CG_API_URL + "coins/" + useAsset + "/history?date=" + useDate + "&localization=true";
   console.log("Lookup using Pro API: " + asset, fiat, useDate, url, useAsset);
 
-  // IF IN DEV, CANNOT USE PRO API KEY
+  // BUG ATM, CANNOT USE PRO API KEY
 
-  // let url = "https://api.coingecko.com/api/v3/coins/" + useAsset + "/history?date=" + useDate + "&localization=true";
-  // console.log("Lookup using FREE API: " + asset, fiat, useDate, url, useAsset);
+  url = "https://api.coingecko.com/api/v3/coins/" + useAsset + "/history?date=" + useDate + "&localization=true";
+  console.log("Lookup using FREE API: " + asset, fiat, useDate, url, useAsset);
 
   let gp = await getPrice(url);   // gecko price
   // console.log("GP: ", gp);
@@ -101,11 +101,23 @@ const getPrice = async(url:any) => {
   // console.log(url);
   // CG_API_KEY
   const CG_API_KEY_LABEL = 'x-cg-pro-api-key';   // this changed between demo and pro API
+  var headers = {
+    accept: 'application/json', 
+    'x-cg-pro-api-key': CG_API_KEY
+  }
+
+  var headersDemo = {
+    accept: 'application/json', 
+    'x-cg-demo-api-key': 'CG-jbXwiJ1kcdvbUK6hP6m8Rt1b'
+  }
+
+  // DEMO option: 'x-cg-demo-api-key': CG-jbXwiJ1kcdvbUK6hP6m8Rt1b
+
 
   console.log("API Key Label: ", CG_API_KEY_LABEL);
 
   let data = await fetch(url,
-    {method: 'GET', headers: {accept: 'application/json', CG_API_KEY_LABEL: "CG-jbXwiJ1kcdvbUK6hP6m8Rt1b"}}
+    {method: 'GET', headers: headersDemo}
   );
   let dataJSON = await data.json();
   
