@@ -9,12 +9,10 @@ import {
   ethPrices2022, 
   daiPrices2022,
   usdcPrices2022,
-  CG_API_KEY } from "../data";
+  CG_API_KEY,
+  CG_API_URL } from "../data";
 
 import { possibleAssetsObj } from "../data/possibleAssets";
-
-// const CG_API_KEY = "CG-jbXwiJ1kcdvbUK6hP6m8Rt1b";
-
 
 // CREATE and IMPORT NEW function to get DYNAMIC price data for each token based on timestamps
 // NEW: USE Single pricing API call to get only a single price for each token.
@@ -28,7 +26,7 @@ export async function displayConvertAmount(value:any, asset:any, timestamp:any, 
   // parse hrough the historical data corresponding to the asset and FIAT and 
   // return price at timestamp
 
-  console.log(asset, value, timestamp, fiat);
+  console.log(asset, value, timestamp, fiat, CG_API_KEY, CG_API_URL);
 
    // get active assets list and compare to asset
 
@@ -56,6 +54,7 @@ async function getSinglePrice(asset:any, value:any, timestamp:any, fiat:any, las
 
   // default for inputs
   let useAsset = possibleAssetsObj[asset as keyof typeof possibleAssetsObj].assetGeckoList || asset.toLowerCase();
+  console.log("Asset: " +useAsset, asset);
   let useFiat = fiat.toLowerCase();
 
 
@@ -72,9 +71,13 @@ async function getSinglePrice(asset:any, value:any, timestamp:any, fiat:any, las
 
   // build the URL for pricing data lookup
   //  https://docs.coingecko.com/v3.0.1/reference/coins-id-history
-  let url = "https://api.coingecko.com/api/v3/coins/" + useAsset + "/history?date=" + useDate + "&localization=true";
+  let url = CG_API_URL + "coins/" + useAsset + "/history?date=" + useDate + "&localization=true";
+  console.log("Lookup using Pro API: " + asset, fiat, useDate, url, useAsset);
 
-  console.log("Lookup " + asset, fiat, useDate, url, useAsset);
+  // IF IN DEV, CANNOT USE PRO API KEY
+
+  // let url = "https://api.coingecko.com/api/v3/coins/" + useAsset + "/history?date=" + useDate + "&localization=true";
+  // console.log("Lookup using FREE API: " + asset, fiat, useDate, url, useAsset);
 
   let gp = await getPrice(url);   // gecko price
   // console.log("GP: ", gp);
@@ -94,10 +97,11 @@ async function getSinglePrice(asset:any, value:any, timestamp:any, fiat:any, las
 // general price/history ASYNC lookup function
 const getPrice = async(url:any) => {
 
-  
+  // console.log(url);
+  // CG_API_KEY
 
   let data = await fetch(url,
-    {method: 'GET', headers: {accept: 'application/json', 'x-cg-demo-api-key': CG_API_KEY}}
+    {method: 'GET', headers: {accept: 'application/json', 'x-cg-demo-api-key': "CG-jbXwiJ1kcdvbUK6hP6m8Rt1b"}}
   );
   let dataJSON = await data.json();
   

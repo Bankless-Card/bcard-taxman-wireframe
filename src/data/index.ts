@@ -8,7 +8,8 @@ export {
     ELASTICMAIL_SECURETOKEN, 
     CONVERT_KIT_API_KEY, 
     CONVERT_KIT_FORM_ID,
-    CG_API_KEY } from './env'
+    CG_API_KEY,
+    CG_API_URL } from './env'
 
 export { bankPrices2022 } from './bank_feed_2022'
 export { inchPrices2022 } from './1inch_feed_2022'

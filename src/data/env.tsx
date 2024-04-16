@@ -14,3 +14,4 @@ export const ARBITRUM_ALCHEMY_API_KEY = import.meta.env.VITE_ARBITRUM_ALCHEMY_AP
 export const BASE_ALCHEMY_API_KEY = import.meta.env.VITE_BASE_ALCHEMY_API_KEY;          
 
 export const CG_API_KEY = import.meta.env.VITE_CG_API_KEY;          // coingecko API key for pricing history lookups
+export const CG_API_URL = import.meta.env.VITE_CG_API_URL;          // coingecko API url for pricing history lookups    
