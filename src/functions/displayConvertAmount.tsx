@@ -29,16 +29,25 @@ export async function displayConvertAmount(value:any, asset:any, timestamp:any, 
 
   // console.log(asset, value, timestamp, fiat, CG_API_KEY, CG_API_URL);
 
-   // get active assets list and compare to asset
+  
 
-   if(asset === "BANK" || asset === "1INCH" || asset === "ANT" || asset === "MKR" || asset === "POKT" || asset === "POOL" || asset === "ENS" || asset === "WETH" || asset === "DAI" || asset === "USDC"
-    || asset === "ARB" || asset === "DEGEN" || asset === "USDT"
-   ){
+  if(possibleAssetsObj[asset as keyof typeof possibleAssetsObj] === undefined){
+    console.log("Asset not found in lookup.");
+    console.log(possibleAssetsObj);
+    return "Asset not found in lookup.";
+  } else if(asset){
+    //   if(asset === "BANK" || asset === "1INCH" || asset === "ANT" || asset === "MKR" || asset === "POKT" || asset === "POOL" || asset === "ENS" || asset === "WETH" || asset === "DAI" || asset === "USDC"
+    //   || asset === "ARB" || asset === "DEGEN" || asset === "USDT"
+    //  ){
+    
+    // get active assets list and compare to asset
+    console.log(asset)
 
     // get data output to return to front end
     return assetDataLoop(asset, fiat, timestamp, value);
 
-   } else {
+
+  } else {
       // unmatched token asset - we dont lookup values for these tokens
       return "Convert Token - " + value;
     }
