@@ -27,7 +27,7 @@ export async function displayConvertAmount(value:any, asset:any, timestamp:any, 
   // parse hrough the historical data corresponding to the asset and FIAT and 
   // return price at timestamp
 
-  console.log(asset, value, timestamp, fiat, CG_API_KEY, CG_API_URL);
+  // console.log(asset, value, timestamp, fiat, CG_API_KEY, CG_API_URL);
 
    // get active assets list and compare to asset
 
@@ -55,7 +55,7 @@ async function getSinglePrice(asset:any, value:any, timestamp:any, fiat:any, las
 
   // default for inputs
   let useAsset = possibleAssetsObj[asset as keyof typeof possibleAssetsObj].assetGeckoList || asset.toLowerCase();
-  console.log("Asset: " +useAsset, asset);
+  // console.log("Asset: " +useAsset, asset);
   let useFiat = fiat.toLowerCase();
 
 
@@ -81,8 +81,8 @@ async function getSinglePrice(asset:any, value:any, timestamp:any, fiat:any, las
   console.log("Lookup using FREE API: " + asset, fiat, useDate, url, useAsset);
 
   let gp = await getPrice(url);   // gecko price
-  // console.log("GP: ", gp);
 
+  
   if(gp === 0){
     console.log("Price Lookup is 0/error, returning last price: " + lastPrice);
     return lastPrice;

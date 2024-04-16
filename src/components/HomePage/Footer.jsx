@@ -30,7 +30,7 @@ const Footer = () => {
             </li>
           ))}
         </ul>
-        <p>&copy; 2024 BCard | <a href="https://www.coingecko.com/en/api">CoinGecko API kudos for price history</a> | <a href="https://defillama.com/docs/api">Blocks by Llama.fi</a></p>
+        <p>&copy; 2024 BCard | <a target="_blank" href="https://www.coingecko.com/en/api">CoinGecko API</a> | <a href="https://defillama.com/docs/api">Blocks by Llama.fi</a></p>
       </footer>
     </div>
   );
