@@ -1,7 +1,6 @@
 import React from "react";
 import styles from "./styles.module.css";
 import { useUI } from "../../context/UIContext";
-// import { useAccount } from "wagmi";
 
 import { 
   callAlchemyGo,
@@ -43,12 +42,37 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
     return txData;
 
   }
+
+  function isValidDate(d) {
+    // confirm single entry date is valid (either start or enddate is valid)
+    console.log(d);
+    return d; // && !isNaN(d);
+  }
+
+  function isValidRange(d1, d2) {
+
+    // other tests: is range too big?  
+    // is range too small? 
+    // is range in future? 
+    // is range too far in past (no token data before X)?
+
+    // test for start date before end date
+    return (isValidDate(d1) && isValidDate(d2) && (d1 <= d2));
+  }
   
 
   const handleFormButton = (currentStep) => {
 
     if(currentStep === 1){
       console.log("SET Address (Override) & Country Code: "+country+" this page.");
+
+      console.log("check instead for date validity here.");
+      if(isValidRange(dates.startDate, dates.endDate)){
+        // can proceed to next step
+      } else {
+        alert("Please enter valid dates for the range.");
+        return currentStep;
+      }
 
 
     } else if(currentStep === 2){

@@ -51,22 +51,22 @@ const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry, date
   // console.log(defaultDateStart, defaultDateEnd);   // OK for format ???
 
   // confirm dates are valid
-  function isValidDate(d) {
-    // confirm single entry date is valid (either start or enddate is valid)
-    console.log(d);
-    return d; // && !isNaN(d);
-  }
+  // function isValidDate(d) {
+  //   // confirm single entry date is valid (either start or enddate is valid)
+  //   console.log(d);
+  //   return d; // && !isNaN(d);
+  // }
 
-  function isValidRange(d1, d2) {
+  // function isValidRange(d1, d2) {
 
-    // other tests: is range too big?  
-    // is range too small? 
-    // is range in future? 
-    // is range too far in past (no token data before X)?
+  //   // other tests: is range too big?  
+  //   // is range too small? 
+  //   // is range in future? 
+  //   // is range too far in past (no token data before X)?
 
-    // test for start date before end date
-    return (isValidDate(d1) && isValidDate(d2) && (d1 <= d2));
-  }
+  //   // test for start date before end date
+  //   return (isValidDate(d1) && isValidDate(d2) && (d1 <= d2));
+  // }
 
   return (
     <AnimatePresence>
@@ -164,17 +164,20 @@ const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry, date
 
                   let proposeEnd = e.target.value;
                   console.log("Proposed End Date : " + proposeEnd);
-                  if(isValidRange(dates.startDate, proposeEnd)){
-                    console.log("Valid date range.");
-                    setDates({...dates, endDate: proposeEnd});
-                  } else {
-                    // alert("Please enter a valid date range.");
-                    console.log("Invalid date range.");
-                    setDates({startDate: curStart, endDate: curEnd});
-                  }
+
+                  setDates({...dates, endDate: proposeEnd});
+
+                  // if(isValidRange(dates.startDate, proposeEnd)){
+                  //   console.log("Valid date range.");
+                  //   setDates({...dates, endDate: proposeEnd});
+                  // } else {
+                  //   // alert("Please enter a valid date range.");
+                  //   console.log("Invalid date range.");
+                  //   setDates({startDate: curStart, endDate: curEnd});
+                  // }
                 }}
                 // disabled={true}
-                title="Date Selection Coming Soon"
+                title="Date Selection Now Available"
               />
             </div>
             {/* calendar-picker UI icon */}

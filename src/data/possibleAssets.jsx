@@ -109,6 +109,12 @@ export const possibleAssets = [
       tokenLogoIndex: "/img/token/pool-logo.png",
       tokenLabel: "Pooltogether Token",
     },
+    "OP": {
+      defaultPrice: 2.222,
+      assetGeckoList: "optimism",
+      tokenLogoIndex: "/img/token/op-logo.png",
+      tokenLabel: "OP Collective Token",
+    },
     "ARB": {
       defaultPrice: 1.111,
       assetGeckoList: "arbitrum",
