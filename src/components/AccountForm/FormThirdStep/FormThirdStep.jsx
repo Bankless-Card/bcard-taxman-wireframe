@@ -22,10 +22,10 @@ const FormThirdStep = ({ currentStep, txData, setActiveItem, loading, activeAsse
           className={styles.form_third_step}
         >
           <p className={styles.form_third_step_title}>
-            <span>Your transactions</span>
+            <span>Taxable transactions</span>
           </p>
           <p className={styles.form_third_step_label}>
-            Click any line to view details and mark if it's 'Not Income'. Click Save to go to next line.
+            Click a line to view details. Mark 'Not Income" if not taxable. Save to record changes.
           </p>
           <>{loading ? <Spinner /> : <TransactionList txData={txData} setActiveItem={setActiveItem} />}</>
         </motion.div>
