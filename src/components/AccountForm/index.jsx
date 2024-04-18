@@ -34,6 +34,7 @@ const AccountForm = () => {
 
   const [{ isCTAclicked, showTransactionModal }] = useUI();
   const [step, setStep] = useState(1);
+  console.log(showTransactionModal, screenSize);
 
   const [addrOverride, setAddrOverride] = useState("");
   const [country, setCountry] = useState("CAD");
@@ -41,7 +42,8 @@ const AccountForm = () => {
   const [activeAssets, setActiveAssets] = useState(["BANK"]);
   const [txData, setTxData] = useState([]);
   const [loading, setLoading] = useState(true); // loading state for tx data
-  const [activeItem, setActiveItem] = useState(null);
+  const [activeItem, setActiveItem] = useState(null);     // this holds usable data
+  const [isActiveItem, setIsActiveItem] = useState(showTransactionModal);       // this is a boolean for active state
   const [tax, setTax] = useState(20);
 
   const [finalExport, setFinalExport] = useState("init");
@@ -110,6 +112,8 @@ const AccountForm = () => {
                         loading={loading}
                         activeAssets={activeAssets}
                         setActiveItem={setActiveItem} 
+                        isActiveItem={isActiveItem}
+                        setIsActiveItem={setIsActiveItem}
                       />}
                     {step === 4 && 
                       <FormFourthStep 
@@ -153,7 +157,7 @@ const AccountForm = () => {
               </form>
               {/* <div id="output"></div> */}
               {showTransactionModal && screenSize === "large" && (
-                <TransactionModal activeItem={activeItem} />
+                <TransactionModal activeItem={activeItem} isActiveItem={isActiveItem} setIsActiveItem={setIsActiveItem} />
               )}
             </motion.div>
           )}

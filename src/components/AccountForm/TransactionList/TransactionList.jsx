@@ -8,7 +8,7 @@ import styles from "./styles.module.css";
 // I recomend this array in order to render data in a efficient way
 
 
-const TransactionList = ({txData, setActiveItem}) => {
+const TransactionList = ({txData, setActiveItem, isActiveItem, setIsActiveItem}) => {
 
   return (
     <AnimatePresence>
@@ -24,6 +24,8 @@ const TransactionList = ({txData, setActiveItem}) => {
             title={item.title}
             transactions={item.transactions}
             setActiveItem={setActiveItem}
+            isActiveItem={isActiveItem}
+            setIsActiveItem={setIsActiveItem}
           />
         ))}
       </motion.div>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import styles from "./styles.module.css";
 
 const TransactionListItemComponent = ({
@@ -9,14 +9,32 @@ const TransactionListItemComponent = ({
   currency,
   onClick,
   incomeState,
+  isActiveItem,
+  setIsActiveItem,
 }) => {
   if(incomeState){
     // render the item
 
-    // console.log(crypto, currency);
+    const [itemStyles, setItemStyles] = useState(styles.item_container);
+
+    useEffect(() => {
+      // console.log(crypto, currency);
+      console.log(isActiveItem);  
+
+      if(isActiveItem){
+        setItemStyles(styles.active_item_container);
+      } else {
+        setItemStyles(styles.item_container);
+      }
+    }, [isActiveItem]);
+    
 
     return (
-      <div key={id} data-incomestate={incomeState} className={styles.item_container} onClick={onClick}>
+      <div key={id} 
+        data-incomestate={incomeState} 
+        className={itemStyles} 
+        onClick={onClick}
+        >
         <div className={styles.avatar_container}>
           <img src={img_url} className={styles.avatar_img} />
           <div className={styles.inner_container}>

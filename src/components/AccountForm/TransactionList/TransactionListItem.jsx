@@ -3,8 +3,9 @@ import styles from "./styles.module.css";
 import { useUI } from "../../../context/UIContext";
 import TransactionListItemComponent from "./TransactionListItemComponent";
 
-const TransactionListItem = ({ title, transactions, setActiveItem }) => {
+const TransactionListItem = ({ title, transactions, setActiveItem, isActiveItem, setIsActiveItem }) => {
   const [, { setShowTransactionModal }] = useUI();
+  // const [isActive, setIsActive] = useState(false);
 
   // console.log(transactions);
 
@@ -22,11 +23,15 @@ const TransactionListItem = ({ title, transactions, setActiveItem }) => {
           currency={item.currency}
           incomeState={item.incomeState}
 
-          onClick={() => 
+          isActiveItem={isActiveItem}
+          setIsActiveItem={setIsActiveItem}
+
+          onClick={(e) => 
             {
               setShowTransactionModal(true);
               console.log(item);  // need to add this item to the state 
               setActiveItem(item);
+              setIsActiveItem(true);
             }}
         />
       ))}

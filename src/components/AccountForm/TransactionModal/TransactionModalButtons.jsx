@@ -2,14 +2,19 @@ import React from "react";
 import styles from "./styles.module.css";
 import { useUI } from "../../../context/UIContext";
 
-const TransactionModalButtons = () => {
+const TransactionModalButtons = ({setIsActiveItem}) => {
 
   const [, { setShowTransactionModal }] = useUI();
+
+  function closeModalandMarkInactive() {
+    setShowTransactionModal(false);
+    setIsActiveItem(false);
+  }
 
   return (
     <div className={styles.transaction_modal_buttons_container}>
       <button 
-        onClick={() => setShowTransactionModal(false)}
+        onClick={() => closeModalandMarkInactive()}
         className={styles.cancel_button} 
         type="button"
       >
@@ -18,7 +23,7 @@ const TransactionModalButtons = () => {
       <button 
         className={styles.save_button}
         type="button"
-        onClick={() => setShowTransactionModal(false)}
+        onClick={() => closeModalandMarkInactive()}
       >
         Save</button>
     </div>

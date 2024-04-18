@@ -12,7 +12,8 @@ const TransactionModal = (props) => {
   // if it is shown already showTransactionModal = true
   // then we need to close the curren tinstance before opening a new one.
 
-  console.log(props.activeItem);    // gets the active item from the props
+  console.log(props.isActiveItem);      // gets the active item ID from the props
+  // console.log(props.activeItem);    // gets the active item DATA from the props
 
   let txDate = new Date(props.activeItem.metadata.blockTimestamp);
 
@@ -85,6 +86,7 @@ const TransactionModal = (props) => {
               onClick={() => {
                 setShowTransactionModal(false);
                 console.log("IF not income, highlight in main display list?");
+                props.setIsActiveItem(false);
               }}
             />
           </div>
@@ -160,7 +162,7 @@ const TransactionModal = (props) => {
               </p>
             </div>
           </div>
-          <TransactionModalButtons />
+          <TransactionModalButtons setIsActiveItem={props.setIsActiveItem} />
         </div>
       </div>
     </>
