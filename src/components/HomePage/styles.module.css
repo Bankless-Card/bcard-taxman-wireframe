@@ -43,7 +43,7 @@
   color: white;
   display: flex;
   font-size: 16px;
-  gap: 60px;
+  gap: 40px;
 }
 .menu_container > li > a {
   text-decoration: none;
