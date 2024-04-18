@@ -1,20 +1,5 @@
 // Note: Order of display on selection list is determined by the order of this data array.
-export const possibleAssets = [
-    "BANK",
-    "ENS",
-    "1INCH",
-    "ANT",
-    "MKR",
-    "POKT",
-    "POOL",
-    "ARB",
-    "DEGEN",
-  
-    "DAI",
-    "WETH",
-    "USDC",
-    "USDT"
-  ];
+
 
   // let assetGeckoList:any = {
   //   "USDC": "usd-coin",
@@ -153,3 +138,22 @@ export const possibleAssets = [
       tokenLabel: "USDT Cryptodollar",
     },
   }
+
+  export const possibleAssets = Object.keys(possibleAssetsObj);
+
+  // export const possibleAssets = [
+  //   "BANK",
+  //   "ENS",
+  //   "1INCH",
+  //   "ANT",
+  //   "MKR",
+  //   "POKT",
+  //   "POOL",
+  //   "ARB",
+  //   "DEGEN",
+  
+  //   "DAI",
+  //   "WETH",
+  //   "USDC",
+  //   "USDT"
+  // ];

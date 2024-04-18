@@ -7,6 +7,7 @@ import { possibleAssets, getTokenLabel } from "../../../functions";
 const FormSecondStep = ({ currentStep, activeAssets, setActiveAssets }) => {
 
   // console.log(activeAssets);
+  // console.log(possibleAssets);
 
   return (
     <AnimatePresence>
