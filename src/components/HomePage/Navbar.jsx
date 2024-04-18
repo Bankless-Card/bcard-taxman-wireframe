@@ -12,10 +12,20 @@ const Navbar = () => {
           href="https://twitter.com/intent/tweet?text=I%20just%20did%20my%20DAO%20Income%20Taxes%20with%20TaxMan%20from%20@GetBCard%20in%20about%20five%20minutes!%20https://taxman.getbcard.io"
           >
             <div>
-              Share
-              <img src="img/twitter-logo.png" alt="twitter-logo" style={{ width:"15px", margin: "0 5px 0 5px"}} /> 
+              Post It
+              <img src="img/x_logo.png" alt="x-logo" style={{ width:"15px", margin: "0 5px 0 5px", top: "2px", position: "relative"}} /> 
             </div>
         </a>);
+
+const warpShare = (<a 
+  target="_blank"
+  href="https://warpcast.com/~/compose?text=I%20just%20did%20my%20DAO%20Income%20Taxes%20with%20TaxMan%20from%20/BCard%20in%20about%20five%20minutes!&embeds[]=https://taxman.getbcard.io&embeds[]=https://getbcard.io"
+  >
+    <div>
+      Cast It
+      <img src="img/warpcast_logo_white.png" alt="warpcast-logo" style={{ width:"15px", margin: "0 5px 0 5px", top: "2px", position: "relative"}} /> 
+    </div>
+</a>);
 
   const MenuLinks = [
     { id: 1, href: "https://banklesscard.mirror.xyz/", title: "Blog" },
@@ -45,6 +55,7 @@ const Navbar = () => {
             </a>
           </li>
         ))}
+        <li>{warpShare}</li>
         <li>{twitterShare}</li>
       </ul>
       {/* Menu icon */}
