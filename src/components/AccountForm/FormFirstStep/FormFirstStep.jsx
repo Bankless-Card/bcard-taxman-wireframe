@@ -141,7 +141,7 @@ const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry, date
                   setDates({...dates, startDate: e.target.value});
                 }}
                 // disabled={true}
-                title="Date Selection Coming Soon"
+                title="Date Selection Now Available"
               />
             </div>
             {/* calendar-picker UI icon */}
@@ -168,8 +168,9 @@ const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry, date
                     console.log("Valid date range.");
                     setDates({...dates, endDate: proposeEnd});
                   } else {
-                    alert("Please enter a valid date range.");
+                    // alert("Please enter a valid date range.");
                     console.log("Invalid date range.");
+                    setDates({startDate: curStart, endDate: curEnd});
                   }
                 }}
                 // disabled={true}
