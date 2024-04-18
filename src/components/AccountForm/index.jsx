@@ -34,7 +34,7 @@ const AccountForm = () => {
 
   const [{ isCTAclicked, showTransactionModal }] = useUI();
   const [step, setStep] = useState(1);
-  console.log(showTransactionModal, screenSize);
+  // console.log(showTransactionModal, screenSize);
 
   const [addrOverride, setAddrOverride] = useState("");
   const [country, setCountry] = useState("CAD");

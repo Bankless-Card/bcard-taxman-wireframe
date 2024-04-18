@@ -1,4 +1,4 @@
-// import { useState } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useUI } from "../../../context/UIContext";
 import styles from "./styles.module.css";
@@ -7,6 +7,9 @@ import Spinner from "../Spinner";
 
 const FormFourthStep = ({txData, activeAssets, country, tax, setTax, finalExport}) => {
   const [{ showEmailInput }] = useUI();
+
+  const [ showClaimInfo, setShowClaimInfo ] = useState(true);
+
 
   let countryCurrency = country;    // set as assigned
   let txSumOutput = sumTransactions(txData, activeAssets);    // all data in this object
@@ -168,9 +171,30 @@ const FormFourthStep = ({txData, activeAssets, country, tax, setTax, finalExport
             <input id="userEmail" type="email" placeholder="Write your email..." /> 
           </div>
         )} */}
+        {showClaimInfo && <ClosableClaimInfo setShowClaimInfo={setShowClaimInfo} />}
       </motion.div>
     </AnimatePresence>
   );
 };
+
+function ClosableClaimInfo({setShowClaimInfo}) {
+
+  return (
+    <div className={styles.closable_claim_info}>
+      <p>
+      Total Tax Owed is an estimate only. Tax rates vary depending on many factors. Your TaxMan report will display all total income, with currency conversion rates based on the day of receipt, which you can import to any tax calculation software.
+      
+      This is beta software and is offered free for use as is. If you have any questions
+        about your personal tax situation, please consult a tax professional.
+      </p>
+      <button className={styles.closable_claim_info_button}
+        onClick={(e) => {
+          console.log(e);
+          e.preventDefault();
+          setShowClaimInfo(false)
+        }}>Got it!</button>
+    </div>
+  );
+}
 
 export default FormFourthStep;
