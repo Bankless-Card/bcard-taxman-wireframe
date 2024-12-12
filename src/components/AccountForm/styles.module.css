@@ -4,6 +4,7 @@
   align-items: center;
   height: 75vh;
   width: 100%;
+  color: #222222;
 }
 .form_inner_container {
   width: 80%;
@@ -19,10 +20,10 @@
 }
 
 .form_container form {
-  width: 430px;
+  width: 100%;
   height: auto;
   max-height: 600px;
-  background: rgba(220, 190, 238, 0.2);
+  background: #EADDE7;
   border: 2px solid #ffffff;
   backdrop-filter: blur(20px);
   border-radius: 10px;
@@ -30,7 +31,7 @@
 
 .steps_buttons_contaier {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   align-content: center;
   height: 50px;
@@ -38,11 +39,13 @@
 .step_button {
   width: 70px;
   height: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
   background: #ffdde6;
   border-radius: 40px;
   cursor: pointer;
   transition: background-image 0.5s ease-in-out;
-  border: none;
+  border: solid 1px #000000;
 }
 .step_button_current {
   background-image: linear-gradient(
@@ -56,7 +59,9 @@
   height: 5px;
   border-radius: 40px;
   transition: background-image 0.5s ease-in-out;
-  border: none;
+  border: solid 1px #000000;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 .next_step_button {
   background-image: linear-gradient(
@@ -93,7 +98,7 @@
   width: 101%;
   border-radius: 9px;
   padding: 19px 0px;
-  border: none;
+  border: solid 1px #000000;
   margin: 18px 0px;
 }
 
