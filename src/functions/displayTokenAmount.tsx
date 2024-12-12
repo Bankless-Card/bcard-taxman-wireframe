@@ -11,10 +11,10 @@ export function displayTokenAmount(value:any, asset:any, activeAssets:any){
     // adjust to 6 for ETH
     return parseFloat(value).toFixed(6) + " " + asset;
 
-  } else if(activeAssets.includes(asset)){
+  } else { //if(activeAssets.includes(asset)){
     // catch all return for matched assets
     return niceFormat + " " + asset;
-  } 
+  }
 
   // add more rules for specifc assets here
 

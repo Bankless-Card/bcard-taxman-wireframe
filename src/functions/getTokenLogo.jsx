@@ -1,7 +1,11 @@
 import { possibleAssetsObj } from "../data/possibleAssets";
 export function getTokenLogo(asset) {
 
-  return possibleAssetsObj[asset].tokenLogoIndex;
+  if( possibleAssetsObj[asset] ) {
+    return possibleAssetsObj[asset].tokenLogoIndex;
+  }
+
+  return possibleAssetsObj["ETH"].tokenLogoIndex;
 
   let tokenLogoIndex = {
     "BANK": "/img/token/dao.jpg",

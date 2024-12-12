@@ -1,16 +1,16 @@
 import { Alchemy, Network, AssetTransfersCategory } from 'alchemy-sdk';
 
 // data imports
-import { REACT_APP_ALCHEMY_API_KEY, ETH_ALCHEMY_API_KEY, MATIC_ALCHEMY_API_KEY, OP_ALCHEMY_API_KEY, ARBITRUM_ALCHEMY_API_KEY, BASE_ALCHEMY_API_KEY } from '../data' 
+import { ALCHEMY_API_KEY } from '../data' 
 
 
 // using different alchemy keys for different networks for usage tracking
 
-const alchemy = new Alchemy({ apiKey: ETH_ALCHEMY_API_KEY, network: Network.ETH_MAINNET});
-const polygon = new Alchemy({ apiKey: MATIC_ALCHEMY_API_KEY, network: Network.MATIC_MAINNET });
-const optimism = new Alchemy({ apiKey: OP_ALCHEMY_API_KEY, network: Network.OPT_MAINNET });
-const arbitrum = new Alchemy({ apiKey: ARBITRUM_ALCHEMY_API_KEY, network: Network.ARB_MAINNET });
-const base = new Alchemy({ apiKey: BASE_ALCHEMY_API_KEY, network: Network.BASE_MAINNET });
+const alchemy = new Alchemy({ apiKey: ALCHEMY_API_KEY, network: Network.ETH_MAINNET});
+const polygon = new Alchemy({ apiKey: ALCHEMY_API_KEY, network: Network.MATIC_MAINNET });
+const optimism = new Alchemy({ apiKey: ALCHEMY_API_KEY, network: Network.OPT_MAINNET });
+const arbitrum = new Alchemy({ apiKey: ALCHEMY_API_KEY, network: Network.ARB_MAINNET });
+const base = new Alchemy({ apiKey: ALCHEMY_API_KEY, network: Network.BASE_MAINNET });
 
 // combine for a single usable object
 const alchemyConnect = {
@@ -71,7 +71,7 @@ async function processTxArr(array, activeAssets, countryExport, chain) {
       if(activeAssets.includes(thisRow.asset)){
         // save to globalTxs
         await saveToGlobalTxs(thisRow, unixT, tNice, countryExport, activeAssets, chain);
-        // return true;
+        //return true;
       } else {
         // remove from the tx list - it will be recalled latter if dao selectors are toggled
         array.splice(i,1);    // the result here is JUST the spliced out entry
@@ -157,7 +157,12 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
       var startUnix = new Date(dates.startDate);
       // console.log(startUnix.getTime());
       var endUnix = new Date(dates.endDate);
-      // console.log(endUnix.getTime());
+      var yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1)
+      if(endUnix > yesterday){
+        endUnix = yesterday;
+      }
+      console.log(endUnix.getTime());
 
       // now we need block numbers
 
@@ -165,9 +170,10 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
       const getBlock = async(chain, timestamp) => {
         let block = await fetch('https://coins.llama.fi/block/'+ chain + '/' + timestamp.getTime()/1000);
         let data = await block.json();
-        // console.log(data);
-        // console.log(data.height);
-
+        // Add a safety buffer of 1000 blocks to avoid querying too recent blocks
+        if (data && data.height) {
+          data.height = Math.max(0, data.height - 1000);
+        }
         return data;
       }
 
@@ -369,14 +375,14 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
     });
 
     // BASE
-    const baseRes = await alchemyConnect.base.core.getAssetTransfers({
+    /*const baseRes = await alchemyConnect.base.core.getAssetTransfers({
       fromBlock: baseStart,
       toBlock: baseEnd,
       toAddress: toAddress,
       excludeZeroValue: true,
       withMetadata: true,
       category: [ AssetTransfersCategory.ERC20 ],
-    });
+    });*/
 
     // ARBITRUM
     const arbRes = await alchemyConnect.arb.core.getAssetTransfers({
@@ -386,12 +392,12 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
       excludeZeroValue: true,
       withMetadata: true,
       category: [ AssetTransfersCategory.ERC20 ],
-    });
+    }); 
   
     let objArr = ethRes.transfers;
     let polyArr = polyRes.transfers;
     let opArr = opRes.transfers;
-    let baseArr = baseRes.transfers;
+    //let baseArr = baseRes.transfers;
     let arbArr = arbRes.transfers;
 
     let countryExport = country;  //"CAD";   // label for export currency
@@ -401,7 +407,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
     await processTxArr(objArr, activeAssets, countryExport, "Ethereum");      // ETH MAINNET
     await processTxArr(polyArr, activeAssets, countryExport, "Polygon");    // POLYGON MAINNET
     await processTxArr(opArr, activeAssets, countryExport, "Optimism");
-    await processTxArr(baseArr, activeAssets, countryExport, "Base");
+    //await processTxArr(baseArr, activeAssets, countryExport, "Base");
     await processTxArr(arbArr, activeAssets, countryExport, "Arbitrum")
   
 
@@ -409,7 +415,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
       setFullStorageArr(1, "Ethereum Mainnet", objArr),
       setFullStorageArr(2, "Polygon Transactions", polyArr),
       setFullStorageArr(3, "Optimism Transactions", opArr),
-      setFullStorageArr(4, "Base Transactions", baseArr),
+      //setFullStorageArr(4, "Base Transactions", baseArr),
       setFullStorageArr(5, "Arbitrum Transactions", arbArr)
     ];
 

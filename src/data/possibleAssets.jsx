@@ -137,6 +137,12 @@
       tokenLogoIndex: "/img/token/usdt-logo.png",
       tokenLabel: "USDT Cryptodollar",
     },
+    "ETH": {
+      defaultPrice: 3500.420,
+      assetGeckoList: "ethereum",
+      tokenLogoIndex: "/img/token/eth-logo.png",
+      tokenLabel: "Ether",
+    },
   }
 
   export const possibleAssets = Object.keys(possibleAssetsObj);

@@ -7,6 +7,7 @@ export const ELASTICMAIL_SECURETOKEN = import.meta.env.VITE_ELASTICMAIL_SECURETO
 export const CONVERT_KIT_API_KEY = import.meta.env.VITE_CONVERT_KIT_API_KEY;     
 export const CONVERT_KIT_FORM_ID = import.meta.env.VITE_CONVERT_KIT_FORM_ID;     
 
+export const ALCHEMY_API_KEY = import.meta.env.VITE_ALCHEMY_API_KEY;
 export const ETH_ALCHEMY_API_KEY = import.meta.env.VITE_ETH_ALCHEMY_API_KEY;           
 export const MATIC_ALCHEMY_API_KEY = import.meta.env.VITE_MATIC_ALCHEMY_API_KEY;       
 export const OP_ALCHEMY_API_KEY = import.meta.env.VITE_OP_ALCHEMY_API_KEY;               
