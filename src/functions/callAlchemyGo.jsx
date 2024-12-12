@@ -375,14 +375,14 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
     });
 
     // BASE
-    /*const baseRes = await alchemyConnect.base.core.getAssetTransfers({
+    const baseRes = await alchemyConnect.base.core.getAssetTransfers({
       fromBlock: baseStart,
       toBlock: baseEnd,
       toAddress: toAddress,
       excludeZeroValue: true,
       withMetadata: true,
       category: [ AssetTransfersCategory.ERC20 ],
-    });*/
+    });
 
     // ARBITRUM
     const arbRes = await alchemyConnect.arb.core.getAssetTransfers({
