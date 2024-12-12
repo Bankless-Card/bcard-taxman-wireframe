@@ -45,6 +45,8 @@ async function saveToGlobalTxs(thisRow, unixT, tNice, countryExport, activeAsset
   thisRow.tNice = tNice;   // add date/time to global object
   // console.log(thisRow.value, thisRow.asset, unixT, countryExport);
 
+  console.log("currently looking at asset:", thisRow.asset);
+
   thisRow.currency = await displayConvertAmount(thisRow.value, thisRow.asset, unixT, countryExport);
   thisRow.img_url = getTokenLogo(thisRow.asset);      //"./img/dao.jpg";
   thisRow.tokenLabel = getTokenLabel(thisRow.asset);
@@ -397,7 +399,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
     let objArr = ethRes.transfers;
     let polyArr = polyRes.transfers;
     let opArr = opRes.transfers;
-    //let baseArr = baseRes.transfers;
+    let baseArr = baseRes.transfers;
     let arbArr = arbRes.transfers;
 
     let countryExport = country;  //"CAD";   // label for export currency
@@ -407,7 +409,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
     await processTxArr(objArr, activeAssets, countryExport, "Ethereum");      // ETH MAINNET
     await processTxArr(polyArr, activeAssets, countryExport, "Polygon");    // POLYGON MAINNET
     await processTxArr(opArr, activeAssets, countryExport, "Optimism");
-    //await processTxArr(baseArr, activeAssets, countryExport, "Base");
+    await processTxArr(baseArr, activeAssets, countryExport, "Base");
     await processTxArr(arbArr, activeAssets, countryExport, "Arbitrum")
   
 
@@ -415,7 +417,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
       setFullStorageArr(1, "Ethereum Mainnet", objArr),
       setFullStorageArr(2, "Polygon Transactions", polyArr),
       setFullStorageArr(3, "Optimism Transactions", opArr),
-      //setFullStorageArr(4, "Base Transactions", baseArr),
+      setFullStorageArr(4, "Base Transactions", baseArr),
       setFullStorageArr(5, "Arbitrum Transactions", arbArr)
     ];
 
