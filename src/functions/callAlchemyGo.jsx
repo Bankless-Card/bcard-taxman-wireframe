@@ -179,139 +179,43 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
         return data;
       }
 
-      //ethereum
-      const getEthStartBlock = async() => {
-        let block = await getBlock("ethereum", startUnix);
-        //console.log(block.height);
-        blockNumInt = block.height;
-
-        return block.height;
-      }
-
-      const getEthEndBlock = async() => {
-        let block = await getBlock("ethereum", endUnix);
-        //console.log(block.height);
-        endBlockNumInt = block.height;
-
-        return block.height;
-      }
-
-      // polygon
-      const getPolyStartBlock = async() => {
-        let block = await getBlock("polygon", startUnix);
-        // console.log(block.height);
-        polyStartInt = block.height;
-
-        return block.height;
-      }
-
-      const getPolyEndBlock = async() => {
-        let block = await getBlock("polygon", endUnix);
-        // console.log(block.height);
-        polyEndInt = block.height;
-
-        return block.height;
-      }
-
-      // optimism
-      const getOPStartBlock = async() => {
-
-        let opLaunch = 1637549336;  // 2022-12-23?
-
-        if(startUnix.getTime()/1000 < opLaunch){
-          // before OP launch
-          opStartInt = 0;
-        } else {
-
-          let block = await getBlock("optimism", startUnix);
-          // console.log(block.height);
-          opStartInt = block.height;
-
-          return block.height;
-        }
-      }
-
-      const getOPEndBlock = async() => {
-        let block = await getBlock("optimism", endUnix);
-        // console.log(block.height);
-        opEndInt = block.height;
-
-        return block.height;
-      }
-
-      // base
-      const getBASEStartBlock = async() => {
-
-        let baseLaunch = 1691553601;  // 2023-08-09
-
-        if(startUnix.getTime()/1000 < baseLaunch){
-          // before BASE launch
-          baseStartInt = 0;
-        } else {
-
-
-          let block = await getBlock("base", startUnix);
-          console.log("NEW BASE: " + block.height);
-
-          baseStartInt = block.height;
-
-          return block.height;
-        }
-      }
-
-      const getBASEEndBlock = async() => {
-        let block = await getBlock("base", endUnix);
-        console.log("NEW BASE END: " + block.height);
-
-        baseEndInt = block.height;
-
-        return block.height;
-      }
-
-      // arbitrum
-      const getArbStartBlock = async() => {
-
-        let arbLaunch = 1679544001;  // 2023-08-09
-
-        if(startUnix.getTime()/1000 < arbLaunch){
-          // before BASE launch
-          arbStartInt = 0;
-        } else {
-
-
-          let block = await getBlock("arbitrum", startUnix);
-          console.log("NEW ARB: " + block.height);
-
-          arbStartInt = block.height;
-
-          return block.height;
-        }
-      }
-
-      const getArbEndBlock = async() => {
-        let block = await getBlock("arbitrum", endUnix);
-        console.log("NEW ARB END: " + block.height);
-
-        arbEndInt = block.height;
-
-        return block.height;
-      }
-
       // execute the block collection functions to generate the constants
-      await getEthStartBlock();
-      await getEthEndBlock();
+      const getBlockNum = async(network, unixTimestamp) => {
+        // Create a cache key based on network and timestamp
+        const cacheKey = `block_${network}_${unixTimestamp}`;
 
-      await getPolyStartBlock();
-      await getPolyEndBlock();
+        // Try to get cached value
+        const cachedBlock = localStorage.getItem(cacheKey);
+        if (cachedBlock) {
+          console.log(`Using cached block for ${network} at ${unixTimestamp}`);
+          return parseInt(cachedBlock);
+        }
 
-      await getOPStartBlock();
-      await getOPEndBlock();
+        // If not in cache, fetch from API
+        let block = await getBlock(network, unixTimestamp);
+        if (block && block.height) {
+          // Cache the result
+          localStorage.setItem(cacheKey, block.height.toString());
+          return block.height;
+        }
+        
+        return 0;
+      }
 
-      await getBASEStartBlock();
-      await getBASEEndBlock();
+      blockNumInt = await getBlockNum("ethereum", startUnix);
+      endBlockNumInt = await getBlockNum("ethereum", endUnix);
 
-      await getArbStartBlock();
-      await getArbEndBlock();
+      polyStartInt = await getBlockNum("polygon", startUnix);
+      polyEndInt = await getBlockNum("polygon", endUnix);
+
+      opStartInt = await getBlockNum("optimism", startUnix);
+      opEndInt = await getBlockNum("optimism", endUnix);
+
+      baseStartInt = await getBlockNum("base", startUnix);
+      baseEndInt = await getBlockNum("base", endUnix);
+
+      arbStartInt = await getBlockNum("arbitrum", startUnix);
+      arbEndInt = await getBlockNum("arbitrum", endUnix); 
 
 
       if(true){
