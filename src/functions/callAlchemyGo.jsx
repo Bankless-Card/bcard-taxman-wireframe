@@ -181,13 +181,17 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
 
       // execute the block collection functions to generate the constants
       const getBlockNum = async(network, unixTimestamp) => {
+        // Convert Date object to Unix timestamp (seconds)
+        const timestampInSeconds = Math.floor(unixTimestamp.getTime() / 1000);
+        
         // Create a cache key based on network and timestamp
-        const cacheKey = `block_${network}_${unixTimestamp}`;
+        const cacheKey = `block_${network}_${timestampInSeconds}`;
+        //console.log('Block Cache Key:', cacheKey);
 
         // Try to get cached value
         const cachedBlock = localStorage.getItem(cacheKey);
         if (cachedBlock) {
-          console.log(`Using cached block for ${network} at ${unixTimestamp}`);
+          console.log(`Using cached block for ${network} at ${timestampInSeconds}`);
           return parseInt(cachedBlock);
         }
 
@@ -237,68 +241,74 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
     var polyEnd = "0x" + polyEndInt.toString(16);
     var opStart = "0x"+ opStartInt.toString(16); //f0efd5";
     var opEnd = "0x" + opEndInt.toString(16);
-
-    // NEW 2023
     var baseStart = "0x"+ baseStartInt.toString(16); //f0efd5";
     var baseEnd = "0x" + baseEndInt.toString(16);
     var arbStart = "0x"+ arbStartInt.toString(16); //f0efd5";
     var arbEnd = "0x" + arbEndInt.toString(16);
 
+
+    const getAlchemyInstanceByNetwork = (network) => {
+      switch (network) {
+        case "ethereum":
+          return alchemyConnect.eth;
+        case "polygon":
+          return alchemyConnect.poly;
+        case "optimism":
+          return alchemyConnect.op;
+        case "arbitrum":
+          return alchemyConnect.arb;
+        case "base":
+          return alchemyConnect.base;
+        default:
+          return alchemyConnect.eth;
+      }
+    }
+
+    const getERC20AssetTransfers = async(network, startBlock, endBlock, toAddress) => {
+      const alchemyInstance = getAlchemyInstanceByNetwork(network);
+      
+      // Normalize block numbers to decimal for consistent cache keys
+      const startBlockDec = parseInt(startBlock, 16).toString();
+      const endBlockDec = parseInt(endBlock, 16).toString();
+      
+      // Create a cache key based on network, startBlock, and endBlock using decimal values
+      const cacheKey = `transfers_${network}_${startBlockDec}_${endBlockDec}_${toAddress}`;
+      //console.log('Cache Key:', cacheKey);
+      
+      // Try to get cached value
+      const cachedTransfers = localStorage.getItem(cacheKey);
+      //console.log('Found in cache:', !!cachedTransfers);
+      
+      if (cachedTransfers) {
+        console.log(`Using cached transfers for ${network} from ${startBlock} to ${endBlock}`);
+        const parsedTransfers = JSON.parse(cachedTransfers);
+        //console.log('Cached data:', parsedTransfers);
+        return parsedTransfers;
+      }
+
+      // If not in cache, fetch from API
+      const transfers = await alchemyInstance.core.getAssetTransfers({
+        fromBlock: startBlock,  // Use original hex values for API call
+        toBlock: endBlock,
+        toAddress: toAddress,
+        excludeZeroValue: true,
+        withMetadata: true,
+        category: [ AssetTransfersCategory.ERC20 ],
+      });
+
+      // Cache the result
+      localStorage.setItem(cacheKey, JSON.stringify(transfers));
+      return transfers;
+    }
     
-    // MAINNET
-    const ethRes = await alchemyConnect.eth.core.getAssetTransfers({
-      fromBlock: startBlock,
-      toBlock: endBlock,
-      toAddress: toAddress,
-      excludeZeroValue: true,
-      withMetadata: true,
-      // order: "desc",       // default asc for ascending
-      category: [ AssetTransfersCategory.ERC20 ],
-    });
-    
+    // Get ERC20 asset transfers
+    const ethRes = await getERC20AssetTransfers("ethereum", startBlock, endBlock, toAddress);
+    const polyRes = await getERC20AssetTransfers("polygon", polyStart, polyEnd, toAddress);
+    const opRes = await getERC20AssetTransfers("optimism", opStart, opEnd, toAddress);   
+    const baseRes = await getERC20AssetTransfers("base", baseStart, baseEnd, toAddress);
+    const arbRes = await getERC20AssetTransfers("arbitrum", arbStart, arbEnd, toAddress);
     // Other categories available:
     // AssetTransfersCategory.EXTERNAL, AssetTransfersCategory.INTERNAL, AssetTransfersCategory.ERC721, AssetTransfersCategory.ERC1155,
-  
-    // POLYGON
-    const polyRes = await alchemyConnect.poly.core.getAssetTransfers({
-      fromBlock: polyStart,
-      toBlock: polyEnd,
-      toAddress: toAddress,
-      excludeZeroValue: true,
-      withMetadata: true,
-      category: [ AssetTransfersCategory.ERC20 ],
-    });
-  
-    // OPTIMISM  
-    const opRes = await alchemyConnect.op.core.getAssetTransfers({
-      fromBlock: opStart,
-      toBlock: opEnd,
-      toAddress: toAddress,
-      excludeZeroValue: true,
-      withMetadata: true,
-      // order: "desc",       // default asc for ascending
-      category: [ AssetTransfersCategory.ERC20 ],
-    });
-
-    // BASE
-    const baseRes = await alchemyConnect.base.core.getAssetTransfers({
-      fromBlock: baseStart,
-      toBlock: baseEnd,
-      toAddress: toAddress,
-      excludeZeroValue: true,
-      withMetadata: true,
-      category: [ AssetTransfersCategory.ERC20 ],
-    });
-
-    // ARBITRUM
-    const arbRes = await alchemyConnect.arb.core.getAssetTransfers({
-      fromBlock: arbStart,
-      toBlock: arbEnd,
-      toAddress: toAddress,
-      excludeZeroValue: true,
-      withMetadata: true,
-      category: [ AssetTransfersCategory.ERC20 ],
-    }); 
   
     let objArr = ethRes.transfers;
     let polyArr = polyRes.transfers;
