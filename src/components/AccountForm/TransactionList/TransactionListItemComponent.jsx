@@ -11,9 +11,11 @@ const TransactionListItemComponent = ({
   incomeState,
   isActiveItem,
   setIsActiveItem,
+  item,
 }) => {
 
   const [itemStyles, setItemStyles] = useState(styles.item_container);
+  const [localIncomeState, setLocalIncomeState] = useState(item.incomeState);
 
   useEffect(() => {
     // console.log(crypto, currency);
@@ -30,7 +32,7 @@ const TransactionListItemComponent = ({
   function RenderIncomeSwitcher({isIncome=true}) {
     if (isIncome) {
       return (
-        <div className={styles.income_switcher}>
+        <div className={styles.income_switcher} onClick={toggleIncomeClick}>
           <img style={{ width: "20px" }} src="./img/money-bag.png" alt="income" />
           <br/>income
         </div>
@@ -38,20 +40,26 @@ const TransactionListItemComponent = ({
     }
 
     return (
-      <div className={styles.income_switcher}>
+      <div className={styles.income_switcher} onClick={toggleIncomeClick}>
         <img style={{ width: "20px" }} src="./img/x.png" alt="not income" />
         <br/>not income
       </div>
     );
   }
 
+  function toggleIncomeClick(e){
+    e.stopPropagation();
+    item.incomeState = !item.incomeState;
+    setLocalIncomeState(item.incomeState);
+  }
+
     return (
       <div key={id} 
-        data-incomestate={incomeState} 
+        data-incomestate={localIncomeState} 
         className={itemStyles} 
         onClick={onClick}
         >
-        <RenderIncomeSwitcher isIncome={incomeState} />
+        <RenderIncomeSwitcher isIncome={localIncomeState} />
         <div className={styles.avatar_container}>
           <img src={img_url} className={styles.avatar_img} />
           <div className={styles.inner_container}>

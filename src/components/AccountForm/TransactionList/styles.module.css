@@ -41,11 +41,10 @@ p {
   display: flex;
   justify-content: start;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 0px;
   cursor: pointer;
   padding-top: 0px;
-  padding-bottom: 10px;
-  border-radius: 10px;
+  padding-bottom: 5px;
 }
 .item_container:hover {
   background: rgba(255, 221, 230, 0.2);
@@ -53,10 +52,15 @@ p {
 
 .income_switcher {
   font-size: 0.8em;
-  text-align:center;
+  text-align: center;
   line-height: 0.8em;
   flex: 0 0 auto;
   width: 50px;
+  height: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .active_item_container {
