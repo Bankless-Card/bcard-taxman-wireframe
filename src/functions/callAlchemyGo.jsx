@@ -58,31 +58,40 @@ async function saveToGlobalTxs(thisRow, unixT, tNice, countryExport, activeAsset
 
 }
 
-async function processTxArr(array, activeAssets, countryExport, chain) {
+async function processTxArr(sourceArray, destArray, activeAssets, countryExport, chain) {
 
   // console.log(array, activeAssets, countryExport, chain);
 
-  let initArr = array;    // copy of initial array to measure length of for loop
+  let initArr = sourceArray;    // copy of initial array to measure length of for loop
   for (var i=0; i<initArr.length; i++) {
 
-      let thisRow = array[i];      
+      let thisRow = sourceArray[i];   
+      console.log(thisRow);   
       let t = thisRow.metadata.blockTimestamp;    // date from tx record
       let tNice = new Date(t);
+      let tMonth = tNice.getMonth();
+      let tLongMonth = tNice.toLocaleString('default', { month: 'long' });
+      let tYear = tNice.getFullYear();
       let unixT = Date.parse(t)/1000
-          
+
+      const destKey = tYear + "-" + tMonth + "-" + tLongMonth;
+
       if(activeAssets.includes(thisRow.asset)){
-        // save to globalTxs
+        // transform the row for output
         await saveToGlobalTxs(thisRow, unixT, tNice, countryExport, activeAssets, chain);
-        //return true;
+        if(destArray[destKey]){
+          destArray[destKey].push(thisRow);
+        } else {
+          destArray[destKey] = [thisRow];
+        }
       } else {
         // remove from the tx list - it will be recalled latter if dao selectors are toggled
-        array.splice(i,1);    // the result here is JUST the spliced out entry
-        // return false;
+        sourceArray.splice(i,1);    // the result here is JUST the spliced out entry
       }
 
   }
 
-  return array;
+  return sourceArray;
 }
 
 export async function callAlchemyGo(address, addrOverride, country, activeAssets, dates) {
@@ -315,27 +324,31 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
     let opArr = opRes.transfers;
     let baseArr = baseRes.transfers;
     let arbArr = arbRes.transfers;
+    let blendedTxArray = [];
 
     let countryExport = country;  //"CAD";   // label for export currency
 
     // process each of the transaction arrays read in and filter out the unwanted assets
     // add data to the desired transaction objects
-    await processTxArr(objArr, activeAssets, countryExport, "Ethereum");      // ETH MAINNET
-    await processTxArr(polyArr, activeAssets, countryExport, "Polygon");    // POLYGON MAINNET
-    await processTxArr(opArr, activeAssets, countryExport, "Optimism");
-    await processTxArr(baseArr, activeAssets, countryExport, "Base");
-    await processTxArr(arbArr, activeAssets, countryExport, "Arbitrum")
-  
+    await processTxArr(objArr, blendedTxArray, activeAssets, countryExport, "Ethereum");      // ETH MAINNET
+    await processTxArr(polyArr, blendedTxArray, activeAssets, countryExport, "Polygon");    // POLYGON MAINNET
+    await processTxArr(opArr, blendedTxArray, activeAssets, countryExport, "Optimism");
+    await processTxArr(baseArr, blendedTxArray, activeAssets, countryExport, "Base");
+    await processTxArr(arbArr, blendedTxArray, activeAssets, countryExport, "Arbitrum")
 
-    const alTxs = [
-      setFullStorageArr(1, "Ethereum Mainnet", objArr),
-      setFullStorageArr(2, "Polygon Transactions", polyArr),
-      setFullStorageArr(3, "Optimism Transactions", opArr),
-      setFullStorageArr(4, "Base Transactions", baseArr),
-      setFullStorageArr(5, "Arbitrum Transactions", arbArr)
-    ];
+    console.log(blendedTxArray);
 
-    // console.log(alTxs);
+    const alTxs = [];
+    var counter = 1;
+    for (const [monthKey, transactions] of Object.entries(blendedTxArray)) {
+        // monthKey is in format "2024-11-November", split it
+        const [year, month, monthName] = monthKey.split("-");
+        const formattedTitle = `${monthName} ${year}`;
+        
+        alTxs.push(setFullStorageArr(counter++, formattedTitle, transactions));
+    }
+
+    //console.log(alTxs);
   
     return alTxs;
 }
