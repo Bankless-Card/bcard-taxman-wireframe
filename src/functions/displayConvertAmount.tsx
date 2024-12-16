@@ -282,7 +282,7 @@ async function assetDataLoop(asset:any, fiat:any, timestamp:any, value:any){
 
 
   let output = "$"+fiat+" "+(currentPrice*parseFloat(value)).toFixed(2) + " @ " +currentPrice.toFixed(4);
-
+  output = "$"+(currentPrice*parseFloat(value)).toFixed(2)+" "+fiat;
   // return the price in FIAT terms, based on timestamp
   return output;
 }

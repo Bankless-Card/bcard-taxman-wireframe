@@ -7,16 +7,12 @@
   color: #222222;
 }
 .form_inner_container {
-  width: 80%;
+  width: 90%;
   margin: auto;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
-}
-
-[data-incomestate="false"] {
-  border-bottom:3px solid red;
 }
 
 .form_container form {

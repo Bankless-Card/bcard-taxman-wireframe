@@ -2,7 +2,7 @@ p {
   margin: 0px;
 }
 .transaction_list_container {
-  height: 35vh;
+  height: 45vh;
   overflow-x: hidden;
   overflow-y: scroll;
   padding-right: 10px;
@@ -18,15 +18,14 @@ p {
   background: linear-gradient(90deg, #c02cae 0%, #f62e54 113.54%);
 }
 .list_item_container {
-  border-bottom: solid 1px white;
-  margin: 20px 0;
+  margin-bottom: 25px;
 }
 .date {
   font-family: "Inter";
   font-style: normal;
   font-weight: 600;
   font-size: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 0px;
   /* color */
   background: linear-gradient(90deg, #c02cae 0%, #f62e54 113.54%);
   -webkit-background-clip: text;
@@ -36,14 +35,15 @@ p {
 }
 .inner_container {
   margin-left: 10px;
+  font-size: 0.8em;
 }
 .item_container {
   display: flex;
-  justify-content: space-between;
+  justify-content: start;
   align-items: center;
   margin-bottom: 16px;
   cursor: pointer;
-  padding-top: 10px;
+  padding-top: 0px;
   padding-bottom: 10px;
   border-radius: 10px;
 }
@@ -51,32 +51,43 @@ p {
   background: rgba(255, 221, 230, 0.2);
 }
 
+.income_switcher {
+  font-size: 0.8em;
+  text-align:center;
+  line-height: 0.8em;
+  flex: 0 0 auto;
+  width: 50px;
+}
+
 .active_item_container {
   display: flex;
   justify-content: space-between;
+  justify-items: stretch;
   align-items: center;
-  margin-bottom: 16px;
+  margin-bottom: 0px;
   cursor: pointer;
   padding-top: 10px;
-  padding-bottom: 10px;
+  padding-bottom: 0px;
   border-radius: 10px;
   background: rgba(255, 221, 230, 0.2);
 }
 .avatar_container {
   display: flex;
-  align-items: center;
+  flex: 1;
+  text-align: left;
+  margin-left: 10px
 }
 
 .avatar_img {
-  width: 40px;
-  height: 40px;
+  width: 32px;
+  height: 32px;
   border-radius: 100%;
 }
 
 .income_received {
   font-family: "Roboto";
   font-style: normal;
-  font-weight: 600;
+  font-weight: normal;
   font-size: 12px;
   text-decoration-line: underline;
   background: linear-gradient(90deg, #c02cae 0%, #f62e54 113.54%);
@@ -89,21 +100,27 @@ p {
 .avatar_userName {
   font-family: "Roboto", sans-serif;
   font-style: normal;
-  font-weight: 400;
-  font-size: 16px;
+  font-weight: normal;
+}
+
+.currency_values {
+  text-align: right;
+  font-size: 0.8em;
+  margin-left: auto; /* Pushes the box to the far right */
+  flex: 0 0 auto; /* Fixed size, does not grow or shrink */
 }
 
 .crypto {
   font-family: "Roboto", sans-serif;
   font-style: normal;
   font-weight: 400;
-  font-size: 16px;
+  font-size: 0.9em;
 }
 
 .currency {
   font-family: "Roboto" sans-serif;
   font-weight: 500;
-  font-size: 10px;
+  font-size: 0.8em;
   text-align: right;
 
   /* color */
