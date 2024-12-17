@@ -37,15 +37,14 @@ jobs:
           cache: 'npm'
       - name: Install dependencies
         run: npm install
+      - name: Verify env variables
+        run: |
+          echo "Checking for environment variables..."
+          echo "ALCHEMY_API_KEY exists: ${{ secrets.VITE_ALCHEMY_API_KEY != '' }}"
       - name: Build
         run: npm run build
         env:
           NODE_ENV: production
-          VITE_ARBITRUM_ALCHEMY_API_KEY: ${{ secrets.VITE_ARBITRUM_ALCHEMY_API_KEY }}
-          VITE_BASE_ALCHEMY_API_KEY: ${{ secrets.VITE_BASE_ALCHEMY_API_KEY }}
-          VITE_OP_ALCHEMY_API_KEY: ${{ secrets.VITE_OP_ALCHEMY_API_KEY }}
-          VITE_MATIC_ALCHEMY_API_KEY: ${{ secrets.VITE_MATIC_ALCHEMY_API_KEY }}
-          VITE_ETH_ALCHEMY_API_KEY: ${{ secrets.VITE_ETH_ALCHEMY_API_KEY }}
           VITE_ALCHEMY_API_KEY: ${{ secrets.VITE_ALCHEMY_API_KEY }}
           VITE_ELASTIC_EMAIL_PASSWORD: ${{ secrets.VITE_ELASTIC_EMAIL_PASSWORD }}
           VITE_ELASTICMAIL_SECURETOKEN: ${{ secrets.VITE_ELASTICMAIL_SECURETOKEN }}
