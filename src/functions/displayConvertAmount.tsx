@@ -99,8 +99,8 @@ async function getSinglePrice(asset:any, value:any, timestamp:any, fiat:any, las
 
   
   if(gp === 0){
-    console.log("Price Lookup is 0/error, returning last price: " + lastPrice);
-    return lastPrice;
+    console.log("Price Lookup is 0/error, returning 0");
+    return 0;
   } else {
     let priceUpdate = gp[useFiat];
     console.log("$$API$$ Price Update: " + priceUpdate);
@@ -140,11 +140,10 @@ const getPrice = async(url:any) => {
   let dataJSON = await data.json();
   
   // console.log(dataJSON);
-  if(dataJSON.error){
+  if(dataJSON.error || !dataJSON.market_data ){
     console.log("Error in getPrice: ", dataJSON.error);
     return 0;
   } else {
-    // return only token prices
     return dataJSON.market_data.current_price;
   }
 
