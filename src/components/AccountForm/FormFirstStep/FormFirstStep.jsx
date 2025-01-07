@@ -38,35 +38,10 @@ const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry, date
     };
     getCOuntryNames();
 
-    // also set default dates? IF NEEDED FOR MORE SIMPLE FORMAT INPUTS TO JS TRANSLATOR
-
   }, []);
 
-  // set datepicker defaults to 2022
   var curStart = dates.startDate;   // now set on init
   var curEnd = dates.endDate;     // now set on init
-  // console.log(curStart, curEnd);
-  // var defaultDateStart = curStart.toISOString().substring(0,10);
-  // var defaultDateEnd = curEnd.toISOString().substring(0,10);
-  // console.log(defaultDateStart, defaultDateEnd);   // OK for format ???
-
-  // confirm dates are valid
-  // function isValidDate(d) {
-  //   // confirm single entry date is valid (either start or enddate is valid)
-  //   console.log(d);
-  //   return d; // && !isNaN(d);
-  // }
-
-  // function isValidRange(d1, d2) {
-
-  //   // other tests: is range too big?  
-  //   // is range too small? 
-  //   // is range in future? 
-  //   // is range too far in past (no token data before X)?
-
-  //   // test for start date before end date
-  //   return (isValidDate(d1) && isValidDate(d2) && (d1 <= d2));
-  // }
 
   return (
     <AnimatePresence>
