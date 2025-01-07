@@ -179,13 +179,14 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
 
       // general block lookup function using llama.fi blocknum API lookup
       const getBlock = async(chain, timestamp) => {
-        let block = await fetch('https://coins.llama.fi/block/'+ chain + '/' + timestamp.getTime()/1000);
-        let data = await block.json();
-        // Add a safety buffer of 1000 blocks to avoid querying too recent blocks
-        if (data && data.height) {
-          data.height = Math.max(0, data.height - 1000);
+        try {
+          let block = await fetch('https://coins.llama.fi/block/'+ chain + '/' + timestamp.getTime()/1000);
+          let data = await block.json();
+          return data;
+        } catch (error) {
+          console.log(error);
+          return null;
         }
-        return data;
       }
 
       // execute the block collection functions to generate the constants
