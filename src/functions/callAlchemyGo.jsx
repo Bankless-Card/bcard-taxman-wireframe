@@ -45,7 +45,7 @@ async function saveToGlobalTxs(thisRow, unixT, tNice, countryExport, activeAsset
   thisRow.tNice = tNice;   // add date/time to global object
   // console.log(thisRow.value, thisRow.asset, unixT, countryExport);
 
-  console.log("currently looking at asset:", thisRow.asset);
+  //console.log("currently looking at asset:", thisRow.asset);
 
   thisRow.currency = await displayConvertAmount(thisRow.value, thisRow.asset, unixT, countryExport);
   thisRow.img_url = getTokenLogo(thisRow.asset);      //"./img/dao.jpg";
@@ -65,16 +65,15 @@ async function processTxArr(sourceArray, destArray, activeAssets, countryExport,
   let initArr = sourceArray;    // copy of initial array to measure length of for loop
   for (var i=0; i<initArr.length; i++) {
 
-      let thisRow = sourceArray[i];   
-      console.log(thisRow);   
+      let thisRow = sourceArray[i];    
       let t = thisRow.metadata.blockTimestamp;    // date from tx record
       let tNice = new Date(t);
-      let tMonth = tNice.getMonth();
+      let tMonth = String(tNice.getMonth()).padStart(2, '0');  // add 1 because months are 0-indexed
       let tLongMonth = tNice.toLocaleString('default', { month: 'long' });
       let tYear = tNice.getFullYear();
       let unixT = Date.parse(t)/1000
 
-      const destKey = tYear + "-" + tMonth + "-" + tLongMonth;
+      const destKey = `${tYear}-${tMonth}-${tLongMonth}`;
 
       if(activeAssets.includes(thisRow.asset)){
         // transform the row for output
@@ -335,7 +334,15 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
     await processTxArr(polyArr, blendedTxArray, activeAssets, countryExport, "Polygon");    // POLYGON MAINNET
     await processTxArr(opArr, blendedTxArray, activeAssets, countryExport, "Optimism");
     await processTxArr(baseArr, blendedTxArray, activeAssets, countryExport, "Base");
-    await processTxArr(arbArr, blendedTxArray, activeAssets, countryExport, "Arbitrum")
+    await processTxArr(arbArr, blendedTxArray, activeAssets, countryExport, "Arbitrum");
+
+    // Sort by keys (which are in format "YYYY-MM-mmm")
+    const sortedKeys = Object.keys(blendedTxArray).sort();
+    const sortedBlendedTxArray = {};
+    sortedKeys.forEach(key => {
+        sortedBlendedTxArray[key] = blendedTxArray[key];
+    });
+    blendedTxArray = sortedBlendedTxArray;
 
     console.log(blendedTxArray);
 
@@ -353,7 +360,3 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
   
     return alTxs;
 }
-
-
-
-  
