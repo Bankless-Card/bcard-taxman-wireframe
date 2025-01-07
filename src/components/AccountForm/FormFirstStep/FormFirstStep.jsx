@@ -9,21 +9,7 @@ const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry, date
   const [countryNames, setCountryNames] = useState([]);
   useEffect(() => {
     const getCOuntryNames = async () => {
-      /*const response = await fetch(
-        "https://restcountries.com/v3.1/all?fields=name"
-      );
-      const data = await response.json();*/
 
-      console.log(fiatData);
-
-      // const fiatData = [
-      //   {"name":{"common":"Canadian Dollar","official":"CAD","nativeName":{"eng":{"official":"Canada","common":"Canada"},"fra":{"official":"Canada","common":"Canada"}}}}, 
-      //   {"name":{"common":"US Dollar","official":"USD","nativeName":{"eng":{"official":"United States of America","common":"United States"}}}},
-      //   {"name":{"common":"Euro","official":"EUR","nativeName":{"eng":{"official":"The European Union Currency","common":"Euro"}}}}
-      // ]
-
-      //console.log(data);
-      // console.log("Order alhabetically by country name:");
       fiatData.sort((a, b) => {
         if (a.name.common < b.name.common) {
           return -1;
@@ -68,7 +54,6 @@ const FormFirstStep = ({ currentStep, setAddrOverride, country, setCountry, date
               onChange={(e) => 
                 {
                   setAddrOverride(e.target.value)
-                  console.log(e.target.value);
               }}
             />
           </div>

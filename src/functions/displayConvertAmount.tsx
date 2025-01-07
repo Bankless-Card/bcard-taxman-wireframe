@@ -88,7 +88,7 @@ async function getSinglePrice(asset:any, value:any, timestamp:any, fiat:any, las
   // build the URL for pricing data lookup
   //  https://docs.coingecko.com/v3.0.1/reference/coins-id-history
   let url = CG_API_URL + "coins/" + useAsset + "/history?date=" + useDate + "&localization=true";
-  console.log("Lookup using Pro API: " + asset, fiat, useDate, url, useAsset);
+  //console.log("Lookup using Pro API: " + asset, fiat, useDate, url, useAsset);
 
   // BUG ATM, CANNOT USE PRO API KEY
 
@@ -103,7 +103,7 @@ async function getSinglePrice(asset:any, value:any, timestamp:any, fiat:any, las
     return 0;
   } else {
     let priceUpdate = gp[useFiat];
-    console.log("$$API$$ Price Update: " + priceUpdate);
+    //console.log("$$API$$ Price Update: " + priceUpdate);
       
     return priceUpdate;
   }
@@ -178,14 +178,13 @@ const getPrice = async(url:any) => {
 // this function to generalize the data lookup for each asset
 async function assetDataLoop(asset:any, fiat:any, timestamp:any, value:any){
 
-  console.log("Asset Data Loop: " + asset, fiat, timestamp, value);
+  //console.log("Asset Data Loop: " + asset, fiat, timestamp, value);
 
   // initial pricing data to be used based on asset
   let defaultPrice = possibleAssetsObj[asset as keyof typeof possibleAssetsObj].defaultPrice || 1;
   // console.log("Default Price: " + defaultPrice);
   let currentPrice = defaultPrice;
   // which data cache table to be used to lookup data
-  console.log("Need to add cache for NEW assets OR remove DEFAULT of BANK from lookup.")
   let priceFiatHistory = getPriceFiatTable(asset, fiat);    // default BANK history
 
 
@@ -198,49 +197,16 @@ async function assetDataLoop(asset:any, fiat:any, timestamp:any, value:any){
     // console.log("BUG: Need to update pricing for country currency.")
     currentPrice = await getSinglePrice(asset, value, timestamp, fiat, defaultPrice) || defaultPrice;
 
-    console.log("STABLE Price @ " + timestamp + " : " + currentPrice);
-
-    // if(fiat === "CAD"){
-    //   console.log("lookup CAD/USD for timestamp supplied.");
-
-    //   // price lookup using CAD/USDC     
-    //   currentPrice = 1.35;    // 1 CAD = 0.74 USD
-
-    //   // build the URL to use for the lookup
-    //   // let fiatLookupURL = CG_API_URL + "coins/usd-coin/history?date="+timestamp + "&localization=true";
-
-    //   // console.log(fiatLookupURL);
-
-    //   currentPrice = await getSinglePrice("USDC", value, timestamp, fiat, defaultPrice) || defaultPrice;
-
-    //   console.log("STABLE Price @ " + timestamp + " : " + currentPrice);
-
-    //   // 'https://pro-api.coingecko.com/api/v3/coins/dai/history?date=28-03-2023';
-
-
-    // } else if(fiat === "EUR"){
-    //   console.log("lookup EUR/USD for timestamp supplied.");
-    //   currentPrice = 0.93;    // 1 EUR = 1.07 USD
-    // } else {
-    //   currentPrice = defaultPrice;    // same assignemnt as default
-    // }
   } else {
     if(priceFiatHistory !== undefined){
-
-
-      // testing call for single price lookup
-      // let cp = await getSinglePrice(asset, value, timestamp, fiat, defaultPrice);
-      // console.log("Single Price: " + cp);
-
-
 
       // if the timestamp data indicates a date before the first price in the data set
       if (timestamp < priceFiatHistory[0][0] / 1000) {
         // then we need to call for a single lookup price and skip the loop
-        console.log("Pre Cache: then we need to call for a single lookup price and skip the loop");
+        //console.log("Pre Cache: then we need to call for a single lookup price and skip the loop");
         currentPrice = await getSinglePrice(asset, value, timestamp, fiat, defaultPrice) || defaultPrice;
       } else if (timestamp > priceFiatHistory[priceFiatHistory.length - 1][0] / 1000) {
-        console.log("After Cache: it's a future date beyond our stored data, skip the looping lookup.");
+        //console.log("After Cache: it's a future date beyond our stored data, skip the looping lookup.");
 
         currentPrice = await getSinglePrice(asset, value, timestamp, fiat, defaultPrice);
 
@@ -256,7 +222,7 @@ async function assetDataLoop(asset:any, fiat:any, timestamp:any, value:any){
 
           // check for undefined data - it's a future date
           if(i >= priceFiatHistory.length || priceFiatHistory[i] === undefined){
-            console.log("Note: Loop to check price out of data range. - lookup data, and we're out.");
+            //console.log("Note: Loop to check price out of data range. - lookup data, and we're out.");
 
             // this call is different as it uses the currently stored price from the stored data (NOT NEEDED?)
             currentPrice = await getSinglePrice(asset, value, timestamp, fiat, currentPrice);
@@ -272,7 +238,7 @@ async function assetDataLoop(asset:any, fiat:any, timestamp:any, value:any){
 
       
     } else {
-      console.log("Note: Token data is undefined - No data cache.");
+      //console.log("Note: Token data is undefined - No data cache.");
 
       currentPrice = await getSinglePrice(asset, value, timestamp, fiat, defaultPrice);
     }  // end undefined check for price data history

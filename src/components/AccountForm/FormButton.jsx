@@ -45,7 +45,6 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
 
   function isValidDate(d) {
     // confirm single entry date is valid (either start or enddate is valid)
-    console.log(d);
     return d; // && !isNaN(d);
   }
 
@@ -64,9 +63,6 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
   const handleFormButton = (currentStep) => {
 
     if(currentStep === 1){
-      console.log("SET Address (Override) & Country Code: "+country+" this page.");
-
-      console.log("check instead for date validity here.");
       if(isValidRange(dates.startDate, dates.endDate)){
         // can proceed to next step
       } else {
