@@ -346,7 +346,7 @@ export async function callAlchemyGo(address, addrOverride, country, activeAssets
     });
     blendedTxArray = sortedBlendedTxArray;
 
-    console.log(blendedTxArray);
+    //console.log(blendedTxArray);
 
     const alTxs = [];
     var counter = 1;

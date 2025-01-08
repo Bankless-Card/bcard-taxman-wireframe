@@ -34,9 +34,6 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
 
     // read and parse data first:
     setTxData(txData);
-    console.log("Updating transaction data.");
-    console.log(txData);
-
     setLoading(false);    // clear spinner
 
     return txData;
@@ -128,8 +125,6 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
         // if(!isConnected){
         //   localAddr = "NOT CONNECTED";
         // }
-
-        console.log(activeAssets);
 
         // BUILD THE CSV DATA OF THE CURRENT INCOME TRASNACTIONS
         let csvData = exportData(country, txData, activeAssets, tax);

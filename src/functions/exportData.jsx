@@ -11,7 +11,6 @@ export function exportData(country, txData, activeAssets, tax) {
 
     let totalIncome = 0;
 
-    console.log(activeAssets);
     
     // only if there are any txs
     if(txData.length > 0){
@@ -20,8 +19,6 @@ export function exportData(country, txData, activeAssets, tax) {
         let index = 1;    // for row number of csv
 
         txData.forEach(chainList => {
-            //console.log(chainList);
-            console.log(chainList.title);
 
             newLine = chainList.title + "\r\n";
             csvData += newLine;

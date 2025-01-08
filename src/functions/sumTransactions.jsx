@@ -3,7 +3,7 @@ import { possibleAssets } from "../data/possibleAssets";
 // purpose is to sum up the income
 export function sumTransactions(txData, activeAssets) {
 
-  console.log("running sumTransactions...");
+  //console.log("running sumTransactions...");
 
   // output the displayed DAO tokens for summary
   let totalIncome = 0;
