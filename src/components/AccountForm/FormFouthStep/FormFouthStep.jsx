@@ -189,7 +189,6 @@ function ClosableClaimInfo({setShowClaimInfo}) {
       </p>
       <button className={styles.closable_claim_info_button}
         onClick={(e) => {
-          console.log(e);
           e.preventDefault();
           setShowClaimInfo(false)
         }}>Got it!</button>

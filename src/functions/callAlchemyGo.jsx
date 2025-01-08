@@ -46,8 +46,10 @@ async function saveToGlobalTxs(thisRow, unixT, tNice, countryExport, activeAsset
   // console.log(thisRow.value, thisRow.asset, unixT, countryExport);
 
   //console.log("currently looking at asset:", thisRow.asset);
+  let fiatPrices = await displayConvertAmount(thisRow.value, thisRow.asset, unixT, countryExport);
 
-  thisRow.currency = await displayConvertAmount(thisRow.value, thisRow.asset, unixT, countryExport);
+  thisRow.fiatValue = fiatPrices[0];
+  thisRow.currency = fiatPrices[1];
   thisRow.img_url = getTokenLogo(thisRow.asset);      //"./img/dao.jpg";
   thisRow.tokenLabel = getTokenLabel(thisRow.asset);
   thisRow.incomeState = true;    // "NOT" for unmatched txs by default

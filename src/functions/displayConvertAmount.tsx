@@ -245,11 +245,11 @@ async function assetDataLoop(asset:any, fiat:any, timestamp:any, value:any){
   }   // end else (not stables)
 
 
-
-  let output = "$"+fiat+" "+(currentPrice*parseFloat(value)).toFixed(2) + " @ " +currentPrice.toFixed(4);
-  output = "$"+(currentPrice*parseFloat(value)).toFixed(2)+" "+fiat;
+  let fiatPrice = parseFloat((currentPrice*parseFloat(value)).toFixed(2));
+  let prettyOutput = "$"+fiat+" "+fiatPrice + " @ " +currentPrice.toFixed(4);
+  prettyOutput = "$"+fiatPrice+" "+fiat;
   // return the price in FIAT terms, based on timestamp
-  return output;
+  return [fiatPrice, prettyOutput];
 }
 // hard-coded defaults based on 2022 starting pri
 // function getDefaultPrice(asset:any){

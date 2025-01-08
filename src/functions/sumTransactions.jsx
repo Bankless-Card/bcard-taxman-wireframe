@@ -30,10 +30,9 @@ export function sumTransactions(txData, activeAssets) {
   // }
 
 
-  txData.forEach(chainList => {
-    // console.log(chainList.title);
+  txData.forEach(month => {
 
-    chainList.transactions.forEach(tx => {
+    month.transactions.forEach(tx => {
 
       if(activeAssets.includes(tx.asset)){
         //its an actively tracked token
@@ -44,7 +43,7 @@ export function sumTransactions(txData, activeAssets) {
           tokenTotals[tx.asset] += tx.value;
 
           // always add to income, if it is flagged as such
-          totalIncome += parseFloat(tx.currency.split(" ")[1]);
+          totalIncome += parseFloat(tx.fiatValue);
           
         } else {
           // not income, dont sum it
