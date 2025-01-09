@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "/api/:path*"
+    }
+  ],
+  "env": {
+    "MAILJET_API_KEY": "@mailjet_api_key",
+    "MAILJET_SECRET_KEY": "@mailjet_secret_key"
+  }
+}

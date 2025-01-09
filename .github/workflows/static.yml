@@ -46,8 +46,8 @@ jobs:
         env:
           NODE_ENV: production
           VITE_ALCHEMY_API_KEY: ${{ secrets.VITE_ALCHEMY_API_KEY }}
-          VITE_ELASTIC_EMAIL_PASSWORD: ${{ secrets.VITE_ELASTIC_EMAIL_PASSWORD }}
-          VITE_ELASTICMAIL_SECURETOKEN: ${{ secrets.VITE_ELASTICMAIL_SECURETOKEN }}
+          VITE_MAILJET_API_KEY: ${{ secrets.VITE_MAILJET_API_KEY }}
+          VITE_MAILJET_SECRET_KEY: ${{ secrets.VITE_MAILJET_SECRET_KEY }}
           VITE_CONVERT_KIT_FORM_ID: ${{ secrets.VITE_CONVERT_KIT_FORM_ID }}
           VITE_CONVERT_KIT_API_KEY: ${{ secrets.VITE_CONVERT_KIT_API_KEY }}
           VITE_CG_API_KEY: ${{ secrets.VITE_CG_API_KEY }}

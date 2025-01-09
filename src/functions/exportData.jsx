@@ -42,7 +42,7 @@ export function exportData(country, txData, activeAssets, tax) {
                     // only add to csvData if income
                     csvData += newLine;
 
-                    totalIncome += parseFloat(tx.currency.split(" ")[1]);
+                    totalIncome += tx.fiatValue;
 
                     // increment index
                     index++;
@@ -59,9 +59,7 @@ export function exportData(country, txData, activeAssets, tax) {
   
   
     // console.log(csvData);
-
     let taxableIncome = totalIncome * tax / 100;
-    console.log("Taxable Income: " + taxableIncome);
 
     let niceDateNow = new Date(Date.now());
 

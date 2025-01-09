@@ -133,6 +133,7 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
         
         
         // CALL HERE TO SEND EMAIL DATA TO USER
+        console.log(txData);
         let emailOutcome = emailData(country, userEmail, activeAssets, txData, tax, csvData, setFinalExport);
         console.log(emailOutcome);
 
