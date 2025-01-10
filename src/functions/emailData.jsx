@@ -1,10 +1,7 @@
 // data imports
 import { possibleAssets } from '../data/possibleAssets'; 
 import { sumTransactions } from './sumTransactions';
-
-// Add these to your env variables
-const MAILJET_API_KEY = import.meta.env.VITE_MAILJET_API_KEY;
-const MAILJET_SECRET_KEY = import.meta.env.VITE_MAILJET_SECRET_KEY;
+import { API_URL } from '../data/env';
 
 export async function emailData(country, userEmail, activeAssets, txData, tax, csvData) {
     
@@ -34,11 +31,8 @@ export async function emailData(country, userEmail, activeAssets, txData, tax, c
       <p>TaxMan was made with ❤️by the team at <a href='https://getbcard.io'>BCard</a>. If you found it useful, please share with your friends: https://taxman.getbcard.io</p>\
     </div>";
 
-    // build csv data
-    let encodeCsv = btoa(csvData);
-
     try {
-        const response = await fetch('/api/send-email', {
+        const response = await fetch(`${API_URL}api/send-email`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -46,7 +40,7 @@ export async function emailData(country, userEmail, activeAssets, txData, tax, c
             body: JSON.stringify({
                 userEmail,
                 summaryData,
-                csvData: encodeCsv
+                csvData: btoa(csvData)
             })
         });
 

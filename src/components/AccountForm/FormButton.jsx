@@ -141,8 +141,8 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
         
         // CAPTURE EMAIL WITH CONVERTKIT
         // console.log(userEmail);    // ok for validity conditions
-        let storeEmail = await convertKitEmail(userEmail, addrOverride);  // flip to convertkit
-        console.log(storeEmail); 
+        //let storeEmail = await convertKitEmail(userEmail, addrOverride);  // flip to convertkit
+        //console.log(storeEmail); 
 
         setFinalExport("completed");
 
