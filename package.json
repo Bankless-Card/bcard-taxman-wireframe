@@ -6,7 +6,8 @@
     "dev": "vite --host",
     "build": "vite build",
     "vercel-build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "vercel-dev": "vercel dev"
   },
   "dependencies": {
     "alchemy-sdk": "^3.2.1",
@@ -27,7 +28,9 @@
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.3",
     "@vitejs/plugin-react": "^4.2.1",
+    "node-fetch": "^3.3.2",
     "typescript": "^5.4.5",
+    "vercel": "^39.2.6",
     "vite": "^4.3.9"
   }
 }
