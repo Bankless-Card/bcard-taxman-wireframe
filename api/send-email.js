@@ -10,7 +10,7 @@ export default async function handler(req, res) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': 'Basic ' + Buffer.from(`${process.env.MAILJET_API_KEY}:${process.env.MAILJET_SECRET_KEY}`).toString('base64')
+        'Authorization': 'Basic ' + Buffer.from(`${process.env.VITE_MAILJET_API_KEY}:${process.env.VITE_MAILJET_SECRET_KEY}`).toString('base64')
       },
       body: JSON.stringify({
         Messages: [
