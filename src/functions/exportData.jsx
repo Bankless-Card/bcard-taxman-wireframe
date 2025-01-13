@@ -28,8 +28,6 @@ export function exportData(country, txData, activeAssets, tax) {
               if(activeAssets.includes(tx.asset)){
                 //its an actively tracked token
 
-                console.log(tx);
-
                 if(tx.incomeState){
                     // this is an INCOME tx
                     // console.log(tx.crypto, tx.currency);

@@ -133,12 +133,8 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
         
         
         // CALL HERE TO SEND EMAIL DATA TO USER
-        console.log(txData);
         let emailOutcome = emailData(country, userEmail, activeAssets, txData, tax, csvData, setFinalExport);
-        console.log(emailOutcome);
 
-        
-        
         // CAPTURE EMAIL WITH CONVERTKIT
         // console.log(userEmail);    // ok for validity conditions
         //let storeEmail = await convertKitEmail(userEmail, addrOverride);  // flip to convertkit
