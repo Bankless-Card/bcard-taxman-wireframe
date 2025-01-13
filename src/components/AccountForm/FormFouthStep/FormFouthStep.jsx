@@ -8,7 +8,7 @@ import Spinner from "../Spinner";
 const FormFourthStep = ({txData, activeAssets, country, tax, setTax, finalExport}) => {
   const [{ showEmailInput }] = useUI();
 
-  const [ showClaimInfo, setShowClaimInfo ] = useState(true);
+  const [ showClaimInfo, setShowClaimInfo ] = useState(false);
 
 
   let countryCurrency = country;    // set as assigned

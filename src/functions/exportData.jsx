@@ -4,7 +4,7 @@ export function exportData(country, txData, activeAssets, tax) {
 
     // export data to CSV
     // first line is 'header'
-    let csvData = "timestamp, asset, tokenAmount, fiatRatio, fiatAmount, fiatLabel" + "\r\n";
+    let csvData = "timestamp, tokenName, tokenAmount, chain, fiatName, fiatAmount" + "\r\n";
 
     // console.log("GET FIAT CODE HERE FROM GLOBAL SETTINGS");
     let fiatCode = country;
@@ -27,7 +27,9 @@ export function exportData(country, txData, activeAssets, tax) {
         
               if(activeAssets.includes(tx.asset)){
                 //its an actively tracked token
-        
+
+                console.log(tx);
+
                 if(tx.incomeState){
                     // this is an INCOME tx
                     // console.log(tx.crypto, tx.currency);
@@ -37,7 +39,7 @@ export function exportData(country, txData, activeAssets, tax) {
                     let dateOut = new Date(tx.unixT * 1000);
 
                     // generate the csv data for each tx row
-                    newLine = dateOut + "," + tx.asset + "," + tx.value + "," + tx.currency.split(" ")[3] + "," + tx.currency.split(" ")[1] + "," + tx.currency.split(" ")[0] + "\r\n";
+                    newLine = dateOut + "," + tx.asset + "," + tx.value + "," + tx.chain + "," + tx.fiatName + "," + tx.fiatValue + "\r\n";
   
                     // only add to csvData if income
                     csvData += newLine;
