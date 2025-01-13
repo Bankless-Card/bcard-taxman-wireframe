@@ -12,7 +12,9 @@ const FormFourthStep = ({txData, activeAssets, country, tax, setTax, finalExport
 
 
   let countryCurrency = country;    // set as assigned
-  let txSumOutput = sumTransactions(txData, activeAssets);    // all data in this object
+  let txSums = sumTransactions(txData, activeAssets);    // all data in this object
+  let txSumOutput = txSums[0];
+  let fiatSumOutput = txSums[1];
   let txSum = txSumOutput.ALL;   // this is the total income in FIAT
 
   function handleEmailFix(event){
@@ -30,25 +32,9 @@ const FormFourthStep = ({txData, activeAssets, country, tax, setTax, finalExport
 
   function finalExportCase(finalExport) {
 
-    // console.log(finalExport);
-
-    /* sample fix
-
-    document.getElementById("userEmail")
-    .addEventListener("keyup", function(event) {
-      event.preventDefault();
-      if (event.keyCode === 13) {
-        document.getElementById("finalExport").click();
-      }
-    });
-
-    */
-
-    
-
     let defaultState = (
       <div id="finalExport" className={styles.email_input}>
-        <p>Enter your email to receive a CSV export of all of your DAO income tax transactions (required for most tax jurisdictions)</p>
+        <p>Enter your email to receive a CSV export of your transactions</p>
         <input 
           id="userEmail" 
           type="email" 
@@ -92,15 +78,15 @@ const FormFourthStep = ({txData, activeAssets, country, tax, setTax, finalExport
     return parseFloat( txSum ).toFixed(2);
   }
 
-  function TokenRowReturn({tokenSum, tokenName}){
+  function TokenRowReturn({tokenSum, tokenName, fiatSum}){
 
     // console.log(tokenSum, tokenName);
 
     if(tokenSum > 0) {
       return (
         <div className={styles.row}>
-          <p>Total {tokenName}</p>
-          <p>{returnNiceFormat(tokenSum)}</p>
+          <p>{returnNiceFormat(tokenSum)} {tokenName}</p>
+          <p>{parseFloat( fiatSum ).toLocaleString('en-US', { style: 'currency', currency: countryCurrency })}</p>
         </div>  
       )
     } else {
@@ -119,6 +105,7 @@ const FormFourthStep = ({txData, activeAssets, country, tax, setTax, finalExport
 
   
 
+  
   return (
     <AnimatePresence>
       <motion.div
@@ -128,72 +115,27 @@ const FormFourthStep = ({txData, activeAssets, country, tax, setTax, finalExport
         transition={{ delay: 0.15 }}
         className={styles.fourth_step_container}
       >
-        <p className={styles.form_fourth_step_title}>Your Income Claim</p>
+        <p className={styles.form_fourth_step_title}>Your Income</p>
 
         {activeAssets.map((asset, index) => {
           // console.log(asset);
           return (
-            <TokenRowReturn key={index} tokenSum={txSumOutput[asset]} tokenName={asset} />
+            <TokenRowReturn key={index} tokenSum={txSumOutput[asset]} tokenName={asset} fiatSum={fiatSumOutput[asset]} />
           );
         })}
         
         <hr />
 
         <div className={styles.row_total}>
-          <p>Total Income</p>
+          <p>Total Taxable Income</p>
           <p>{curFormatIncome}</p>
-        </div>
-
-        <div className={styles.row}>
-          <p>Tax Rate</p>
-          <div className={styles.tax_number_container}>
-            <input 
-              defaultValue={tax} 
-              type="number" 
-              step="1" 
-              suffix="%" 
-              onChange={ (e) => setTax(e.target.value) }
-            />
-            <p className={styles.porcentage}>%</p>
-          </div>
-        </div>
-
-        <div className={styles.row_total}>
-          <p>TOTAL TAX OWED:</p>
-          <p>{incomeDisplay}</p>
         </div>
 
         {showEmailInput && finalExportCase(finalExport)}
 
-        {/* {(showEmailInput && finalExport === "init") && (
-          <div id="finalExport" className={styles.email_input}>
-            <p>Enter your email to receive a CSV export of all of your DAO income tax transactions (required for most tax jurisdictions)</p>
-            <input id="userEmail" type="email" placeholder="Write your email..." /> 
-          </div>
-        )} */}
-        {showClaimInfo && <ClosableClaimInfo setShowClaimInfo={setShowClaimInfo} />}
       </motion.div>
     </AnimatePresence>
   );
 };
-
-function ClosableClaimInfo({setShowClaimInfo}) {
-
-  return (
-    <div className={styles.closable_claim_info}>
-      <p>
-      Total Tax Owed is an estimate only. Tax rates vary depending on many factors. Your TaxMan report will display all total income, with currency conversion rates based on the day of receipt, which you can import to any tax calculation software.
-      
-      This is beta software and is offered free for use as is. If you have any questions
-        about your personal tax situation, please consult a tax professional.
-      </p>
-      <button className={styles.closable_claim_info_button}
-        onClick={(e) => {
-          e.preventDefault();
-          setShowClaimInfo(false)
-        }}>Got it!</button>
-    </div>
-  );
-}
 
 export default FormFourthStep;

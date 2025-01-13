@@ -8,9 +8,11 @@ export function sumTransactions(txData, activeAssets) {
   // output the displayed DAO tokens for summary
   let totalIncome = 0;
   let tokenTotals = {};
+  let fiatTotals = {};
   // build the token totals object to store the sum of each token
   possibleAssets.forEach((asset, index) => {
     tokenTotals[asset] = 0;
+    fiatTotals[asset] = 0;
   });
 
   // let tokenTotals = {
@@ -41,6 +43,7 @@ export function sumTransactions(txData, activeAssets) {
           // this is an INCOME tx;
           // console.log(tx.crypto, tx.currency);
           tokenTotals[tx.asset] += tx.value;
+          fiatTotals[tx.asset] += tx.fiatValue;
 
           // always add to income, if it is flagged as such
           totalIncome += parseFloat(tx.fiatValue);
@@ -57,7 +60,8 @@ export function sumTransactions(txData, activeAssets) {
   // console.log(tokenTotals);
 
   tokenTotals.ALL = totalIncome;
+  fiatTotals.ALL = totalIncome;
 
-  return tokenTotals;
+  return [tokenTotals, fiatTotals];
   
 }

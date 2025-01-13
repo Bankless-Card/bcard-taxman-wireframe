@@ -3,7 +3,7 @@ import styles from "./styles.module.css";
 import { useUI } from "../../context/UIContext";
 
 const StepsButtons = ({ currentStep, stepChange }) => {
-  const steps = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }];
+  const steps = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
 
   const [{ showTransactionModal }] = useUI();
 

@@ -4,6 +4,7 @@ import FormFirstStep from "./FormFirstStep/FormFirstStep";
 import FormSecondStep from "./FormSecondStep/FormSecondStep";
 import FormThirdStep from "./FormThirdStep/FormThirdStep";
 import FormFourthStep from "./FormFouthStep/FormFouthStep";
+import FormFifthStep from "./FormFifthStep/FormFifthStep";
 import FormButton from "./FormButton";
 import styles from "./styles.module.css";
 import { useUI } from "../../context/UIContext";
@@ -127,15 +128,7 @@ const AccountForm = () => {
                       />}
 
                     {step === 5 && 
-                      <FormFourthStep 
-                        txData={txData} 
-                        activeAssets={activeAssets}
-                        country={country} 
-                        tax={tax}
-                        setTax={setTax}
-
-                        finalExport={finalExport}
-                      />}
+                      <FormFifthStep />}
                       
                   </div>
                   <FormButton 

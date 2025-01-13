@@ -6,7 +6,9 @@ import { API_URL } from '../data/env';
 export async function emailData(country, userEmail, activeAssets, txData, tax, csvData) {
 
     let fiatCode = country;
-    let tokenTotals = sumTransactions(txData, activeAssets);
+    let allTotals = sumTransactions(txData, activeAssets);
+    let tokenTotals = allTotals[0];
+
     let totalIncome = tokenTotals.ALL;
 
     // Build summary data HTML
