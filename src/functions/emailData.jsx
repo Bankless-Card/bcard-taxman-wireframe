@@ -4,8 +4,6 @@ import { sumTransactions } from './sumTransactions';
 import { API_URL } from '../data/env';
 
 export async function emailData(country, userEmail, activeAssets, txData, tax, csvData) {
-    
-    console.log(txData);
 
     let fiatCode = country;
     let tokenTotals = sumTransactions(txData, activeAssets);
@@ -13,8 +11,8 @@ export async function emailData(country, userEmail, activeAssets, txData, tax, c
 
     // Build summary data HTML
     let summaryData = "<div style='font-family: Arial, sans-serif;'>\
-      <h2>Your TaxMan Report</h2>\
-      <h3>Total Income: $"+totalIncome.toFixed(2)+" "+fiatCode+"</h3>\
+      <h2>💸 Your TaxMan Report 💸</h2>\
+      <h3>Total Income: $"+totalIncome.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })+" "+fiatCode+"</h3>\
       <p>Token Breakdown:</p>\
       <ul>";
 
@@ -28,7 +26,7 @@ export async function emailData(country, userEmail, activeAssets, txData, tax, c
 
     summaryData += "</ul>\
       <p>Please find your detailed report attached.</p>\
-      <p>TaxMan was made with ❤️by the team at <a href='https://getbcard.io'>BCard</a>. If you found it useful, please share with your friends: https://taxman.getbcard.io</p>\
+      <p>TaxMan was made with ❤️ by the team at <a href='https://getbcard.io'>BCard</a>. If you found it useful, please share with your friends: https://taxman.getbcard.io</p>\
     </div>";
 
     try {
