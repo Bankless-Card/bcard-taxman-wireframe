@@ -42,7 +42,7 @@ const warpShare = (<a
   return (
     <header className={styles.nav_container}>
       <img
-        src="./img/bc_logo_new.png"
+        src="./img/logo-circle-grey.png"
         className={styles.logo}
         alt="BCard Logo"
         onClick={() => setIsCTAclicked(false)}

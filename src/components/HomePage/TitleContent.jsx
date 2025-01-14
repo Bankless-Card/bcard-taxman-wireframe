@@ -16,23 +16,19 @@ const TitleContent = () => {
         >
           <div className={styles.title_container}>
             <h1>Taxman</h1>
-            <div>
-              <h2>DAO Income</h2>
-              <h2>Tax Helper</h2>
-            </div>
+            <h2>&nbsp;&nbsp; Crypto Income Tax Helper</h2>
           </div>
-          <div>
-            <p className={styles.title_paragraph}>Taxman is a quick and easy tool to help you calculate your DAO income taxes.</p>
+          <div className={styles.title_paragraph_container}>
+            <p className={styles.title_paragraph}>Taxman automatically converts your crypto income to your local currency.</p>
             <ul className={styles.title_benefit_list}>
               <li>
-                <b>FAST</b> - you can finish your DAO income taxes in 5 minutes
+                <b>FAST</b> - calculate your income in 5 minutes
               </li>
               <li>
-                <b>FREE</b> - No credit card or crypto payment required 
+                <b>FREE</b> - No payment required
               </li>
               <li>
-                <b>BUILT FOR DAO CONTRIBUTORS</b> - we automatically filter out any
-                transactions that aren't DAO income
+                <b>FLEXIBLE</b> - download a CSV for your tax calculation
               </li>
             </ul>
           </div>

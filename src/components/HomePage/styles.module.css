@@ -35,8 +35,9 @@
 .nav_container {
   display: flex;
   justify-content: space-between;
-  padding-top: 45px;
   position: relative;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 .menu_container {
   list-style: none;
@@ -64,37 +65,42 @@
 }
 
 .title_container {
-  display: flex;
   align-items: center;
-  margin-top: 80px;
-  margin-bottom: 30px;
+  margin-bottom: 20px;
 }
 
 .title_container h1 {
   margin: 0;
-  font-size: 145px;
+  font-size: 8em;
+  line-height: 1em;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   font-weight: 500;
-  margin-right: 40px;
 }
 
 .title_container h2 {
   font-weight: 400;
-  font-size: 32px;
+  font-size: 2em;
   letter-spacing: 0.04em;
   margin: 0;
+}
+
+.title_paragraph_container {
+  margin-left: 25px;
 }
 
 .title_paragraph {
   font-weight: 400;
   font-size: 16px;
-  width: 40%;
 }
 
 .title_benefit_list {
   list-style-type: none;
-  width: 40%;
+  padding-left: 20px;
+}
+
+.title_benefit_list > li {
+  margin-bottom: 10px;
 }
 
 .footer_container {
@@ -104,22 +110,19 @@
 }
 .footer_container footer {
   width: 100%;
-  height: 40px;
+  height: 30px;
   display: flex;
   justify-content: space-between;
+  color: #222;
 }
 
 .footer_container footer p {
   margin: 0;
-  color: rgba(255, 255, 255, 0.5);
   font-size: 16px;
 }
 
 .special_button_container {
-  position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateX(-70px);
+  text-align: center;
 }
 .special_button_container_mobile {
   display: none;
@@ -133,6 +136,8 @@
   align-items: center;
   border: 2px solid #ffffff;
   backdrop-filter: blur(20px);
+  margin-left: auto;
+  margin-right: auto;
   margin-bottom: 40px;
   /* Note: backdrop-filter has minimal browser support */
   cursor: pointer;
@@ -223,7 +228,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 70px;
+    height: 40px;
+    padding-bottom: 10px;
   }
   .footer_container footer p {
     text-align: center;

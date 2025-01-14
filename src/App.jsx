@@ -9,7 +9,6 @@ import {
   AppContainer,
   Footer,
   Navbar,
-  // TitleContent,
   CallToAction,
 } from "./components/HomePage";
 // import AccountForm from "./components/AccountForm";
