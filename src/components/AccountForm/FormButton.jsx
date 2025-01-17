@@ -32,6 +32,14 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
     // country needed for pricing data - default to Canada
     const txData = await callAlchemyGo(address, addrOverride, country, dates);
 
+    // Store in localStorage with address and timestamp as part of the key
+    const storageKey = `txData`;
+    try {
+      localStorage.setItem(storageKey, JSON.stringify(txData));
+    } catch (error) {
+      console.error('Error storing data in localStorage:', error);
+    }
+
     // read and parse data first:
     setTxData(txData);
     setLoading(false);    // clear spinner
@@ -62,6 +70,9 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
     if(currentStep === 1){
       if(isValidRange(dates.startDate, dates.endDate)){
         // can proceed to next step
+        localStorage.removeItem('txData');
+        setTxData([]);
+        setLoading(true);        
       } else {
         alert("Please enter valid dates for the range.");
         return currentStep;

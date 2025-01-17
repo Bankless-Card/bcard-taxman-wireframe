@@ -63,8 +63,18 @@ const AccountForm = () => {
   // const { address, isConnected } = useAccount();
 
   useEffect(() => {
-    // this obsoleted on index load - data fetch triggered on arrival at step 2
-
+    // Check if we have stored data
+    try {
+      const storedData = localStorage.getItem('txData');
+      if (storedData) {
+        const parsedData = JSON.parse(storedData);
+        setTxData(parsedData);
+        setLoading(false);
+        setStep(3); // Skip to step 3
+      }
+    } catch (error) {
+      console.error('Error reading from localStorage:', error);
+    }
   }, []);
 
   const classForTransactionModal = showTransactionModal
