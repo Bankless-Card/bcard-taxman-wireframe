@@ -13,6 +13,7 @@ import {
   CG_API_URL } from "../data";
 
 import { possibleAssetsObj } from "../data/possibleAssets";
+import { API_URL } from '../data/env';
 
 
 // CREATE and IMPORT NEW function to get DYNAMIC price data for each token based on timestamps
@@ -31,11 +32,11 @@ export async function displayConvertAmount(value:any, asset:any, timestamp:any, 
 
   
 
-  if(possibleAssetsObj[asset as keyof typeof possibleAssetsObj] === undefined){
+  /*if(possibleAssetsObj[asset as keyof typeof possibleAssetsObj] === undefined){
     console.log("Asset not found in lookup.");
     console.log(possibleAssetsObj);
     return "Asset not found in lookup.";
-  } else if(asset){
+  } else*/if(asset){
     //   if(asset === "BANK" || asset === "1INCH" || asset === "ANT" || asset === "MKR" || asset === "POKT" || asset === "POOL" || asset === "ENS" || asset === "WETH" || asset === "DAI" || asset === "USDC"
     //   || asset === "ARB" || asset === "DEGEN" || asset === "USDT"
     //  ){
@@ -63,7 +64,10 @@ async function getSinglePrice(asset:any, value:any, timestamp:any, fiat:any, las
   let useDate = dateObj.getDate() + "-" + (dateObj.getMonth() + 1) + "-" + dateObj.getFullYear();
 
   // default for inputs - get GC asset label from possibleAssetsObj
-  let useAsset = possibleAssetsObj[asset as keyof typeof possibleAssetsObj].assetGeckoList || asset.toLowerCase();
+  let useAsset = asset.toLowerCase();
+  if(possibleAssetsObj && asset in possibleAssetsObj){
+    useAsset = possibleAssetsObj[asset as keyof typeof possibleAssetsObj].assetGeckoList || asset.toLowerCase();
+  }
   // console.log("Asset: " +useAsset, asset);
   let useFiat = fiat.toLowerCase();
 
@@ -90,16 +94,10 @@ async function getSinglePrice(asset:any, value:any, timestamp:any, fiat:any, las
   let url = CG_API_URL + "coins/" + useAsset + "/history?date=" + useDate + "&localization=true";
   //console.log("Lookup using Pro API: " + asset, fiat, useDate, url, useAsset);
 
-  // BUG ATM, CANNOT USE PRO API KEY
-
-  // url = "https://api.coingecko.com/api/v3/coins/" + useAsset + "/history?date=" + useDate + "&localization=true";
-  // console.log("Lookup using FREE API: " + asset, fiat, useDate, url, useAsset);
-
-  let gp = await getPrice(url);   // gecko price
-
+  let gp = await getPrice(useAsset, useDate);   // gecko price
   
   if(gp === 0){
-    console.log("Price Lookup is 0/error, returning 0");
+    //console.log("Price Lookup is 0/error, returning 0");
     return 0;
   } else {
     let priceUpdate = gp[useFiat];
@@ -111,68 +109,40 @@ async function getSinglePrice(asset:any, value:any, timestamp:any, fiat:any, las
 }
 
 // general price/history ASYNC lookup function
-const getPrice = async(url:any) => {
-
-  // console.log(url);
-  // CG_API_KEY
-  const CG_API_KEY_LABEL = 'x-cg-pro-api-key';   // this changed between demo and pro API
-  var headers = {
-    accept: 'application/json', 
-    'x-cg-pro-api-key': CG_API_KEY
-  }
-
-  var headersDemo = {
-    accept: 'application/json', 
-    'x-cg-demo-api-key': 'CG-jbXwiJ1kcdvbUK6hP6m8Rt1b'
-  }
-
-  // override headers for DEMO API
-  // headers = headersDemo;
-
-  // DEMO option: 'x-cg-demo-api-key': CG-jbXwiJ1kcdvbUK6hP6m8Rt1b
-
-
-  // console.log("API headers: ", headers);
-
-  let data = await fetch(url,
-    {method: 'GET', headers: headers}
-  );
-  let dataJSON = await data.json();
-  
-  // console.log(dataJSON);
-  if(dataJSON.error || !dataJSON.market_data ){
-    console.log("Error in getPrice: ", dataJSON.error);
+async function getPrice(asset: string, date: string) {
+  // Return 0 if asset contains a dot (likely a scam token)
+  if (asset.includes('.')) {
     return 0;
-  } else {
-    return dataJSON.market_data.current_price;
   }
 
-  
-
-//   console.log(url, " in get Price");
-//   const options = {
-//     method: 'GET',
-//     headers: {
-//       accept: 'application/json', 
-//       'x-cg-demo-api-key': 'CG-jbXwiJ1kcdvbUK6hP6m8Rt1b'
-//     }
-//   };
-
-// let dataJSON: { market_data: { current_price: any } } = { market_data: { current_price: 0 }};
-// fetch(url, options)
-//   .then(res => res.json())
-//   .then(json => {
-//     console.log(json)
-//     dataJSON = json;
-
-//     console.log(dataJSON.market_data.current_price);    // this has all currencies included here in market_price object
-
-//     return dataJSON.market_data.current_price;
-//   })
-//   .catch(err => console.error('error:' + err));
-
-
-
+  try {
+    // Ensure proper URL encoding of parameters
+    const encodedAsset = encodeURIComponent(asset);
+    const encodedDate = encodeURIComponent(date);
+    
+    // Ensure API_URL doesn't end with a slash
+    const baseUrl = API_URL.replace(/\/$/, '');
+    const url = `${baseUrl}/api/price-lookup?asset=${encodedAsset}&date=${encodedDate}`;
+    
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+      }
+    });
+    
+    const data = await response.json();
+    
+    if (response.ok) {
+      return data.prices;
+    } else {
+      console.error('Price lookup failed:', data.error);
+      return 0;
+    }
+  } catch (error) {
+    console.error('Error fetching price:', error);
+    return 0;
+  }
 }
 
 // this function to generalize the data lookup for each asset
@@ -181,7 +151,10 @@ async function assetDataLoop(asset:any, fiat:any, timestamp:any, value:any){
   //console.log("Asset Data Loop: " + asset, fiat, timestamp, value);
 
   // initial pricing data to be used based on asset
-  let defaultPrice = possibleAssetsObj[asset as keyof typeof possibleAssetsObj].defaultPrice || 1;
+  let defaultPrice = 0;
+  if (possibleAssetsObj && asset in possibleAssetsObj) {
+    defaultPrice = possibleAssetsObj[asset as keyof typeof possibleAssetsObj].defaultPrice || 0;
+  }
   // console.log("Default Price: " + defaultPrice);
   let currentPrice = defaultPrice;
   // which data cache table to be used to lookup data

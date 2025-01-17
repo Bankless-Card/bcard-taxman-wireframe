@@ -19,6 +19,13 @@
       "dest": "/api/send-email"
     },
     {
+      "src": "/api/price-lookup",
+      "dest": "/api/price-lookup",
+      "headers": {
+        "Cache-Control": "public, s-maxage=2592000, stale-while-revalidate"
+      }
+    },
+    {
       "src": "/(.*)",
       "dest": "/dist/$1"
     }

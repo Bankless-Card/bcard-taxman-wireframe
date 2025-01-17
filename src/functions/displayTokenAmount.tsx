@@ -1,6 +1,6 @@
 // this function to parse the token amount and return a nice format
 
-export function displayTokenAmount(value:any, asset:any, activeAssets:any){
+export function displayTokenAmount(value:any, asset:any){
 
   let niceFormat = new Intl.NumberFormat('en-US', { maximumSignificantDigits: 6, minimumFractionDigits: 3,
     maximumFractionDigits: 3 }).format(value);
@@ -11,7 +11,7 @@ export function displayTokenAmount(value:any, asset:any, activeAssets:any){
     // adjust to 6 for ETH
     return parseFloat(value).toFixed(6) + " " + asset;
 
-  } else { //if(activeAssets.includes(asset)){
+  } else { 
     // catch all return for matched assets
     return niceFormat + " " + asset;
   }
