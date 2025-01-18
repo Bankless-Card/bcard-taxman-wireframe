@@ -32,11 +32,7 @@ export async function displayConvertAmount(value:any, asset:any, timestamp:any, 
 
   
 
-  /*if(possibleAssetsObj[asset as keyof typeof possibleAssetsObj] === undefined){
-    console.log("Asset not found in lookup.");
-    console.log(possibleAssetsObj);
-    return "Asset not found in lookup.";
-  } else*/if(asset){
+  if(asset){
     //   if(asset === "BANK" || asset === "1INCH" || asset === "ANT" || asset === "MKR" || asset === "POKT" || asset === "POOL" || asset === "ENS" || asset === "WETH" || asset === "DAI" || asset === "USDC"
     //   || asset === "ARB" || asset === "DEGEN" || asset === "USDT"
     //  ){
@@ -56,7 +52,7 @@ export async function displayConvertAmount(value:any, asset:any, timestamp:any, 
 }
 
 // this function is IMPORTANT in calculating the unknown price of the asset based on historical price data and FIAT input
-async function getSinglePrice(asset:any, value:any, timestamp:any, fiat:any, lastPrice:any) {
+async function getSinglePriceAndImage(asset:any, value:any, timestamp:any, fiat:any, lastPrice:any) {
 
   let dateObj = new Date(timestamp * 1000);
 
@@ -94,22 +90,23 @@ async function getSinglePrice(asset:any, value:any, timestamp:any, fiat:any, las
   let url = CG_API_URL + "coins/" + useAsset + "/history?date=" + useDate + "&localization=true";
   //console.log("Lookup using Pro API: " + asset, fiat, useDate, url, useAsset);
 
-  let gp = await getPrice(useAsset, useDate);   // gecko price
-  
-  if(gp === 0){
-    //console.log("Price Lookup is 0/error, returning 0");
-    return 0;
-  } else {
-    let priceUpdate = gp[useFiat];
-    //console.log("$$API$$ Price Update: " + priceUpdate);
-      
-    return priceUpdate;
-  }
+  let gp = await getPriceAndImage(useAsset, useDate);   // gecko price
 
+  if (typeof gp === 'object' && gp !== null && 'prices' in gp && 'image' in gp) {
+    return {
+      "price": gp.prices[useFiat],
+      "image": gp.image.small
+    };
+  }  
+
+  return {
+    "price": 0,
+    "image": 0    
+  }
 }
 
 // general price/history ASYNC lookup function
-async function getPrice(asset: string, date: string) {
+async function getPriceAndImage(asset: string, date: string) {
   // Return 0 if asset contains a dot (likely a scam token)
   if (asset.includes('.')) {
     return 0;
@@ -134,7 +131,10 @@ async function getPrice(asset: string, date: string) {
     const data = await response.json();
     
     if (response.ok) {
-      return data.prices;
+      return {
+        prices: data.prices,
+        image: data.image
+      };
     } else {
       console.error('Price lookup failed:', data.error);
       return 0;
@@ -157,6 +157,7 @@ async function assetDataLoop(asset:any, fiat:any, timestamp:any, value:any){
   }
   // console.log("Default Price: " + defaultPrice);
   let currentPrice = defaultPrice;
+  let currentImage = null;
   // which data cache table to be used to lookup data
   let priceFiatHistory = getPriceFiatTable(asset, fiat);    // default BANK history
 
@@ -168,7 +169,9 @@ async function assetDataLoop(asset:any, fiat:any, timestamp:any, value:any){
   // skip historical lookups for stables
   if(asset === "USDC" || asset === "DAI" || asset === "USDT"){
     // console.log("BUG: Need to update pricing for country currency.")
-    currentPrice = await getSinglePrice(asset, value, timestamp, fiat, defaultPrice) || defaultPrice;
+    let priceAndImage = await getSinglePriceAndImage(asset, value, timestamp, fiat, defaultPrice);
+    currentPrice = priceAndImage.price || defaultPrice;
+    currentImage = priceAndImage.image || null;
 
   } else {
     if(priceFiatHistory !== undefined){
@@ -177,11 +180,15 @@ async function assetDataLoop(asset:any, fiat:any, timestamp:any, value:any){
       if (timestamp < priceFiatHistory[0][0] / 1000) {
         // then we need to call for a single lookup price and skip the loop
         //console.log("Pre Cache: then we need to call for a single lookup price and skip the loop");
-        currentPrice = await getSinglePrice(asset, value, timestamp, fiat, defaultPrice) || defaultPrice;
+        let priceAndImage = await getSinglePriceAndImage(asset, value, timestamp, fiat, defaultPrice);
+        currentPrice = priceAndImage.price || defaultPrice;
+        currentImage = priceAndImage.image || null;
       } else if (timestamp > priceFiatHistory[priceFiatHistory.length - 1][0] / 1000) {
         //console.log("After Cache: it's a future date beyond our stored data, skip the looping lookup.");
 
-        currentPrice = await getSinglePrice(asset, value, timestamp, fiat, defaultPrice);
+        let priceAndImage = await getSinglePriceAndImage(asset, value, timestamp, fiat, defaultPrice);
+        currentPrice = priceAndImage.price || defaultPrice;
+        currentImage = priceAndImage.image || null;
 
         // console.log("FAILING Current Price: " + currentPrice);  // this is the price at timestamp
 
@@ -198,7 +205,9 @@ async function assetDataLoop(asset:any, fiat:any, timestamp:any, value:any){
             //console.log("Note: Loop to check price out of data range. - lookup data, and we're out.");
 
             // this call is different as it uses the currently stored price from the stored data (NOT NEEDED?)
-            currentPrice = await getSinglePrice(asset, value, timestamp, fiat, currentPrice);
+            let priceAndImage = await getSinglePriceAndImage(asset, value, timestamp, fiat, defaultPrice);
+            currentPrice = priceAndImage.price || defaultPrice;
+            currentImage = priceAndImage.image || null;
 
             break;
 
@@ -213,7 +222,9 @@ async function assetDataLoop(asset:any, fiat:any, timestamp:any, value:any){
     } else {
       //console.log("Note: Token data is undefined - No data cache.");
 
-      currentPrice = await getSinglePrice(asset, value, timestamp, fiat, defaultPrice);
+      let priceAndImage = await getSinglePriceAndImage(asset, value, timestamp, fiat, defaultPrice);
+      currentPrice = priceAndImage.price || defaultPrice;
+      currentImage = priceAndImage.image || null;
     }  // end undefined check for price data history
   }   // end else (not stables)
 
@@ -222,69 +233,8 @@ async function assetDataLoop(asset:any, fiat:any, timestamp:any, value:any){
   let prettyOutput = "$"+fiat+" "+fiatValue + " @ " +currentPrice.toFixed(4);
   prettyOutput = "$"+fiatValue+" "+fiat;
   // return the price in FIAT terms, based on timestamp
-  return [fiatValue, fiat, currentPrice, prettyOutput];
+  return [fiatValue, fiat, currentPrice, prettyOutput, currentImage];
 }
-// hard-coded defaults based on 2022 starting pri
-// function getDefaultPrice(asset:any){
-
-//   console.log("Default Prices to be set in MAIN DATA for all assets & imported");
-
-//   // const defaultPrices:any = {
-//   //   "bank": 0.0101,
-//   //   "1inch": 3.0268715932288863,
-//   //   "ant": 16.950179294162645,
-//   //   "mkr": 2959.628120231065,
-//   //   "pokt": 1.0101,
-//   //   "pool": 5.277036824374893,
-//   //   "ens": 49.39483417275808,
-//   //   "weth": 2000.0101,
-//   //   "arb": 1.1111,
-//   //   "degen": 0.0101,
-
-//   //   "dai": 1.0010,
-//   //   "usdc": 1.0010,
-//   //   "usdt": 1.0010,
-//   // };
-
-//   // const defaultPrices:any = possibleAssetsObj;
-
-
-//   // console.log(asset, defaultPrices[asset.toLowerCase()]);
-
-//   // switch(asset){
-//   //   case "USDC":
-//   //     return defaultPrices.usdc;
-//   //   case "DAI":
-//   //     return defaultPrices.dai;   // same as default
-//   //   case "WETH":
-//   //     return defaultPrices.weth;
-//   //   case "BANK":
-//   //     return defaultPrices.bank;
-//   //   case "1INCH":
-//   //     return defaultPrices["1inch"];
-//   //   case "ANT":
-//   //     return defaultPrices.ant;
-//   //   case "MKR":
-//   //     return defaultPrices.mkr;
-//   //   case "POKT":
-//   //     return defaultPrices.pokt;
-//   //   case "POOL":
-//   //     return defaultPrices.pool;
-//   //   case "ENS":
-//   //     return defaultPrices.ens;
-//   //   case "ARB":
-//   //     // console.log("arb")
-//   //     return defaultPrices.arb;
-//   //   case "DEGEN":
-//   //     return defaultPrices.degen;
-//   //   default:
-//   //     // stablecoin default 1 USD
-//   //     return defaultPrices.dai;
-//   // }
-
-//   return possibleAssetsObj[asset as keyof typeof possibleAssetsObj].defaultPrice;
-
-// }
 
 // needs acccess to the data cache
 function getPriceFiatTable(asset:any, fiat:any){

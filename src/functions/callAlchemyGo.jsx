@@ -38,24 +38,30 @@ function setFullStorageArr(id, title, transactions){
 
 // export data for thisRow Tx: to be used in the UI output
 async function saveToGlobalTxs(thisRow, unixT, tNice, countryExport, chain="Arbitrum") {
-
-  // console.log("Saving...", thisRow);
-
+  
   thisRow.unixT = unixT;   // add unix timestamp to global object
   thisRow.tNice = tNice;   // add date/time to global object
   // console.log(thisRow.value, thisRow.asset, unixT, countryExport);
 
-  //console.log("currently looking at asset:", thisRow.asset);
-  let fiatPrices = await displayConvertAmount(thisRow.value, thisRow.asset, unixT, countryExport);
+  // get price data for this tx
+  let priceData = await displayConvertAmount(thisRow.value, thisRow.asset, unixT, countryExport);
 
-  thisRow.fiatValue = fiatPrices[0];
-  thisRow.fiatName = fiatPrices[1];
-  thisRow.conversionRate = fiatPrices[2];
-  thisRow.currency = fiatPrices[3];
-  thisRow.img_url = getTokenLogo(thisRow.asset);      //"./img/dao.jpg";
+  thisRow.fiatValue = priceData[0];
+  thisRow.fiatName = priceData[1];
+  thisRow.conversionRate = priceData[2];
+  thisRow.currency = priceData[3];
+
+  // Set image URL from the price lookup response
+  if (priceData && priceData[4]) {
+    thisRow.img_url = priceData[4];
+  } else {
+    // Fallback to default image if no image from API
+    thisRow.img_url = getTokenLogo(thisRow.asset);
+  }
+
   thisRow.tokenLabel = getTokenLabel(thisRow.asset);
   thisRow.incomeState = true;    // "NOT" for unmatched txs by default
-  thisRow.crypto = displayTokenAmount(thisRow.value,  thisRow.asset);
+  thisRow.crypto = displayTokenAmount(thisRow.value, thisRow.asset);
   thisRow.chain = chain;
 
   return true;
@@ -70,6 +76,12 @@ async function processTxArr(sourceArray, destArray, countryExport, chain) {
   for (var i=0; i<initArr.length; i++) {
 
       let thisRow = sourceArray[i];    
+
+      // Skip if asset contains a dot (likely a scam token)
+      if (thisRow.asset && thisRow.asset.includes('.')) {
+        continue;
+      }
+
       let t = thisRow.metadata.blockTimestamp;    // date from tx record
       let tNice = new Date(t);
       let tMonth = String(tNice.getMonth()).padStart(2, '0');  // add 1 because months are 0-indexed

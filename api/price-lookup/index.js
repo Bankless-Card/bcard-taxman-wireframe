@@ -51,9 +51,19 @@ const handler = async (req, res) => {
       return res.status(404).json({ error: data.error || 'No market data found' });
     }
 
+    // Return both price data and image URLs
+    const result = {
+      prices: data.market_data.current_price,
+      image: {
+        thumb: data.image?.thumb,
+        small: data.image?.small,
+        large: data.image?.large
+      }
+    };
+
     // Set cache headers
     res.setHeader('Cache-Control', `public, s-maxage=${CACHE_DURATION}, stale-while-revalidate`);
-    return res.status(200).json({ prices: data.market_data.current_price });
+    return res.status(200).json(result);
   } catch (error) {
     console.error('API Error:', error);
     return res.status(500).json({ error: 'Failed to fetch price data' });
