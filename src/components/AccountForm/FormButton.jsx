@@ -67,12 +67,15 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
 
   const handleFormButton = (currentStep) => {
 
+    console.log(currentStep);
+
     if(currentStep === 1){
       if(isValidRange(dates.startDate, dates.endDate)){
         // can proceed to next step
         localStorage.removeItem('txData');
         setTxData([]);
-        setLoading(true);        
+        setLoading(true);     
+        fetchData(addrOverride);   
       } else {
         alert("Please enter valid dates for the range.");
         return currentStep;
@@ -80,20 +83,15 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
 
 
     } else if(currentStep === 2){
-      console.log("Handle step 2 - DAO selection boxes - filter Income TXs for display.");
-
-      // console.log(addrOverride)
-      fetchData(addrOverride);
+      // display transactions & toggles on screen
+      
 
     } else if(currentStep === 3){
-      
-      // display transactions & toggles on screen
+      handleSendEmail();
 
-      
 
     } else if(currentStep === 4){
-      console.log("Handle step 4 - Sum and Finish.");
-        handleStepFour();
+        
     }
 
     // step counter
@@ -101,7 +99,7 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
       stepChange(currentStep + 1);
     } 
 
-    if(currentStep === 5){
+    if(currentStep === 4){
       // LAST STEP: reset the form
       console.log("Handle step 5 and exit. reset.");
       stepChange(1);
@@ -111,7 +109,7 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
     return currentStep;
   };
 
-  async function handleStepFour() {
+  async function handleSendEmail() {
 
     setShowEmailInput(true);
     console.log("SHOW EMAIL INPUT - FIRST PASS");
@@ -168,12 +166,6 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
   
   }
 
-  if(currentStep === 4) {
-    // console.log("Sum Up Transactions - handled with a function");
-
-    // console.log("globalTxList: ", globalTxList);
-  }
-
   return (
     <button
       id="formButton"
@@ -183,8 +175,8 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
       disabled={showTransactionModal}
     >
       {
-        currentStep === 4 ? "Send CSV to my email" : 
-          currentStep === 5 ? "Done" : "Next Step"
+        currentStep === 3 ? "Send CSV to my email" : 
+          currentStep === 4 ? "Try Another Address" : "Next Step"
       }
     </button>
   );

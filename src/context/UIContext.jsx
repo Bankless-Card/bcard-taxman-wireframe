@@ -7,7 +7,7 @@ export const useUI = () => useContext(UIContext);
 export const UIProvider = ({ children }) => {
   const [isCTAclicked, setIsCTAclicked] = useState(false);
   const [showTransactionModal, setShowTransactionModal] = useState(false);
-  const [showEmailInput, setShowEmailInput] = useState(false);
+  const [showEmailInput, setShowEmailInput] = useState(true);
 
   // console.log(children);
 

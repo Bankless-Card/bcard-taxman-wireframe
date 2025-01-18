@@ -4,6 +4,13 @@ const CG_API_KEY = process.env.VITE_CG_API_KEY;
 // Cache duration in seconds (30 days)
 const CACHE_DURATION = 30* 60 * 60 * 24;
 
+/**
+ * Simple in-memory cache for local development only.
+ * This cache won't persist in production as Vercel functions are stateless.
+ * In production, Vercel's edge caching will handle caching via Cache-Control headers.
+ */
+const cache = new Map();
+
 // For local development
 const allowCors = fn => async (req, res) => {
   res.setHeader('Access-Control-Allow-Credentials', true);
@@ -34,6 +41,15 @@ const handler = async (req, res) => {
   // Create cache key from query parameters
   const cacheKey = `${asset}-${date}`;
 
+  // Check in-memory cache first (only effective during local development)
+  // In production, each serverless function instance is ephemeral and this cache will be empty
+  const cachedData = cache.get(cacheKey);
+  if (cachedData) {
+    // Set cache headers for Vercel's CDN, even when serving from in-memory cache
+    res.setHeader('Cache-Control', `public, s-maxage=${CACHE_DURATION}, stale-while-revalidate`);
+    return res.status(200).json(cachedData);
+  }
+
   const url = `${CG_API_URL}coins/${asset}/history?date=${date}&localization=true`;
   
   try {
@@ -61,7 +77,12 @@ const handler = async (req, res) => {
       }
     };
 
-    // Set cache headers
+    // Store in in-memory cache (only useful during local development)
+    // In production, Vercel's edge caching will handle caching instead
+    cache.set(cacheKey, result);
+
+    // Set cache headers for Vercel's CDN
+    // This is what handles caching in production
     res.setHeader('Cache-Control', `public, s-maxage=${CACHE_DURATION}, stale-while-revalidate`);
     return res.status(200).json(result);
   } catch (error) {

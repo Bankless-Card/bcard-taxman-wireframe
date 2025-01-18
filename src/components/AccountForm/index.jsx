@@ -70,7 +70,7 @@ const AccountForm = () => {
         const parsedData = JSON.parse(storedData);
         setTxData(parsedData);
         setLoading(false);
-        setStep(3); // Skip to step 3
+        setStep(2); // Skip to step 2
       }
     } catch (error) {
       console.error('Error reading from localStorage:', error);
@@ -109,13 +109,6 @@ const AccountForm = () => {
                         setDates={setDates}
                       />}
                     {step === 2 && 
-                      <FormSecondStep 
-                        currentStep={step} 
-                        activeAssets={activeAssets}
-                        setActiveAssets={setActiveAssets}
-                      />
-                    }
-                    {step === 3 && 
                       <FormThirdStep 
                         currentStep={step} 
                         // address={null}
@@ -126,7 +119,7 @@ const AccountForm = () => {
                         isActiveItem={isActiveItem}
                         setIsActiveItem={setIsActiveItem}
                       />}
-                    {step === 4 && 
+                    {step === 3 && 
                       <FormFourthStep 
                         txData={txData} 
                         activeAssets={activeAssets}
@@ -137,7 +130,7 @@ const AccountForm = () => {
                         finalExport={finalExport}
                       />}
 
-                    {step === 5 && 
+                    {step === 4 && 
                       <FormFifthStep />}
                       
                   </div>
