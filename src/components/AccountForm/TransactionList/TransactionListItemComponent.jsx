@@ -9,6 +9,7 @@ const TransactionListItemComponent = ({
   currency,
   onClick,
   incomeState,
+  incoming,
   isActiveItem,
   setIsActiveItem,
   item,
@@ -65,14 +66,13 @@ const TransactionListItemComponent = ({
           <div className={styles.inner_container}>
             <p className={styles.income_received}>    
               <span>
-                {" "}
                 <img
                   style={{ width: "10px" }}
-                  src="./img/inBadge.png"
-                  alt="income"
+                  src={incoming ? "./img/inBadge.png" : "./img/outBadge.png"}
+                  alt={incoming ? "received" : "sent"}
                 />
               </span>{" "}
-              Received
+              {incoming ? "Received" : "Sent"}
             </p>
             <p className={styles.avatar_userName}>{tokenLabel}</p>
 

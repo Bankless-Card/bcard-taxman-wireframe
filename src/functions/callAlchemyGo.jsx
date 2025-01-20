@@ -37,14 +37,19 @@ function setFullStorageArr(id, title, transactions){
 }
 
 // export data for thisRow Tx: to be used in the UI output
-async function saveToGlobalTxs(thisRow, unixT, tNice, countryExport, chain="Arbitrum") {
+async function saveToGlobalTxs(thisRow, unixT, tNice, countryExport, chain="Arbitrum", toAddress) {
   
   thisRow.unixT = unixT;   // add unix timestamp to global object
   thisRow.tNice = tNice;   // add date/time to global object
   // console.log(thisRow.value, thisRow.asset, unixT, countryExport);
 
+  thisRow.incoming = true;
+  if(thisRow.from.toLowerCase() === toAddress.toLowerCase()){
+    thisRow.incoming = false;
+  }
+
   // get price data for this tx
-  let priceData = await displayConvertAmount(thisRow.value, thisRow.asset, unixT, countryExport);
+  let priceData = await displayConvertAmount(thisRow.value, thisRow.asset, unixT, countryExport, thisRow.incoming);
 
   thisRow.fiatValue = priceData[0];
   thisRow.fiatName = priceData[1];
@@ -61,14 +66,14 @@ async function saveToGlobalTxs(thisRow, unixT, tNice, countryExport, chain="Arbi
 
   thisRow.tokenLabel = getTokenLabel(thisRow.asset);
   thisRow.incomeState = true;    // "NOT" for unmatched txs by default
-  thisRow.crypto = displayTokenAmount(thisRow.value, thisRow.asset);
+  thisRow.crypto = displayTokenAmount(thisRow.value, thisRow.asset, thisRow.incoming);
   thisRow.chain = chain;
 
   return true;
 
 }
 
-async function processTxArr(sourceArray, destArray, countryExport, chain, setStatusText) {
+async function processTxArr(sourceArray, destArray, toAddress, countryExport, chain, setStatusText) {
 
   // console.log(array, countryExport, chain);
 
@@ -92,7 +97,7 @@ async function processTxArr(sourceArray, destArray, countryExport, chain, setSta
 
       const destKey = `${tYear}-${tMonth}-${tLongMonth}`;
 
-      await saveToGlobalTxs(thisRow, unixT, tNice, countryExport, chain);
+      await saveToGlobalTxs(thisRow, unixT, tNice, countryExport, chain, toAddress);
       if(destArray[destKey]){
         destArray[destKey].push(thisRow);
       } else {
@@ -384,11 +389,11 @@ export async function callAlchemyGo(address, addrOverride, country, dates, setSt
 
     // process each of the transaction arrays read in and filter out the unwanted assets
     // add data to the desired transaction objects
-    await processTxArr(objArr, blendedTxArray, countryExport, "Ethereum", setStatusText);      // ETH MAINNET
-    await processTxArr(polyArr, blendedTxArray, countryExport, "Polygon", setStatusText);    // POLYGON MAINNET
-    await processTxArr(opArr, blendedTxArray, countryExport, "Optimism", setStatusText);
-    await processTxArr(baseArr, blendedTxArray, countryExport, "Base", setStatusText);
-    await processTxArr(arbArr, blendedTxArray, countryExport, "Arbitrum", setStatusText);
+    await processTxArr(objArr, blendedTxArray, toAddress, countryExport, "Ethereum", setStatusText);      // ETH MAINNET
+    await processTxArr(polyArr, blendedTxArray, toAddress, countryExport, "Polygon", setStatusText);    // POLYGON MAINNET
+    await processTxArr(opArr, blendedTxArray, toAddress, countryExport, "Optimism", setStatusText);
+    await processTxArr(baseArr, blendedTxArray, toAddress, countryExport, "Base", setStatusText);
+    await processTxArr(arbArr, blendedTxArray, toAddress, countryExport, "Arbitrum", setStatusText);
 
     // Sort by keys (which are in format "YYYY-MM-mmm")
     const sortedKeys = Object.keys(blendedTxArray).sort();

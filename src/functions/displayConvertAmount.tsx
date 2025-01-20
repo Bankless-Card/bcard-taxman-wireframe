@@ -20,7 +20,7 @@ import { API_URL } from '../data/env';
 // NEW: USE Single pricing API call to get only a single price for each token.
 
 // this function is IMPORTANT in calculating the price of the asset based on historical price data
-export async function displayConvertAmount(value:any, asset:any, timestamp:any, fiat:string){
+export async function displayConvertAmount(value:any, asset:any, timestamp:any, fiat:string, incoming:boolean){
   // USD/FIAT value @ timefrom blockNum
 
   // Since this receives a SINGLE value for asset, we are looking up only a 
@@ -41,7 +41,7 @@ export async function displayConvertAmount(value:any, asset:any, timestamp:any, 
     // console.log(asset)
 
     // get data output to return to front end
-    return assetDataLoop(asset, fiat, timestamp, value);
+    return assetDataLoop(asset, fiat, timestamp, value, incoming);
 
 
   } else {
@@ -146,7 +146,7 @@ async function getPriceAndImage(asset: string, date: string) {
 }
 
 // this function to generalize the data lookup for each asset
-async function assetDataLoop(asset:any, fiat:any, timestamp:any, value:any){
+async function assetDataLoop(asset:any, fiat:any, timestamp:any, value:any, incoming:boolean){
 
   //console.log("Asset Data Loop: " + asset, fiat, timestamp, value);
 
@@ -230,8 +230,12 @@ async function assetDataLoop(asset:any, fiat:any, timestamp:any, value:any){
 
 
   let fiatValue = parseFloat((currentPrice*parseFloat(value)).toFixed(2));
-  let prettyOutput = "$"+fiat+" "+fiatValue + " @ " +currentPrice.toFixed(4);
-  prettyOutput = "$"+fiatValue+" "+fiat;
+  if(!incoming){
+    fiatValue *= -1;
+  }
+
+  let prettyOutput = "$"+fiatValue+" "+fiat;
+  
   // return the price in FIAT terms, based on timestamp
   return [fiatValue, fiat, currentPrice, prettyOutput, currentImage];
 }

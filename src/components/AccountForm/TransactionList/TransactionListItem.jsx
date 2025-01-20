@@ -20,6 +20,7 @@ const TransactionListItem = ({ title, transactions, setActiveItem, isActiveItem,
           currency={item.currency}
           incomeState={item.incomeState}
           item={item}
+          incoming={item.incoming}
 
           setActiveItem={setActiveItem}
           isActiveItem={isActiveItem}
