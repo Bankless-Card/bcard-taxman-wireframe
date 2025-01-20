@@ -76,6 +76,8 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
         setTxData([]);
         setLoading(true);     
         fetchData(addrOverride);   
+
+        stepChange(currentStep + 1);
       } else {
         alert("Please enter valid dates for the range.");
         return currentStep;
@@ -84,24 +86,29 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
 
     } else if(currentStep === 2){
       // display transactions & toggles on screen
-      
+      stepChange(currentStep + 1);
 
     } else if(currentStep === 3){
-      handleSendEmail();
-
+      const emailInput = document.getElementById("userEmail");
+      if (emailInput) {
+        const emailValue = emailInput.value;
+        if (emailValue && isValidEmail(emailValue)) {
+          handleSendEmail(emailValue).then(() => {
+            stepChange(currentStep + 1);
+          });
+        } else {
+          alert("Please enter a valid email.");
+          return currentStep;
+        }
+      }
 
     } else if(currentStep === 4){
         
     }
 
-    // step counter
-    if(currentStep != 4) {
-      stepChange(currentStep + 1);
-    } 
-
     if(currentStep === 4){
       // LAST STEP: reset the form
-      console.log("Handle step 5 and exit. reset.");
+      console.log("Handle step 4 and exit. reset.");
       stepChange(1);
       setFinalExport("init");
     }
@@ -109,61 +116,18 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
     return currentStep;
   };
 
-  async function handleSendEmail() {
+  async function handleSendEmail(emailValue) {
+    // set state of email area to loading
+    setFinalExport("loading");
 
-    setShowEmailInput(true);
-    console.log("SHOW EMAIL INPUT - FIRST PASS");
+    // BUILD THE CSV DATA OF THE CURRENT INCOME TRASNACTIONS
+    let csvData = exportData(country, txData);
+    console.log(csvData);
+    
+    // CALL HERE TO SEND EMAIL DATA TO USER
+    let emailOutcome = emailData(country, emailValue, txData, csvData);
 
-    let userEmail = "NO EMAIL";
-  
-    if( document.getElementById("userEmail") ){
-      let emailInput = document.getElementById("userEmail");
-      let userEmail = emailInput.value;
-
-
-      if(userEmail != "" && userEmail != null && isValidEmail(userEmail) ){
-
-        console.log("CAPTURE FROM EMAIL INPUT - SECOND PASS");
-
-        // set state of email area to loading
-        setFinalExport("loading");
-
-        // determine address of connected wallet
-        // console.log(address);  // ok for address
-        // let localAddr = address;    // local storage of address variable
-        // if(!isConnected){
-        //   localAddr = "NOT CONNECTED";
-        // }
-
-        // BUILD THE CSV DATA OF THE CURRENT INCOME TRASNACTIONS
-        let csvData = exportData(country, txData, activeAssets, tax);
-        // console.log(csvData);   // OK
-
-        
-        
-        // CALL HERE TO SEND EMAIL DATA TO USER
-        let emailOutcome = emailData(country, userEmail, activeAssets, txData, tax, csvData, setFinalExport);
-
-        // CAPTURE EMAIL WITH CONVERTKIT
-        // console.log(userEmail);    // ok for validity conditions
-        //let storeEmail = await convertKitEmail(userEmail, addrOverride);  // flip to convertkit
-        //console.log(storeEmail); 
-
-        setFinalExport("completed");
-
-        // set button text to DONE step 5
-        stepChange(currentStep + 1);
-
-  
-
-      } else {
-        // no email available
-        alert("Please enter a valid email address to receive your CSV file.");
-      }
-    }     
-  
-    return userEmail;
-  
+    setFinalExport("completed");
   }
 
   return (

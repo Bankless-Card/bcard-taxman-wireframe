@@ -1,4 +1,4 @@
-export function exportData(country, txData, activeAssets, tax) {
+export function exportData(country, txData) {
 
     // console.log(txData);
 
@@ -24,32 +24,28 @@ export function exportData(country, txData, activeAssets, tax) {
             csvData += newLine;
         
             chainList.transactions.forEach(tx => {
-        
-              if(activeAssets.includes(tx.asset)){
-                //its an actively tracked token
 
-                if(tx.incomeState){
-                    // this is an INCOME tx
-                    // console.log(tx.crypto, tx.currency);
-                    // console.log(tx);
+              if(tx.incomeState){
+                  // this is an INCOME tx
+                  // console.log(tx.crypto, tx.currency);
+                  // console.log(tx);
 
-                    // convert unix time to human time
-                    let dateOut = new Date(tx.unixT * 1000);
+                  // convert unix time to human time
+                  let dateOut = new Date(tx.unixT * 1000);
 
-                    // generate the csv data for each tx row
-                    newLine = dateOut + "," + tx.asset + "," + tx.value + "," + tx.chain + "," + tx.fiatName + "," + tx.fiatValue + "\r\n";
-  
-                    // only add to csvData if income
-                    csvData += newLine;
+                  // generate the csv data for each tx row
+                  newLine = dateOut + "," + tx.asset + "," + tx.value + "," + tx.chain + "," + tx.fiatName + "," + tx.fiatValue + "\r\n";
 
-                    totalIncome += tx.fiatValue;
+                  // only add to csvData if income
+                  csvData += newLine;
 
-                    // increment index
-                    index++;
+                  totalIncome += tx.fiatValue;
 
-                } else {
-                  // not income, dont sum it
-                }
+                  // increment index
+                  index++;
+
+              } else {
+                // not income, dont sum it
               }
         
             });
@@ -64,8 +60,8 @@ export function exportData(country, txData, activeAssets, tax) {
     let niceDateNow = new Date(Date.now());
 
     // last line of output should be summation of all income
-    csvData += "RUN@, TaxRate, Total Income to Report, FiatCode" + "\r\n";
-    csvData += niceDateNow + "," + tax + ","+ taxableIncome + "," + fiatCode + "\r\n";
+    csvData += "RUN@, Total Income to Report, FiatCode" + "\r\n";
+    csvData += niceDateNow + ","+ taxableIncome + "," + fiatCode + "\r\n";
 
     return csvData;
   

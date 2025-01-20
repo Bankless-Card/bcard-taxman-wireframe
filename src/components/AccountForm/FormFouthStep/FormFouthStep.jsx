@@ -5,7 +5,7 @@ import styles from "./styles.module.css";
 import { sumTransactions } from "../../../functions/sumTransactions";
 import Spinner from "../Spinner";
 
-const FormFourthStep = ({txData, activeAssets, country, tax, setTax, finalExport}) => {
+const FormFourthStep = ({txData, country, tax, setTax, finalExport}) => {
   const [{ showEmailInput }] = useUI();
 
   const [ showClaimInfo, setShowClaimInfo ] = useState(false);
