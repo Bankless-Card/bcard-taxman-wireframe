@@ -286,6 +286,26 @@ export async function callAlchemyGo(address, addrOverride, country, dates, setSt
       }
     }
 
+    const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+    async function makeTransferRequest(alchemyInstance, params, retries = 3, baseDelay = 1000) {
+      for (let i = 0; i < retries; i++) {
+        try {
+          const result = await alchemyInstance.core.getAssetTransfers(params);
+          return result;
+        } catch (error) {
+          if (error.code === 429 && i < retries - 1) {
+            // Wait longer between each retry
+            const waitTime = baseDelay * Math.pow(2, i);
+            console.log(`Rate limited, waiting ${waitTime}ms before retry ${i + 1}/${retries}`);
+            await delay(waitTime);
+            continue;
+          }
+          throw error;
+        }
+      }
+    }
+
     const getERC20AssetTransfers = async(network, startBlock, endBlock, toAddress) => {
       const alchemyInstance = getAlchemyInstanceByNetwork(network);
       
@@ -309,14 +329,30 @@ export async function callAlchemyGo(address, addrOverride, country, dates, setSt
       }
 
       // If not in cache, fetch from API
-      const transfers = await alchemyInstance.core.getAssetTransfers({
+      const incomingTransfers = await makeTransferRequest(alchemyInstance, {
         fromBlock: startBlock,  // Use original hex values for API call
         toBlock: endBlock,
         toAddress: toAddress,
         excludeZeroValue: true,
         withMetadata: true,
-        category: [ AssetTransfersCategory.ERC20 ],
+        category: [AssetTransfersCategory.ERC20, AssetTransfersCategory.EXTERNAL],
       });
+
+      await delay(1000);
+
+      const outgoingTransfers = await makeTransferRequest(alchemyInstance, {
+        fromBlock: startBlock,
+        toBlock: endBlock,
+        fromAddress: toAddress,
+        excludeZeroValue: true,
+        withMetadata: true,
+        category: [AssetTransfersCategory.ERC20, AssetTransfersCategory.EXTERNAL],
+      });
+
+      const transfers = {
+        transfers: [...incomingTransfers.transfers, ...outgoingTransfers.transfers],
+        pageKey: incomingTransfers.pageKey || outgoingTransfers.pageKey
+      };
 
       // Cache the result
       localStorage.setItem(cacheKey, JSON.stringify(transfers));
