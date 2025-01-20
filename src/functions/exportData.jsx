@@ -52,16 +52,6 @@ export function exportData(country, txData) {
           });
 
     }
-  
-  
-    // console.log(csvData);
-    let taxableIncome = totalIncome * tax / 100;
-
-    let niceDateNow = new Date(Date.now());
-
-    // last line of output should be summation of all income
-    csvData += "RUN@, Total Income to Report, FiatCode" + "\r\n";
-    csvData += niceDateNow + ","+ taxableIncome + "," + fiatCode + "\r\n";
 
     return csvData;
   

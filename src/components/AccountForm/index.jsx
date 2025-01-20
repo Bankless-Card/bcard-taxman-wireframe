@@ -139,13 +139,9 @@ const AccountForm = () => {
                     setLoading={setLoading}
                     txData={txData} 
                     setTxData={setTxData} 
-                    activeAssets={activeAssets}
                     country={country}
-                    tax={tax}
                     setFinalExport={setFinalExport}
-
                     dates={dates}
-
                     />
                 </div>
               </form>

@@ -10,7 +10,7 @@ import {
  } from "../../functions";  // import functions
 
 
-const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData, setTxData, country, activeAssets, tax, setFinalExport, dates }) => {
+const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData, setTxData, country, setFinalExport, dates }) => {
   const [{ showTransactionModal }, { setShowEmailInput }] = useUI();
 
   // const { address, isConnected } = useAccount();
