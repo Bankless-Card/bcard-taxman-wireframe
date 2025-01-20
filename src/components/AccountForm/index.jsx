@@ -45,9 +45,9 @@ const AccountForm = () => {
   const [loading, setLoading] = useState(true); // loading state for tx data
   const [activeItem, setActiveItem] = useState(null);     // this holds usable data
   const [isActiveItem, setIsActiveItem] = useState(showTransactionModal);       // this is a boolean for active state
-  const [tax, setTax] = useState(20);
 
   const [finalExport, setFinalExport] = useState("init");
+  const [statusText, setStatusText] = useState("Loading...");
 
   // NEW setState for STARTDATE
   // NEW setState for ENDDATE (single object with start and end dates is better)
@@ -118,13 +118,12 @@ const AccountForm = () => {
                         setActiveItem={setActiveItem} 
                         isActiveItem={isActiveItem}
                         setIsActiveItem={setIsActiveItem}
+                        statusText={statusText}
                       />}
                     {step === 3 && 
                       <FormFourthStep 
                         txData={txData} 
-                        country={country} 
-                        tax={tax}
-                        setTax={setTax}
+                        country={country}
                         finalExport={finalExport}
                       />}
 
@@ -142,6 +141,7 @@ const AccountForm = () => {
                     country={country}
                     setFinalExport={setFinalExport}
                     dates={dates}
+                    setStatusText={setStatusText}
                     />
                 </div>
               </form>

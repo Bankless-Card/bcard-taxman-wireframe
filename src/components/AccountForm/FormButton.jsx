@@ -10,7 +10,7 @@ import {
  } from "../../functions";  // import functions
 
 
-const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData, setTxData, country, setFinalExport, dates }) => {
+const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData, setTxData, country, setFinalExport, dates, setStatusText }) => {
   const [{ showTransactionModal }, { setShowEmailInput }] = useUI();
 
   // const { address, isConnected } = useAccount();
@@ -30,7 +30,7 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
     // address may be null - if so, use the override address in callAlchemyGo
 
     // country needed for pricing data - default to Canada
-    const txData = await callAlchemyGo(address, addrOverride, country, dates);
+    const txData = await callAlchemyGo(address, addrOverride, country, dates, setStatusText);
 
     // Store in localStorage with address and timestamp as part of the key
     const storageKey = `txData`;
@@ -66,8 +66,6 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
   
 
   const handleFormButton = (currentStep) => {
-
-    console.log(currentStep);
 
     if(currentStep === 1){
       if(isValidRange(dates.startDate, dates.endDate)){
@@ -122,7 +120,6 @@ const FormButton = ({ stepChange, currentStep, addrOverride, setLoading, txData,
 
     // BUILD THE CSV DATA OF THE CURRENT INCOME TRASNACTIONS
     let csvData = exportData(country, txData);
-    console.log(csvData);
     
     // CALL HERE TO SEND EMAIL DATA TO USER
     let emailOutcome = emailData(country, emailValue, txData, csvData);

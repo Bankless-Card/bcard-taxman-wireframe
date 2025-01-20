@@ -7,7 +7,7 @@ import Spinner from "../Spinner";
 // I recommend to add a loader spiner while the data is loaading on Transaction List, this is an example
 // this settimeOut is to simulate this behavior
 
-const FormThirdStep = ({ txData, setActiveItem, loading, isActiveItem, setIsActiveItem }) => { 
+const FormThirdStep = ({ txData, setActiveItem, loading, isActiveItem, setIsActiveItem, statusText }) => { 
 
   // console.log(txData);
 
@@ -27,7 +27,7 @@ const FormThirdStep = ({ txData, setActiveItem, loading, isActiveItem, setIsActi
           <p className={styles.form_third_step_label}>
             Click a line to view details. Mark 'Not Income" if not taxable. Save to record changes.
           </p>
-          <>{loading ? <Spinner /> : <TransactionList txData={txData} setActiveItem={setActiveItem} isActiveItem={isActiveItem} setIsActiveItem={setIsActiveItem} />}</>
+          <>{loading ? <Spinner text={statusText} /> : <TransactionList txData={txData} setActiveItem={setActiveItem} isActiveItem={isActiveItem} setIsActiveItem={setIsActiveItem} />}</>
         </motion.div>
       </AnimatePresence>
     </>

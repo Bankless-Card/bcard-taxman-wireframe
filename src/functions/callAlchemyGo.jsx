@@ -68,7 +68,7 @@ async function saveToGlobalTxs(thisRow, unixT, tNice, countryExport, chain="Arbi
 
 }
 
-async function processTxArr(sourceArray, destArray, countryExport, chain) {
+async function processTxArr(sourceArray, destArray, countryExport, chain, setStatusText) {
 
   // console.log(array, countryExport, chain);
 
@@ -84,6 +84,7 @@ async function processTxArr(sourceArray, destArray, countryExport, chain) {
 
       let t = thisRow.metadata.blockTimestamp;    // date from tx record
       let tNice = new Date(t);
+      setStatusText('Processing '+ chain + ' ' + tNice.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) + '...');
       let tMonth = String(tNice.getMonth()).padStart(2, '0');  // add 1 because months are 0-indexed
       let tLongMonth = tNice.toLocaleString('default', { month: 'long' });
       let tYear = tNice.getFullYear();
@@ -103,30 +104,30 @@ async function processTxArr(sourceArray, destArray, countryExport, chain) {
   return sourceArray;
 }
 
-export async function callAlchemyGo(address, addrOverride, country, dates) {
+export async function callAlchemyGo(address, addrOverride, country, dates, setStatusText) {
 
   // NEED TO ALSO RECEIVE HERE THE STARTDATE AND ENDDATE
   console.log(address, addrOverride, country, dates)
 
-  // internal functions (requiring data from the parent component) - maybe move internal
+    // internal functions (requiring data from the parent component) - maybe move internal
 
     // receives addresses so can be used for connected or inserted wallet address
     // maybe move this logic to the function call in the parent component
     
     // get address to use
-  let walletAddress = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045";   // vitalik.eth
-  //let walletAddress = "0x522d634b6BFfb444FdbCdE5932738995A4cfd1F1";
-  if(addrOverride){
-    console.log("Using inserted wallet address. " + addrOverride);
-    walletAddress = addrOverride;
-  } else if(address){
-    console.log("Using connected wallet adddress. - " + address);
-    walletAddress = address;
-  } else  {
-    console.log("NO wallet address - check defaults.");
-  }
-  
-  const toAddress = walletAddress;    // for connected or inserted wallet address
+    let walletAddress = "0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045";   // vitalik.eth
+    //let walletAddress = "0x522d634b6BFfb444FdbCdE5932738995A4cfd1F1";
+    if(addrOverride){
+      console.log("Using inserted wallet address. " + addrOverride);
+      walletAddress = addrOverride;
+    } else if(address){
+      console.log("Using connected wallet adddress. - " + address);
+      walletAddress = address;
+    } else  {
+      console.log("NO wallet address - check defaults.");
+    }
+    
+    const toAddress = walletAddress;    // for connected or inserted wallet address
 
 
 
@@ -225,6 +226,8 @@ export async function callAlchemyGo(address, addrOverride, country, dates) {
         return 0;
       }
 
+
+      setStatusText("Fetching block numbers...");
       blockNumInt = await getBlockNum("ethereum", startUnix);
       endBlockNumInt = await getBlockNum("ethereum", endUnix);
 
@@ -321,10 +324,15 @@ export async function callAlchemyGo(address, addrOverride, country, dates) {
     }
     
     // Get ERC20 asset transfers
+    setStatusText("Reading mainnet data...");
     const ethRes = await getERC20AssetTransfers("ethereum", startBlock, endBlock, toAddress);
+    setStatusText("Reading polygon data...");
     const polyRes = await getERC20AssetTransfers("polygon", polyStart, polyEnd, toAddress);
+    setStatusText("Reading optimism data...");
     const opRes = await getERC20AssetTransfers("optimism", opStart, opEnd, toAddress);   
+    setStatusText("Reading base data...");
     const baseRes = await getERC20AssetTransfers("base", baseStart, baseEnd, toAddress);
+    setStatusText("Reading arbitrum data...");
     const arbRes = await getERC20AssetTransfers("arbitrum", arbStart, arbEnd, toAddress);
     // Other categories available:
     // AssetTransfersCategory.EXTERNAL, AssetTransfersCategory.INTERNAL, AssetTransfersCategory.ERC721, AssetTransfersCategory.ERC1155,
@@ -340,11 +348,11 @@ export async function callAlchemyGo(address, addrOverride, country, dates) {
 
     // process each of the transaction arrays read in and filter out the unwanted assets
     // add data to the desired transaction objects
-    await processTxArr(objArr, blendedTxArray, countryExport, "Ethereum");      // ETH MAINNET
-    await processTxArr(polyArr, blendedTxArray, countryExport, "Polygon");    // POLYGON MAINNET
-    await processTxArr(opArr, blendedTxArray, countryExport, "Optimism");
-    await processTxArr(baseArr, blendedTxArray, countryExport, "Base");
-    await processTxArr(arbArr, blendedTxArray, countryExport, "Arbitrum");
+    await processTxArr(objArr, blendedTxArray, countryExport, "Ethereum", setStatusText);      // ETH MAINNET
+    await processTxArr(polyArr, blendedTxArray, countryExport, "Polygon", setStatusText);    // POLYGON MAINNET
+    await processTxArr(opArr, blendedTxArray, countryExport, "Optimism", setStatusText);
+    await processTxArr(baseArr, blendedTxArray, countryExport, "Base", setStatusText);
+    await processTxArr(arbArr, blendedTxArray, countryExport, "Arbitrum", setStatusText);
 
     // Sort by keys (which are in format "YYYY-MM-mmm")
     const sortedKeys = Object.keys(blendedTxArray).sort();

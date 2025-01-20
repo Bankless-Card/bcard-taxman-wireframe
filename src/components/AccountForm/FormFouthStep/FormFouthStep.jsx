@@ -5,7 +5,7 @@ import styles from "./styles.module.css";
 import { sumTransactions } from "../../../functions/sumTransactions";
 import Spinner from "../Spinner";
 
-const FormFourthStep = ({txData, country, tax, setTax, finalExport}) => {
+const FormFourthStep = ({txData, country, finalExport}) => {
   const [{ showEmailInput }] = useUI();
 
   const [ showClaimInfo, setShowClaimInfo ] = useState(false);
@@ -94,17 +94,7 @@ const FormFourthStep = ({txData, country, tax, setTax, finalExport}) => {
     }
   }
 
-
-  let niceFormatIncome = returnNiceFormat( txSum );
   let curFormatIncome = parseFloat( txSum ).toLocaleString('en-US', { style: 'currency', currency: countryCurrency });
-
-  let incomeToClaim = tax * niceFormatIncome / 100;     // this is the amount to claim 100% default
-  let incomeDisplay = parseFloat( incomeToClaim ).toLocaleString('en-US', { style: 'currency', currency: countryCurrency });
-
-  
-
-  
-
   
   return (
     <AnimatePresence>

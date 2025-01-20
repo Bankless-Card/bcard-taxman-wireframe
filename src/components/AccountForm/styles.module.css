@@ -109,8 +109,10 @@
 .spinner_container {
   height: 30vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 1rem;
 }
 
 .spinner_img {
