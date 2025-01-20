@@ -1,5 +1,3 @@
-import { possibleAssets } from "../data/possibleAssets";
-
 // purpose is to sum up the income
 export function sumTransactions(txData) {
 

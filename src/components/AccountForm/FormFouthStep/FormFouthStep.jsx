@@ -13,7 +13,6 @@ const FormFourthStep = ({txData, activeAssets, country, tax, setTax, finalExport
 
   let countryCurrency = country;    // set as assigned
   let txSums = sumTransactions(txData);    // all data in this object
-  console.log(txSums);
   let txSumOutput = txSums[0];
   let fiatSumOutput = txSums[1];
   let txSum = txSumOutput.ALL;   // this is the total income in FIAT
@@ -117,14 +116,13 @@ const FormFourthStep = ({txData, activeAssets, country, tax, setTax, finalExport
         className={styles.fourth_step_container}
       >
         <p className={styles.form_fourth_step_title}>Your Income</p>
-
-        {activeAssets.map((asset, index) => {
-          // console.log(asset);
-          return (
-            <TokenRowReturn key={index} tokenSum={txSumOutput[asset]} tokenName={asset} fiatSum={fiatSumOutput[asset]} />
-          );
-        })}
-        
+        <div className={styles.token_income_list}>
+        {Object.entries(txSumOutput).map(([asset, tokenSum]) => (
+          ( asset != "ALL" ) ? 
+          <TokenRowReturn key={asset} tokenSum={tokenSum} tokenName={asset} fiatSum={fiatSumOutput[asset]} />
+          : null
+        ))}
+        </div>
         <hr />
 
         <div className={styles.row_total}>
