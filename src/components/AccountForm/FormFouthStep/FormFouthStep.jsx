@@ -12,7 +12,8 @@ const FormFourthStep = ({txData, activeAssets, country, tax, setTax, finalExport
 
 
   let countryCurrency = country;    // set as assigned
-  let txSums = sumTransactions(txData, activeAssets);    // all data in this object
+  let txSums = sumTransactions(txData);    // all data in this object
+  console.log(txSums);
   let txSumOutput = txSums[0];
   let fiatSumOutput = txSums[1];
   let txSum = txSumOutput.ALL;   // this is the total income in FIAT

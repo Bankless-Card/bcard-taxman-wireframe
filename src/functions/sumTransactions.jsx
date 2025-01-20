@@ -1,7 +1,7 @@
 import { possibleAssets } from "../data/possibleAssets";
 
 // purpose is to sum up the income
-export function sumTransactions(txData, activeAssets) {
+export function sumTransactions(txData) {
 
   //console.log("running sumTransactions...");
 
@@ -9,41 +9,21 @@ export function sumTransactions(txData, activeAssets) {
   let totalIncome = 0;
   let tokenTotals = {};
   let fiatTotals = {};
-  // build the token totals object to store the sum of each token
-  possibleAssets.forEach((asset, index) => {
-    tokenTotals[asset] = 0;
-    fiatTotals[asset] = 0;
-  });
-
-  // let tokenTotals = {
-  //   "BANK": 0,
-  //   "1INCH": 0,
-  //   "ANT": 0,
-  //   "MKR": 0,
-  //   "POKT": 0,
-  //   "POOL": 0,
-  //   "ENS": 0,
-  //   "ARB": 0,
-  //   "DEGEN": 0,
-  //   "WETH": 0,
-  //   "DAI": 0,
-  //   "USDC": 0,
-  //   "USDT": 0
-  // }
 
 
   txData.forEach(month => {
 
     month.transactions.forEach(tx => {
 
-      if(activeAssets.includes(tx.asset)){
-        //its an actively tracked token
-
         if(tx.incomeState){
-          // this is an INCOME tx;
-          // console.log(tx.crypto, tx.currency);
-          tokenTotals[tx.asset] += tx.value;
-          fiatTotals[tx.asset] += tx.fiatValue;
+
+          if( tokenTotals[tx.asset] && fiatTotals[tx.asset] != null ){
+            tokenTotals[tx.asset] += tx.value;
+            fiatTotals[tx.asset] += tx.fiatValue;
+          } else {
+            tokenTotals[tx.asset] = tx.value;
+            fiatTotals[tx.asset] = tx.fiatValue;
+          }
 
           // always add to income, if it is flagged as such
           totalIncome += parseFloat(tx.fiatValue);
@@ -51,13 +31,8 @@ export function sumTransactions(txData, activeAssets) {
         } else {
           // not income, dont sum it
         }
-      }
-
     });
   });
-
-  // console.log(totalIncome, totalBANK, total1INCH, totalANT, totalMKR, totalPOKT, totalPOOL, totalENS, totalWETH, totalDAI, totalUSDC );
-  // console.log(tokenTotals);
 
   tokenTotals.ALL = totalIncome;
   fiatTotals.ALL = totalIncome;
