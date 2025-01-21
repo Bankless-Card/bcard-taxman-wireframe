@@ -2,6 +2,7 @@ import { Alchemy, Network, AssetTransfersCategory } from 'alchemy-sdk';
 
 // data imports
 import { ALCHEMY_API_KEY } from '../data' 
+import { INCOME_STATES } from "../data/constants";
 
 
 // using different alchemy keys for different networks for usage tracking
@@ -44,8 +45,10 @@ async function saveToGlobalTxs(thisRow, unixT, tNice, countryExport, chain="Arbi
   // console.log(thisRow.value, thisRow.asset, unixT, countryExport);
 
   thisRow.incoming = true;
+  thisRow.txType = INCOME_STATES.INCOME;
   if(thisRow.from.toLowerCase() === toAddress.toLowerCase()){
     thisRow.incoming = false;
+    thisRow.txType = INCOME_STATES.EXPENSE;
   }
 
   // get price data for this tx
@@ -55,6 +58,20 @@ async function saveToGlobalTxs(thisRow, unixT, tNice, countryExport, chain="Arbi
   thisRow.fiatName = priceData[1];
   thisRow.conversionRate = priceData[2];
   thisRow.currency = priceData[3];
+
+  // If there's a gas fee and it's an outgoing transaction, get its fiat value
+  if (thisRow.gasFee && !thisRow.incoming) {
+    // Get native token symbol based on chain
+    const nativeToken = chain === "Ethereum" ? "ETH" : 
+                      chain === "Polygon" ? "MATIC" :
+                      chain === "Optimism" ? "ETH" :
+                      chain === "Base" ? "ETH" :
+                      chain === "Arbitrum" ? "ETH" : "ETH";
+    
+    const gasPriceData = await displayConvertAmount(thisRow.gasFee, nativeToken, unixT, countryExport, false);
+    thisRow.gasFeeInFiat = gasPriceData[0];
+    thisRow.gasFeeFormatted = `${thisRow.gasFee.toFixed(6)} ${nativeToken} (${gasPriceData[3]})`;
+  }
 
   // Set image URL from the price lookup response
   if (priceData && priceData[4]) {
@@ -297,6 +314,23 @@ export async function callAlchemyGo(address, addrOverride, country, dates, setSt
       for (let i = 0; i < retries; i++) {
         try {
           const result = await alchemyInstance.core.getAssetTransfers(params);
+          
+          // Get gas fees for each transfer
+          for (let transfer of result.transfers) {
+            try {
+              const receipt = await alchemyInstance.core.getTransactionReceipt(transfer.hash);
+              if (receipt) {
+                const gasUsed = receipt.gasUsed;
+                const effectiveGasPrice = receipt.effectiveGasPrice;
+                // Calculate gas fee in native token (ETH/MATIC/etc)
+                transfer.gasFee = (parseInt(gasUsed) * parseInt(effectiveGasPrice)) / 1e18;
+              }
+            } catch (error) {
+              console.error(`Error getting gas fee for tx ${transfer.hash}:`, error);
+              transfer.gasFee = 0;
+            }
+          }
+          
           return result;
         } catch (error) {
           if (error.code === 429 && i < retries - 1) {

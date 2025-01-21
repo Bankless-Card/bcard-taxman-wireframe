@@ -11,6 +11,7 @@ import { useUI } from "../../context/UIContext";
 import StepsButtons from "./StepsButtons";
 import TransactionModal from "./TransactionModal/TransactionModal";
 import TransactionModalMobile from "./TransactionModal/TransactionModalMobile";
+import { INCOME_STATES } from "../../data/constants";
 
 // import { useAccount } from 'wagmi';   // for connected account
 
@@ -59,8 +60,6 @@ const AccountForm = () => {
   // console.log(defaultDateStart, defaultDateEnd);   // OK for format ???
 
   const [dates, setDates] = useState({startDate: defaultDateStart, endDate: defaultDateEnd});
-
-  // const { address, isConnected } = useAccount();
 
   useEffect(() => {
     // Check if we have stored data
