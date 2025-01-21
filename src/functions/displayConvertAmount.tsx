@@ -234,8 +234,8 @@ async function assetDataLoop(asset:any, fiat:any, timestamp:any, value:any, inco
     fiatValue *= -1;
   }
 
-  let prettyOutput = "$"+fiatValue+" "+fiat;
-  
+  let prettyOutput = fiatValue+" "+fiat;
+
   // return the price in FIAT terms, based on timestamp
   return [fiatValue, fiat, currentPrice, prettyOutput, currentImage];
 }
