@@ -10,3 +10,4 @@ export const CG_API_KEY = import.meta.env.VITE_CG_API_KEY;          // coingecko
 export const CG_API_URL = import.meta.env.VITE_CG_API_URL;          // coingecko API url for pricing history lookups    
 
 export const API_URL = import.meta.env.VITE_API_URL; 
+export const NODE_ENV = import.meta.env.NODE_ENV;

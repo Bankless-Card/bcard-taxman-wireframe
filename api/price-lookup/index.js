@@ -1,5 +1,6 @@
 const CG_API_URL = process.env.VITE_CG_API_URL;
 const CG_API_KEY = process.env.VITE_CG_API_KEY;
+const NODE_ENV = process.env.VITE_NODE_ENV;
 
 // Cache duration in seconds (30 days)
 const CACHE_DURATION = 30* 60 * 60 * 24;
@@ -13,16 +14,19 @@ const cache = new Map();
 
 // For local development
 const allowCors = fn => async (req, res) => {
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
-  res.setHeader(
-    'Access-Control-Allow-Headers',
-    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
-  );
-  if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
+  // Only apply CORS headers in development
+  if (NODE_ENV === 'development') {
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
+    res.setHeader(
+      'Access-Control-Allow-Headers',
+      'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+    );
+    if (req.method === 'OPTIONS') {
+      res.status(200).end();
+      return;
+    }
   }
   return await fn(req, res);
 };
