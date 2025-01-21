@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import styles from "./styles.module.css";
+import { INCOME_STATES } from "../../../data/constants";
 
 const TransactionListItemComponent = ({
   id,
@@ -8,7 +9,6 @@ const TransactionListItemComponent = ({
   crypto,
   currency,
   onClick,
-  incomeState,
   incoming,
   isActiveItem,
   setIsActiveItem,
@@ -16,7 +16,7 @@ const TransactionListItemComponent = ({
 }) => {
 
   const [itemStyles, setItemStyles] = useState(styles.item_container);
-  const [localIncomeState, setLocalIncomeState] = useState(item.incomeState);
+  const [localIncomeState, setLocalIncomeState] = useState(item.txType);
 
   useEffect(() => {
     // console.log(crypto, currency);
@@ -30,28 +30,52 @@ const TransactionListItemComponent = ({
   }, [isActiveItem]);
 
 
-  function RenderIncomeSwitcher({isIncome=true}) {
-    if (isIncome) {
-      return (
-        <div className={styles.income_switcher} onClick={toggleIncomeClick}>
-          <img style={{ width: "20px" }} src="./img/money-bag.png" alt="income" />
-          <br/>income
-        </div>
-      );
-    }
+  function RenderIncomeSwitcher({txType}) {
 
-    return (
-      <div className={styles.income_switcher} onClick={toggleIncomeClick}>
-        <img style={{ width: "20px" }} src="./img/x.png" alt="not income" />
-        <br/>not income
-      </div>
-    );
+    switch (txType) {
+      case INCOME_STATES.INCOME:
+        return (
+          <div className={styles.income_switcher} onClick={toggleIncomeClick}>
+            <img style={{ width: "20px" }} src="./img/money-bag.png" alt="income" />
+            <br/>income
+          </div>
+        );
+      case INCOME_STATES.EXPENSE:
+        return (
+          <div className={styles.income_switcher} onClick={toggleIncomeClick}>
+            <img style={{ width: "20px" }} src="./img/flying-money.png" alt="expense" />
+            <br/>expense
+          </div>
+        );
+      default:
+        return (
+          <div className={styles.income_switcher} onClick={toggleIncomeClick}>
+            <img style={{ width: "20px" }} src="./img/x.png" alt="ignore" />
+            <br/>ignore   
+          </div>
+        );
+    }
   }
 
   function toggleIncomeClick(e){
     e.stopPropagation();
-    item.incomeState = !item.incomeState;
-    setLocalIncomeState(item.incomeState);
+    
+    // Cycle through states: INCOME -> EXPENSE -> IGNORE -> INCOME
+    switch(item.txType) {
+      case INCOME_STATES.INCOME:
+        item.txType = INCOME_STATES.EXPENSE;
+        break;
+      case INCOME_STATES.EXPENSE:
+        item.txType = INCOME_STATES.IGNORE;
+        break;
+      case INCOME_STATES.IGNORE:
+        item.txType = INCOME_STATES.INCOME;
+        break;
+      default:
+        item.txType = INCOME_STATES.INCOME;
+    }
+    
+    setLocalIncomeState(item.txType);
   }
 
     return (
@@ -60,7 +84,7 @@ const TransactionListItemComponent = ({
         className={itemStyles} 
         onClick={onClick}
         >
-        <RenderIncomeSwitcher isIncome={localIncomeState} />
+        <RenderIncomeSwitcher txType={localIncomeState} />
         <div className={styles.avatar_container}>
           <img src={img_url} className={styles.avatar_img} />
           <div className={styles.inner_container}>

@@ -1,3 +1,5 @@
+import { INCOME_STATES } from "../data/constants";
+
 // purpose is to sum up the income
 export function sumTransactions(txData) {
 
@@ -13,7 +15,7 @@ export function sumTransactions(txData) {
 
     month.transactions.forEach(tx => {
 
-        if(tx.incomeState){
+        if(tx.txType === INCOME_STATES.INCOME){
 
           if( tokenTotals[tx.asset] && fiatTotals[tx.asset] != null ){
             tokenTotals[tx.asset] += tx.value;

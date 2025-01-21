@@ -30,9 +30,9 @@ const FormFourthStep = ({txData, country, finalExport}) => {
     return true
   }
 
-  function finalExportCase(finalExport) {
+  function finalExportCase() {
 
-    let defaultState = (
+    return (
       <div id="finalExport" className={styles.email_input}>
         <p>Enter your email to receive a CSV export of your transactions</p>
         <input 
@@ -44,34 +44,6 @@ const FormFourthStep = ({txData, country, finalExport}) => {
       </div>
     );
 
-    let loadingDisplay = <Spinner />;
-
-    let finishDisplay = (
-      <div className={styles.email_input_done}>
-        <h2>You have mail! </h2>
-        <p>If you found TaxMan useful, please tell your friends.</p>
-        <a 
-          target="_blank"
-          className="twitter-share-button"
-          href="https://twitter.com/intent/tweet?text=I%20just%20did%20my%20DAO%20Income%20Taxes%20with%20TaxMan%20from%20@GetBCard%20in%20about%20five%20minutes!%20https://taxman.getbcard.io"
-          data-size="large">
-            <img src="img/twitter-logo.png" alt="twitter-logo" style={{ width:"80px", margin: "0 20px"}}/>
-            <p>Share on Twitter</p>
-        </a>
-      </div>
-    );
-
-
-    switch(finalExport) {
-      case "init":
-        return defaultState;
-      case "loading":
-        return loadingDisplay;
-      case "completed":
-        return finishDisplay;
-      default:
-        return loadingDisplay;
-    }
   }
 
   function returnNiceFormat(txSum){

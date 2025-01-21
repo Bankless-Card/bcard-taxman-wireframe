@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styles from "./styles.module.css";
 import { useUI } from "../../../context/UIContext";
+import { INCOME_STATES } from "../../../data/constants";
 // import TransactionListItemComponent from "../TransactionList/TransactionListItemComponent";
 import TransactionModalButtons from "./TransactionModalButtons";
 
@@ -12,37 +13,11 @@ const TransactionModal = (props) => {
   // if it is shown already showTransactionModal = true
   // then we need to close the curren tinstance before opening a new one.
 
-  console.log(props.isActiveItem);      // gets the active item ID from the props
-  // console.log(props.activeItem);    // gets the active item DATA from the props
 
   let txDate = new Date(props.activeItem.metadata.blockTimestamp);
 
   // wallet state
   const [walletText, setWalletText] = useState(props.activeItem.from);
-
-  // // Function for copying
-  // function copyToClipboard(text) {
-  //   const tempElement = document.createElement("textarea");
-  //   tempElement.value = text;
-  //   document.body.appendChild(tempElement);
-
-  //   tempElement.select();
-  //   tempElement.setSelectionRange(0, 99999);
-
-  //   document.execCommand("copy");
-
-  //   document.body.removeChild(tempElement);
-  // }
-
-  // function toggleIncomeClick(){
-  //   // also need to buffer the state of the income switch in case CANCEL is pressed and we need to revert
-
-  //   // console.log(props.activeItem.incomeState);
-  //   props.activeItem.incomeState = !props.activeItem.incomeState;
-
-  // }
-
-  // console.log(item);
 
   // NEEDS
 
@@ -141,16 +116,16 @@ const TransactionModal = (props) => {
                 <span>
                   <img src="./img/arrow_up.svg" />
                 </span>
-                Not Income
+                Expense
               </p>
               <label className={styles.switch}>
                 <input 
                   type="checkbox" 
                   onChange={() => {
-                    console.log("toogleIncomeClicked");
-                    props.activeItem.incomeState = !props.activeItem.incomeState;
+                    props.activeItem.txType = props.activeItem.txType === INCOME_STATES.INCOME ? 
+                      INCOME_STATES.EXPENSE : INCOME_STATES.INCOME;
                   }}
-                  defaultChecked={props.activeItem.incomeState}
+                  checked={props.activeItem.txType === INCOME_STATES.INCOME}
                 />
                 <span className={styles.slider}></span>
               </label>

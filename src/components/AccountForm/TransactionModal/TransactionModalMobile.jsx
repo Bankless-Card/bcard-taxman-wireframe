@@ -1,6 +1,8 @@
 import { motion, AnimatePresence } from "framer-motion";
+import React, { useState } from "react";
 import styles from "./styles.module.css";
 import { useUI } from "../../../context/UIContext";
+import { INCOME_STATES } from "../../../data/constants";
 // import TransactionListItemComponent from "../TransactionList/TransactionListItemComponent";
 import TransactionModalButtons from "./TransactionModalButtons";
 
@@ -110,16 +112,16 @@ const TransactionModalMobile = (props) => {
                   <span>
                     <img src="./img/arrow_up.svg" />
                   </span>
-                  Not Income
+                  Expense
                 </p>
                 <label className={styles.switch}>
                 <input 
                   type="checkbox" 
                   onChange={() => {
-                    console.log("toogleIncomeClicked");
-                    props.activeItem.incomeState = !props.activeItem.incomeState;
+                    props.activeItem.txType = props.activeItem.txType === INCOME_STATES.INCOME ? 
+                      INCOME_STATES.EXPENSE : INCOME_STATES.INCOME;
                   }}
-                  defaultChecked={props.activeItem.incomeState}
+                  checked={props.activeItem.txType === INCOME_STATES.INCOME}
                 />
                   <span className={styles.slider}></span>
                 </label>

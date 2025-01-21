@@ -18,7 +18,6 @@ const TransactionListItem = ({ title, transactions, setActiveItem, isActiveItem,
           asset={item.asset}
           crypto={item.crypto}
           currency={item.currency}
-          incomeState={item.incomeState}
           item={item}
           incoming={item.incoming}
 
@@ -28,9 +27,10 @@ const TransactionListItem = ({ title, transactions, setActiveItem, isActiveItem,
 
           onClick={() => 
             {
-              setShowTransactionModal(true);
-              setActiveItem(item);
-              setIsActiveItem(true);
+              //TODO: fix this for new income states
+              //setShowTransactionModal(true);
+              //setActiveItem(item);
+              //setIsActiveItem(true);
             }}
         />
       ))}
