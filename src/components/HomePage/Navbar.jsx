@@ -9,7 +9,7 @@ const Navbar = () => {
 
   const twitterShare = (<a 
           target="_blank"
-          href="https://twitter.com/intent/tweet?text=I%20just%20did%20my%20DAO%20Income%20Taxes%20with%20TaxMan%20from%20@GetBCard%20in%20about%20five%20minutes!%20https://taxman.getbcard.io"
+          href="https://twitter.com/intent/tweet?text=I%20just%20did%20my%20crypto%20Income%20Taxes%20with%20TaxMan%20from%20@GetBCard%20in%20about%20five%20minutes!%20https://taxman.getbcard.io"
           >
             <div>
               Post It
@@ -19,7 +19,7 @@ const Navbar = () => {
 
 const warpShare = (<a 
   target="_blank"
-  href="https://warpcast.com/~/compose?text=I%20just%20did%20my%20DAO%20Income%20Taxes%20with%20TaxMan%20from%20/BCard%20in%20about%20five%20minutes!&embeds[]=https://taxman.getbcard.io&embeds[]=https://getbcard.io"
+  href="https://warpcast.com/~/compose?text=I%20just%20did%20my%20crypto%20Income%20Taxes%20with%20TaxMan%20from%20/BCard%20in%20about%20five%20minutes!&embeds[]=https://taxman.getbcard.io&embeds[]=https://getbcard.io"
   >
     <div>
       Cast It
@@ -30,6 +30,8 @@ const warpShare = (<a
   const MenuLinks = [
     { id: 1, href: "https://banklesscard.mirror.xyz/", title: "Blog" },
     { id: 2, href: "https://getbcard.io", title: "About Us" },
+    { id: 3, href: "https://twitter.com/intent/tweet?text=I%20just%20did%20my%20crypto%20Income%20Taxes%20with%20TaxMan%20from%20@GetBCard%20in%20about%20five%20minutes!%20https://taxman.getbcard.io", title: "Tweet it" },
+    { id: 4, href: "https://warpcast.com/~/compose?text=I%20just%20did%20my%20crypto%20Income%20Taxes%20with%20TaxMan%20from%20/BCard%20in%20about%20five%20minutes!&embeds[]=https://taxman.getbcard.io", title: "Cast it" },
   ];
 
   //  methods for controlling menu icon
@@ -50,13 +52,11 @@ const warpShare = (<a
       <ul className={styles.menu_container}>
         {MenuLinks.map((item) => (
           <li key={item.id}>
-            <a href={item.href} rel="nofollow noopener noreferrer">
+            <a href={item.href} target="_blank" rel="nofollow noopener noreferrer">
               {item.title}
             </a>
           </li>
         ))}
-        <li>{warpShare}</li>
-        <li>{twitterShare}</li>
       </ul>
       {/* Menu icon */}
       <div className={styles.menu_mobile_icon_container} onClick={handleClick}>
