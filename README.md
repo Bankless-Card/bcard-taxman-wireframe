@@ -7,22 +7,38 @@ At its heart, this is a [wagmi](https://wagmi.sh) + [Web3Modal](https://web3moda
 
 The amazing UI was designed by @jasu and developed by @titesan with inception and integration work by @links and additional development by @tomtranmer.
 
-## New tokens requested (in no particular order)
-### To request new tokens added, please tweet at us @BanklessCard
-- USDC - implemented 4/17/2023 - tt
-- ENS (completed: testing procedure)
-    - added in possibleAssets
-    - FUNCTIONS: label, logo, (+ image file SIZE/FORMAT std?), conversion(TEMP): pool price, emailData, sumTransactions (summary functions)
-    - DATA: generated data file (copy POOL), pulled annual data from CG
-    (require user test and review for final confimration of implementation)
-- USDT
-- FF (forefront)
-- UNITY
-- MATIC
-- WMATIC
+# Developers Getting Started
 
+## Set up environment variables
+1. copy .env.example to .env
+2. update .env with your own values
+
+## Running the Web App
+Run `npm run dev` in your terminal, and then open [localhost:5173](http://localhost:5173) in your browser.
+
+Once the webpage has loaded, changes made to files inside the `src/` directory (e.g. `src/App.tsx`) will automatically update the webpage.
+
+## Running the API
+Run `npm run vercel-dev` in your terminal, which will start a server on [localhost:3000](http://localhost:3000).
+
+Make sure to set `VITE_API_URL` to `http://localhost:3000` in your `.env` file for local development.
+
+# Learn more
+
+To learn more about [Vite](https://vitejs.dev/) or [wagmi](https://wagmi.sh), check out the following resources:
+
+- [wagmi Documentation](https://wagmi.sh) – learn about wagmi Hooks and API.
+- [wagmi Examples](https://wagmi.sh/examples/connect-wallet) – a suite of simple examples using wagmi.
+- [Web3Modal Documentation](https://web3modal.com) – learn more about Web3Modal (configuration, theming, advanced usage, etc).
+- [Vite Documentation](https://vitejs.dev/) – learn about Vite features and API.
+
+
+# Semi-Deprecated Documentation
+
+The instructions below are semi-deprecated but have been kept because there is still some valuable information we may need to fully deprecate them.
 
 ## Adding new tokens - a basic guide
+
 1. Get Info: data/possibleAssets.jsx - active token label array for possibilities - as output on chain record - e.g. "USDC" Note: Order of display on selection list is determined by the order of this data array.
 ### Make app aware of token in lookup
 2. TOKEN NAME DISPLAY: functions/getTokenLabel.tsx - this will control the output of the NAME of the token in APP e.g. if(asset==="USDC"){ return "USDC Stablecoin" }
@@ -35,17 +51,6 @@ The amazing UI was designed by @jasu and developed by @titesan with inception an
 8. OUTPUT LABELS: functions/exportData.jsx && functions/exportData.jsx - Labels for output - TBD automate import and formatting from possibleAssets data.
 
 
-# Developers Getting Started
 
-Run `npm run dev` in your terminal, and then open [localhost:5173](http://localhost:5173) in your browser.
 
-Once the webpage has loaded, changes made to files inside the `src/` directory (e.g. `src/App.tsx`) will automatically update the webpage.
 
-# Learn more
-
-To learn more about [Vite](https://vitejs.dev/) or [wagmi](https://wagmi.sh), check out the following resources:
-
-- [wagmi Documentation](https://wagmi.sh) – learn about wagmi Hooks and API.
-- [wagmi Examples](https://wagmi.sh/examples/connect-wallet) – a suite of simple examples using wagmi.
-- [Web3Modal Documentation](https://web3modal.com) – learn more about Web3Modal (configuration, theming, advanced usage, etc).
-- [Vite Documentation](https://vitejs.dev/) – learn about Vite features and API.
