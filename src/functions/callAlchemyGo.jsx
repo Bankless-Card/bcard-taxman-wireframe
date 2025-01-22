@@ -99,6 +99,11 @@ async function processTxArr(sourceArray, destArray, toAddress, countryExport, ch
 
       let thisRow = sourceArray[i];    
 
+      // Skip if we don't have a token name or value
+      if (!thisRow.asset || !thisRow.value) {
+        continue;
+      }
+
       // Skip if asset contains a dot (likely a scam token)
       if (thisRow.asset && thisRow.asset.includes('.')) {
         continue;
@@ -310,13 +315,19 @@ export async function callAlchemyGo(address, addrOverride, country, dates, setSt
 
     const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
-    async function makeTransferRequest(alchemyInstance, params, retries = 3, baseDelay = 1000) {
+    async function makeTransferRequest(alchemyInstance, params, getGasFees, retries = 3, baseDelay = 1000) {
       for (let i = 0; i < retries; i++) {
         try {
           const result = await alchemyInstance.core.getAssetTransfers(params);
           
           // Get gas fees for each transfer
           for (let transfer of result.transfers) {
+            //if we don't want gas fees, skip
+            if (!getGasFees) {
+              transfer.gasFee = 0;
+              continue;
+            }
+
             try {
               const receipt = await alchemyInstance.core.getTransactionReceipt(transfer.hash);
               if (receipt) {
@@ -375,7 +386,7 @@ export async function callAlchemyGo(address, addrOverride, country, dates, setSt
         excludeZeroValue: true,
         withMetadata: true,
         category: [AssetTransfersCategory.ERC20, AssetTransfersCategory.EXTERNAL],
-      });
+      }, false);
 
       await delay(1000);
 
@@ -386,7 +397,7 @@ export async function callAlchemyGo(address, addrOverride, country, dates, setSt
         excludeZeroValue: true,
         withMetadata: true,
         category: [AssetTransfersCategory.ERC20, AssetTransfersCategory.EXTERNAL],
-      });
+      }, true);
 
       const transfers = {
         transfers: [...incomingTransfers.transfers, ...outgoingTransfers.transfers],

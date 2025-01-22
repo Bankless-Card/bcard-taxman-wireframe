@@ -64,7 +64,13 @@
   background: rgba(209, 176, 228, 0.667);
 }
 
+.homepage_container {
+  max-width: 800px;
+  margin: auto;
+}
+
 .title_container {
+  text-align: left;
   align-items: center;
   margin-bottom: 20px;
 }

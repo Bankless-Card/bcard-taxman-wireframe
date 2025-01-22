@@ -46,7 +46,7 @@ export async function displayConvertAmount(value:any, asset:any, timestamp:any, 
 
   } else {
       // unmatched token asset - we dont lookup values for these tokens
-      return "Convert Token - " + value;
+      return [0,fiat,0, "0 "+fiat, null];
     }
 
 }
@@ -229,7 +229,14 @@ async function assetDataLoop(asset:any, fiat:any, timestamp:any, value:any, inco
   }   // end else (not stables)
 
 
-  let fiatValue = parseFloat((currentPrice*parseFloat(value)).toFixed(2));
+  let fiatValue = parseFloat((currentPrice * value).toFixed(2));
+
+  // If fiatValue is NaN, set it to 0
+  if (isNaN(fiatValue)) {
+    fiatValue = 0;
+  }
+
+  // make negative if outgoing
   if(!incoming){
     fiatValue *= -1;
   }

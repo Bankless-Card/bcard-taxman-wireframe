@@ -13,6 +13,7 @@ const TitleContent = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.3 }}
           exit={{ opacity: 0 }}
+          className={styles.homepage_container}
         >
           <div className={styles.title_container}>
             <h1>Taxman</h1>
