@@ -1,3 +1,5 @@
+import { INCOME_STATES } from "../data/constants";
+
 export function exportData(country, txData) {
 
     // console.log(txData);
@@ -44,41 +46,46 @@ export function exportData(country, txData) {
         let newLine = "";
         let index = 1;    // for row number of csv
 
-        txData.forEach(chainList => {
+        // Use for...of instead of forEach for better control flow
+        for (const chainList of txData) {
+          newLine = chainList.title + "\r\n";
+          csvData += newLine;
+      
+          for (const tx of chainList.transactions) {
+            if(tx.txType === INCOME_STATES.IGNORE){
+              continue;
+            }
 
-            newLine = chainList.title + "\r\n";
+            console.log(tx);
+
+            // convert unix time to human time
+            let dateOut = new Date(tx.unixT * 1000);
+            let gasFees = getGasActuallyPaid(tx);
+
+            // generate the csv data for each tx row
+            newLine = dateOut + ","; 
+            newLine += tx.chain + ",";
+            newLine += tx.asset + ","
+            newLine += tx.value + ",";
+            newLine += tx.fiatName + ",";
+            newLine += tx.fiatValue + ",";
+            newLine += tx.from + ",";
+            newLine += tx.to + ",";
+            newLine += tx.txType + ",";
+            newLine += gasFees[0] + ",";
+            newLine += gasFees[1] + ",";
+            newLine += getBlockExplorerUrl(tx.chain, tx.hash);
+            newLine += "\r\n";
+            
+            // only add to csvData if income
             csvData += newLine;
-        
-            chainList.transactions.forEach(tx => {
 
-                // convert unix time to human time
-                let dateOut = new Date(tx.unixT * 1000);
-                let gasFees = getGasActuallyPaid(tx);
+            totalIncome += tx.fiatValue;
 
-                // generate the csv data for each tx row
-                newLine = dateOut + ","; 
-                newLine += tx.chain + ",";
-                newLine += tx.asset + ","
-                newLine += tx.value + ",";
-                newLine += tx.fiatName + ",";
-                newLine += tx.fiatValue + ",";
-                newLine += tx.from + ",";
-                newLine += tx.to + ",";
-                newLine += tx.txType + ",";
-                newLine += gasFees[0] + ",";
-                newLine += gasFees[1] + ",";
-                newLine += getBlockExplorerUrl(tx.chain, tx.hash) + "\r\n";
-                
-                // only add to csvData if income
-                csvData += newLine;
-
-                totalIncome += tx.fiatValue;
-
-                // increment index
-                index++;
-        
-            });
-          });
+            // increment index
+            index++;
+          }
+        }
 
     }
 

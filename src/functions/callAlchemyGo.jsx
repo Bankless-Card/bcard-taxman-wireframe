@@ -359,6 +359,12 @@ export async function callAlchemyGo(address, addrOverride, country, dates, setSt
     const getERC20AssetTransfers = async(network, startBlock, endBlock, toAddress) => {
       const alchemyInstance = getAlchemyInstanceByNetwork(network);
       
+      // Only include internal transactions for networks that support it
+      const categories = [AssetTransfersCategory.ERC20, AssetTransfersCategory.EXTERNAL];
+      if (network === "ethereum" || network === "polygon") {
+        categories.push(AssetTransfersCategory.INTERNAL);
+      }
+
       // Normalize block numbers to decimal for consistent cache keys
       const startBlockDec = parseInt(startBlock, 16).toString();
       const endBlockDec = parseInt(endBlock, 16).toString();
@@ -385,7 +391,7 @@ export async function callAlchemyGo(address, addrOverride, country, dates, setSt
         toAddress: toAddress,
         excludeZeroValue: true,
         withMetadata: true,
-        category: [AssetTransfersCategory.ERC20, AssetTransfersCategory.EXTERNAL],
+        category: categories,
       }, false);
 
       await delay(1000);
@@ -396,7 +402,7 @@ export async function callAlchemyGo(address, addrOverride, country, dates, setSt
         fromAddress: toAddress,
         excludeZeroValue: true,
         withMetadata: true,
-        category: [AssetTransfersCategory.ERC20, AssetTransfersCategory.EXTERNAL],
+        category: categories,
       }, true);
 
       const transfers = {
